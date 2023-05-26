@@ -8,3 +8,4 @@ C:\Scripts - C#\Pixel Game\Pixel Game\obj\Debug\Pixel Game.csproj.GenerateResour
 C:\Scripts - C#\Pixel Game\Pixel Game\obj\Debug\Pixel Game.csproj.CoreCompileInputs.cache
 C:\Scripts - C#\Pixel Game\Pixel Game\obj\Debug\Pixel Game.exe
 C:\Scripts - C#\Pixel Game\Pixel Game\obj\Debug\Pixel Game.pdb
+C:\Scripts - C#\Pixel Game\Pixel Game\obj\Debug\Pixel_Game.Form1.resources
