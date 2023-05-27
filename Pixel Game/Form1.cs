@@ -471,8 +471,10 @@ namespace Pixel_Game
             if (e.KeyCode == Keys.Tab)
             {
                 Blocks.Clear();
-                Block_Generation_Border();
                 BiomeRegions.Clear();
+                Materials_FluidFlow.Clear();
+                Materials_SandFlow.Clear();
+                Block_Generation_Border();
                 Terrain_Generation_GenBiomes();
                 Terrain_Generation();
             }
