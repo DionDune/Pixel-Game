@@ -15,6 +15,7 @@ Controls:  (WASD interchangeable with arrow keys)
      - Space:
         + If shifting, Medium jump
         + If not shifting, Small jump
+     - Shift: Activates shift mode
  
   > Other:
   
