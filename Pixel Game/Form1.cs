@@ -1083,19 +1083,28 @@ namespace Pixel_Game
                         if (random.Next(0, Highlighter_placeChance) == 0)
                         {
                             //Fluid
-                            if (MaterialSelector_Selected == "Water" && Blocks[y_pos][x_pos] == null)
+                            if (MaterialSelector_Selected == "Water")
                             {
-                                Materials_FluidFlow.Add(new List<int>() { x_pos, y_pos, 1 });
+                                if (Blocks[y_pos][x_pos] == null)
+                                {
+                                    Materials_FluidFlow.Add(new List<int>() { x_pos, y_pos, 1 });
+                                }
                             }
 
                             //Sand
-                            if ((MaterialSelector_Selected == "Sand") && Blocks[y_pos][x_pos] == null)
+                            else if (MaterialSelector_Selected == "Sand")
                             {
-                                Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 0 });
+                                if (Blocks[y_pos][x_pos] == null)
+                                {
+                                    Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 0 });
+                                }
                             }
-                            if (MaterialSelector_Selected == "Red Sand" && Blocks[y_pos][x_pos] == null)
+                            else if (MaterialSelector_Selected == "Red Sand")
                             {
-                                Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 1 });
+                                if (Blocks[y_pos][x_pos] == null)
+                                {
+                                    Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 1 });
+                                }
                             }
 
                             //Other
