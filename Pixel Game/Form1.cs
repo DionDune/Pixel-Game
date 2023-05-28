@@ -611,8 +611,6 @@ namespace Pixel_Game
                 string Collision_Type = PlayerMovement_CollisionType_Vertical(Player.Momentum_Vertical);
 
                 // Solid Bellow
-                //if ((blockInDirection != null && blockInDirection != "Water") ||
-                //    (Player.x % blockWidth != 0 && blockInDirection_Right != null && blockInDirection_Right != "water"))
                 if (Collision_Type == "Solid")
                 {
                     Player.Momentum_Vertical = 0;
@@ -636,7 +634,6 @@ namespace Pixel_Game
                 }
 
                 // Air Bellow
-                //else if (blockInDirection == null)
                 else if (Collision_Type == null)
                 {
                     Player.y += Player.Momentum_Vertical;
@@ -653,12 +650,6 @@ namespace Pixel_Game
             if (Player.Momentum_Vertical < 0)
             {
                 string Collision_Type = PlayerMovement_CollisionType_Vertical(Player.Momentum_Vertical);
-
-                int Momentum = Player.Momentum_Vertical;
-                if (Momentum > blockHeight)
-                {
-                    Momentum = blockHeight;
-                }
 
                 if (Collision_Type == "Solid")
                 {
