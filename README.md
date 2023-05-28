@@ -8,10 +8,10 @@ Controls:  (WASD interchangeable with arrow keys)
   
      - A/D: Left/Right
      - W: 
-        + If shifting, Fly
-        + If not shifting, HIGH jump
+        + If shifting, HIGH jump
+        + If not shifting, Fly 
      - S:
-        + If shifting, Force place down
+        + If shifting, Force player down
      - Space:
         + If shifting, Medium jump
         + If not shifting, Small jump
