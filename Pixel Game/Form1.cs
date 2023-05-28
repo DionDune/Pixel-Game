@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,6 +86,7 @@ namespace Pixel_Game
         private List<int> Mouse_PrevPosition = new List<int>();
         int Highlighter_Size;
         int Highlighter_placeChance;
+        bool Highlighter_FluidReplace;
 
         //UI
         private List<UIItem> UIItems = new List<UIItem>();
@@ -91,8 +94,8 @@ namespace Pixel_Game
 
         //Materials
         private List<string> MaterialSelector_Materials = new List<string>();
-        private List<List<int>> Materials_FluidFlow = new List<List<int>>();
-        private List<List<int>> Materials_SandFlow = new List<List<int>>();
+        private List<List<int>> PhysicsMaterial_Water = new List<List<int>>();
+        private List<List<int>> PhysicsMaterial_Sand = new List<List<int>>();
         string MaterialSelector_Selected;
 
 
@@ -154,6 +157,7 @@ namespace Pixel_Game
             Highlighter_Visible = true;
             Highlighter_Size = 5;
             Highlighter_placeChance = 1; // Chance is 1 out of {num}
+            Highlighter_FluidReplace = false;
 
             // UI
             Mouse_PrevPosition = new List<int>() { 0, 0 };
@@ -163,8 +167,8 @@ namespace Pixel_Game
             Colors_Generate();
             MaterialSelector_Materials = new List<string>() { "Default", "Sand", "Red Sand", "Water", null };
             MaterialSelector_Selected = MaterialSelector_Materials[0];
-            Materials_FluidFlow = new List<List<int>>();
-            Materials_SandFlow = new List<List<int>>();
+            PhysicsMaterial_Water = new List<List<int>>();
+            PhysicsMaterial_Sand = new List<List<int>>();
 
 
 
@@ -304,11 +308,11 @@ namespace Pixel_Game
 
                 if (Block_Type == "Sand")
                 {
-                    Materials_SandFlow.Add(new List<int>() { x_pos, GroundHeights[x_pos], 0 });
+                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, GroundHeights[x_pos], 0 });
                 }
                 else if (Block_Type == "Red Sand")
                 {
-                    Materials_SandFlow.Add(new List<int>() { x_pos, GroundHeights[x_pos], 1 });
+                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, GroundHeights[x_pos], 1 });
                 }
             }
 
@@ -327,7 +331,7 @@ namespace Pixel_Game
                             if (BiomeRegions[x_pos] == "Sand")
                             {
                                 type = BiomeRegions[x_pos];
-                                Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 0 });
+                                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 0 });
                             }
                         }
                         if (y_pos > Blocks.Count() - 50)
@@ -374,11 +378,11 @@ namespace Pixel_Game
 
                 if (Block_Type == "Sand")
                 {
-                    Materials_SandFlow.Add(new List<int>() { x_pos, SurfaceHeight, 0 });
+                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, SurfaceHeight, 0 });
                 }
                 else if (Block_Type == "Red Sand")
                 {
-                    Materials_SandFlow.Add(new List<int>() { x_pos, SurfaceHeight, 1 });
+                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, SurfaceHeight, 1 });
                 }
             }
 
@@ -397,7 +401,7 @@ namespace Pixel_Game
                             if (BiomeRegions[x_pos] == "Sand")
                             {
                                 type = BiomeRegions[x_pos];
-                                Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 0 });
+                                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 0 });
                             }
                         }
                         if (y_pos > Blocks.Count() - 50)
@@ -472,8 +476,8 @@ namespace Pixel_Game
             {
                 Blocks.Clear();
                 BiomeRegions.Clear();
-                Materials_FluidFlow.Clear();
-                Materials_SandFlow.Clear();
+                PhysicsMaterial_Water.Clear();
+                PhysicsMaterial_Sand.Clear();
                 Block_Generation_Border();
                 Terrain_Generation_GenBiomes();
                 Terrain_Generation();
@@ -990,8 +994,6 @@ namespace Pixel_Game
 
         /////////////////////////////////////////
 
-        #region UI
-
         #region Highlighter
 
         private void Mouse_placeHighlight_Block(int Mouse_X, int Mouse_Y)
@@ -1058,7 +1060,7 @@ namespace Pixel_Game
             return new List<int>() { placeBound_X_Left, placeBound_Y_Left, placeBound_X_Right, placeBound_Y_Right };
         }
 
-        private void Highlighter_PlaceParticles(int Mouse_X, int Mouse_Y)
+        private void Highlighter_PlacePixels(int Mouse_X, int Mouse_Y)
         {
             List<int> Boundaries = Execute_BlockPlaceBoundary(Mouse_X, Mouse_Y);
             int placeBound_X_Left = Boundaries[0];
@@ -1082,72 +1084,11 @@ namespace Pixel_Game
                     {
                         if (random.Next(0, Highlighter_placeChance) == 0)
                         {
-                            //Fluid
-                            if (MaterialSelector_Selected == "Water")
-                            {
-                                if (Blocks[y_pos][x_pos] == null)
-                                {
-                                    Materials_FluidFlow.Add(new List<int>() { x_pos, y_pos, 1 });
-                                }
-                            }
-
-                            //Sand
-                            else if (MaterialSelector_Selected == "Sand")
-                            {
-                                if (Blocks[y_pos][x_pos] == null)
-                                {
-                                    Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 0 });
-                                }
-                            }
-                            else if (MaterialSelector_Selected == "Red Sand")
-                            {
-                                if (Blocks[y_pos][x_pos] == null)
-                                {
-                                    Materials_SandFlow.Add(new List<int>() { x_pos, y_pos, 1 });
-                                }
-                            }
-
-                            //Other
-                            else
-                            {
-                                Blocks[y_pos][x_pos] = MaterialSelector_Selected;
-                            }
+                            Material_CreatePixel(MaterialSelector_Selected, x_pos, y_pos);
                         }
                     }
                 }
             }
-        }
-
-        private void Highlighter_Erase(int x_pos, int y_pos)
-        {
-            // Water
-            if (Blocks[y_pos][x_pos] == "Water")
-            {
-                foreach (List<int> Particle in Materials_FluidFlow)
-                {
-                    if (Particle[0] == x_pos && Particle[1] == y_pos)
-                    {
-                        Materials_FluidFlow.Remove(Particle);
-                        break;
-                    }
-                }
-            }
-
-            // Sand
-            if (Blocks[y_pos][x_pos] == "Sand" || Blocks[y_pos][x_pos] == "Red Sand")
-            {
-                foreach (List<int> Particle in Materials_SandFlow)
-                {
-                    if (Particle[0] == x_pos && Particle[1] == y_pos)
-                    {
-                        Materials_SandFlow.Remove(Particle);
-                        break;
-                    }
-                }
-            }
-
-
-            Blocks[y_pos][x_pos] = null;
         }
 
         private void Highlighter_Execute_Eraser(int Mouse_X, int Mouse_Y)
@@ -1173,13 +1114,15 @@ namespace Pixel_Game
             {
                 for (int x_pos = placeBound_X_Left; x_pos < placeBound_X_Right; x_pos++)
                 {
-                    Highlighter_Erase(x_pos, y_pos);
+                    Material_ErasePixel(Blocks[y_pos][x_pos], x_pos, y_pos);
                 }
             }
 
         }
 
         #endregion
+
+        #region UI
 
         private void UI_Build()
         {
@@ -1244,7 +1187,7 @@ namespace Pixel_Game
             Mouse_Clicking = true;
             if (Highlighter_Visible != false)
             {
-                Highlighter_PlaceParticles(e.Location.X, e.Location.Y);
+                Highlighter_PlacePixels(e.Location.X, e.Location.Y);
                 return;
             }
         }
@@ -1303,7 +1246,7 @@ namespace Pixel_Game
             if (Mouse_Clicking && Mouse_BlockChange(e.Location.X, e.Location.Y))
             {
                 Execute_BlockPlaceBoundary(e.Location.X, e.Location.Y);
-                Highlighter_PlaceParticles(e.Location.X, e.Location.Y);
+                Highlighter_PlacePixels(e.Location.X, e.Location.Y);
             }
         }
 
@@ -1326,7 +1269,7 @@ namespace Pixel_Game
 
         private void Execute_Physics_Sand()
         {
-            foreach (List<int> Particle in Materials_SandFlow)
+            foreach (List<int> Particle in PhysicsMaterial_Sand)
             {
                 if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
                     Particle[1] >= blockBound_Y_Left / 2 && Particle[1] <= blockBound_Y_Right * 2)
@@ -1372,7 +1315,7 @@ namespace Pixel_Game
 
         private void Execute_Physics_Fluid()
         {
-            foreach (List<int> Particle in Materials_FluidFlow)
+            foreach (List<int> Particle in PhysicsMaterial_Water)
             {
                 if (Blocks[Particle[1] + 1][Particle[0]] == null)
                 {
@@ -1400,7 +1343,7 @@ namespace Pixel_Game
                     // Sand Sink
                     if (Blocks[Particle[1] - 1][Particle[0]] == "Sand")
                     {
-                        foreach (List<int> SandParticle in Materials_SandFlow)
+                        foreach (List<int> SandParticle in PhysicsMaterial_Sand)
                         {
                             if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
                             {
@@ -1413,7 +1356,7 @@ namespace Pixel_Game
                     }
                     if (Blocks[Particle[1] - 1][Particle[0]] == "Red Sand")
                     {
-                        foreach (List<int> SandParticle in Materials_SandFlow)
+                        foreach (List<int> SandParticle in PhysicsMaterial_Sand)
                         {
                             if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
                             {
@@ -1441,7 +1384,76 @@ namespace Pixel_Game
                     }
                 }
             }
-            //Console.WriteLine(Materials_FluidFlow.Count());
+            //Console.WriteLine(PhysicsMaterial_Water.Count());
+        }
+
+        #endregion
+
+        /////////////////////////////////////////
+
+        #region Blocks Create/Erase
+
+        private void Material_ErasePixel(string BlockType, int x_pos, int y_pos)
+        {
+            if (BlockType == "Water")
+            {
+                foreach (List<int> Particle in PhysicsMaterial_Water)
+                {
+                    if (Particle[0] == x_pos && Particle[1] == y_pos)
+                    {
+                        PhysicsMaterial_Water.Remove(Particle);
+                        break;
+                    }
+                }
+            }
+            if (BlockType == "Sand" || BlockType == "Red Sand")
+            {
+                foreach (List<int> Particle in PhysicsMaterial_Sand)
+                {
+                    if (Particle[0] == x_pos && Particle[1] == y_pos)
+                    {
+                        PhysicsMaterial_Sand.Remove(Particle);
+                        break;
+                    }
+                }
+            }
+
+            Blocks[y_pos][x_pos] = null;
+        }
+
+        private void Material_CreatePixel(string BlockType, int x_pos, int y_pos)
+        {
+            // Erase Previouse Pixel
+            if (Blocks[y_pos][x_pos] != null)
+            {
+                if (BlockType == "Water" && Highlighter_FluidReplace == false)
+                {
+                    return;
+                }
+                else
+                {
+                    Material_ErasePixel(Blocks[y_pos][x_pos], x_pos, y_pos);
+                }
+            }
+
+            // Create New Pixel
+            if (BlockType == "Water")
+            {
+                PhysicsMaterial_Water.Add(new List<int>() { x_pos, y_pos, 1 });
+                return;
+            }
+            if (BlockType == "Sand")
+            {
+                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 0 });
+                return;
+            }
+            if (BlockType == "Red Sand")
+            {
+                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 1 });
+                return;
+            }
+
+            Blocks[y_pos][x_pos] = BlockType;
         }
 
         #endregion
