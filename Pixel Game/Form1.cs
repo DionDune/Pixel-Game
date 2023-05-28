@@ -671,15 +671,10 @@ namespace Pixel_Game
             //Give gravitational momentum
             if (Player.Momentum_Vertical == 0)
             {
-                if ((Blocks[Player.y / blockHeight + 1][Player.x / blockWidth] == null || (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth] == "Water")
-                    && GameTick % 2 == 0))
+                string Collision_Type = PlayerMovement_CollisionType_Vertical(blockHeight);
+                if ((Collision_Type == null || Collision_Type == "Water") && GameTick % 2 == 0)
                 {
-                    if (Player.x % blockWidth == 0 ||
-                        (Player.x % blockWidth != 0 && (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == null ||
-                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == "Water")))
-                    {
-                        Player.Momentum_Vertical += 1;
-                    }
+                    Player.Momentum_Vertical += 1;
                 }
             }
         }
