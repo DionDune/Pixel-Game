@@ -138,7 +138,7 @@ namespace Pixel_Game
             Player_Health_RegainAmount = 2;
             Player_Breath_RegainInterval = 1;
             Player_Breath_RegainAmount = 1;
-            Player_AllowBunnyHop = true;
+            Player_AllowBunnyHop = false;
             Player = new PlayerBlock
             {
                 x = (Screen.Width / 2) / blockWidth * blockWidth,
@@ -564,10 +564,6 @@ namespace Pixel_Game
             {
                 Type_BlockLeft = "Solid";
             }
-            else
-            {
-                Type_BlockLeft = null;
-            }
 
             // Right Block
             if (BetweenBlocks == true)
@@ -579,10 +575,6 @@ namespace Pixel_Game
                 else if (Blocks[(Player.y + Momentum) / blockHeight][Player.x / blockWidth + 1] != null)
                 {
                     Type_BlockRight = "Solid";
-                }
-                else
-                {
-                    Type_BlockRight = null;
                 }
             }
 
@@ -603,15 +595,14 @@ namespace Pixel_Game
 
         private void Execute_PlayerMomentum_Vertical()
         {
-            //Console.WriteLine($"Vertical: {Player.Momentum_Vertical}");
-
             // Downward Movement
             if (Player.Momentum_Vertical > 0)
             {
                 string Collision_Type = PlayerMovement_CollisionType_Vertical(Player.Momentum_Vertical);
+                string Collision_Bellow = PlayerMovement_CollisionType_Vertical(blockHeight);
 
                 // Solid Bellow
-                if (Collision_Type == "Solid")
+                if (Collision_Type == "Solid" || Collision_Bellow == "Solid")
                 {
                     Player.Momentum_Vertical = 0;
                 }
@@ -619,15 +610,15 @@ namespace Pixel_Game
                 // Water Bellow
                 else if (Collision_Type == "Fluid")
                 {
-                    if (Player.Momentum_Vertical > 5)
+                    if (Player.Momentum_Vertical > blockHeight / 3)
                     {
-                        Player.Momentum_Vertical = 5;
+                        Player.Momentum_Vertical = blockHeight / 3;
                     }
 
                     Player.y += Player.Momentum_Vertical;
                     cameraOffset_y += Player.Momentum_Vertical;
 
-                    if (Player.Momentum_Vertical < 5)
+                    if (Player.Momentum_Vertical < blockHeight / 4 && GameTick % 12 == 0)
                     {
                         Player.Momentum_Vertical += 1;
                     }
@@ -672,7 +663,7 @@ namespace Pixel_Game
             if (Player.Momentum_Vertical == 0)
             {
                 string Collision_Type = PlayerMovement_CollisionType_Vertical(blockHeight);
-                if ((Collision_Type == null || Collision_Type == "Water") && GameTick % 2 == 0)
+                if ((Collision_Type == null || Collision_Type == "Fluid") && GameTick % 2 == 0)
                 {
                     Player.Momentum_Vertical += 1;
                 }
@@ -681,11 +672,11 @@ namespace Pixel_Game
 
         private void Execute_PlayerMomentum_Vertical_Handler()
         {
-            if (Player_Jump && PlayerMovement_CollisionType_Vertical(blockHeight) != null)
+            if (Player_Jump && PlayerMovement_CollisionType_Vertical(blockHeight) == "Solid")
             {
                 if (Player_AllowBunnyHop == true || Player.Momentum_Vertical == 0)
                 {
-                    if (Player_Jump && Blocks[Player.y / blockHeight + 1][Player.x / blockWidth] != "Water")
+                    if (Blocks[Player.y / blockHeight][Player.x / blockWidth] != "Water")
                     {
                         if (Player_ShiftMove)
                         {
@@ -698,8 +689,15 @@ namespace Pixel_Game
                     }
                     else
                     {
-                        Player.Momentum_Vertical = -Convert.ToInt32(Player.JumpHeight / 3);
+                        Player.Momentum_Vertical = -Player.JumpHeight / 2;
                     }
+                }
+            }
+            else if (Player_Jump && PlayerMovement_CollisionType_Vertical(blockHeight) == "Fluid")
+            {
+                if (Player.Momentum_Vertical > -Player.JumpHeight / 5)
+                {
+                    Player.Momentum_Vertical -= 2;
                 }
             }
         }
@@ -711,16 +709,43 @@ namespace Pixel_Game
             string Type_BlockUpper = null;
             string Type_BlockLower = null;
 
-            int offset = 0;
+            bool BetweenBlocks = false;
+
+            int offset = 0; // Needed so that detection to right works
+
+
             if (Momentum > 0)
             {
                 offset = blockWidth - 1;
             }
 
-            // Lower Block
-            if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] != null)
+            if (Player.y % blockHeight != 0)
             {
-                Type_BlockLower = "Solid";
+                BetweenBlocks = true;
+            }
+
+
+            // Upper Pixel
+            if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] == "Water")
+            {
+                Type_BlockUpper = "Water";
+            }
+            else if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] != null)
+            {
+                Type_BlockUpper = "Solid";
+            }
+
+            // Lower Pixel
+            if (BetweenBlocks == true)
+            {
+                if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] == "Water")
+                {
+                    Type_BlockLower = "Water";
+                }
+                else if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] != null)
+                {
+                    Type_BlockLower = "Solid";
+                }
             }
 
 
@@ -729,9 +754,9 @@ namespace Pixel_Game
             {
                 return "Solid";
             }
-            else if (Type_BlockUpper == "Fluid" || Type_BlockLower == "Fluid")
+            else if (Type_BlockUpper == "Water" || Type_BlockLower == "Water")
             {
-                return "Fluid";
+                return "Water";
             }
             else
             {
@@ -741,28 +766,14 @@ namespace Pixel_Game
 
         private void Execute_PlayerMomentum_Horizontal()
         {
-            //Console.WriteLine($"Horizont: {Player.Momentum_Horizontal}");
-
-            string blockInDirection = "";
-
-            // Detects the blocktype in the direction the player is moving
-            if (Player.Momentum_Horizontal < 0)
-            {
-                blockInDirection = Blocks[Player.y / blockHeight][(Player.x + Player.Momentum_Horizontal) / blockWidth];
-            }
-            else if (Player.Momentum_Horizontal > 0)
-            {
-                blockInDirection = Blocks[Player.y / blockHeight][(Player.x + blockWidth + Player.Momentum_Horizontal) / blockWidth];
-            }
-
-            // Collision
             if (Player.Momentum_Horizontal != 0)
             {
-                // Solid Sideward
-                if (PlayerMovement_ColisionType_Horizontal(Player.Momentum_Horizontal) == "Solid")
-                {
-                    Console.WriteLine(2);
+                string CollsionType = PlayerMovement_ColisionType_Horizontal(Player.Momentum_Horizontal);
 
+
+                // Solid Sideward
+                if (CollsionType == "Solid")
+                {
                     // AutoJump
                     int moveDirection = 1;
                     if (goLeft)
@@ -787,10 +798,40 @@ namespace Pixel_Game
                     }
                 }
 
-                // Air Sideward
-                else if (PlayerMovement_ColisionType_Horizontal(Player.Momentum_Horizontal) == null)
+                // Fluid Sideward
+                if (CollsionType == "Water") // Collision detecting water as air
                 {
-                    Console.WriteLine(1);
+                    if (Player_ShiftMove == true)
+                    {
+                        if (Player.Momentum_Horizontal > blockWidth / 4)
+                        {
+                            Player.Momentum_Horizontal = blockWidth / 4;
+                        }
+                        else if (Player.Momentum_Horizontal < -blockWidth / 3)
+                        {
+                            Player.Momentum_Horizontal = -blockWidth / 4;
+                        }
+                    }
+                    if (Player_ShiftMove == false)
+                    {
+                        if (Player.Momentum_Horizontal > blockWidth / 6)
+                        {
+                            Player.Momentum_Horizontal = blockWidth / 6;
+                        }
+                        else if (Player.Momentum_Horizontal < -blockWidth / 6)
+                        {
+                            Player.Momentum_Horizontal = -blockWidth / 6;
+                        }
+                    }
+
+
+                    Player.x += Player.Momentum_Horizontal;
+                    cameraOffset_x += Player.Momentum_Horizontal;
+                }
+
+                // Air Sideward
+                if (CollsionType == null)
+                {
                     Player.x += Player.Momentum_Horizontal;
                     cameraOffset_x += Player.Momentum_Horizontal;
                 }
