@@ -18,7 +18,8 @@ Controls:  (WASD interchangeable with arrow keys)
      - Shift: Activates shift mode
  
   > Other:
-  
+    
+     - Scroll: Change highlighter size
      - Tab: Generate new world
      - E: Place default pixel left to player every frame (Mainly to see momentum arcs)
      
