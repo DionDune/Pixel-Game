@@ -195,15 +195,10 @@ namespace Pixel_Game
 
                 for (int x_pos = 0; x_pos < worldWidth; x_pos++)
                 {
-                    //string type = "Red";
                     if ((x_pos < 10 || x_pos > worldWidth - 10 || y_pos < 10 || y_pos > worldHeight - 10) && random.Next(1, 6) != 3)
                     {
                         Blocks[y_pos].Add("Red");
                     }
-                    /*if (random.Next(1, 4) != 3)
-                    {
-                        Blocks[y_pos].Add(type);
-                    }*/
                     else
                     {
                         Blocks[y_pos].Add(null);
@@ -1015,7 +1010,7 @@ namespace Pixel_Game
         {
             Execute_Player_HealthDetection();
             Execute_Player_BreathDetection();
-        } // Responsible for all player survival attributes
+        }
 
         #endregion
 
