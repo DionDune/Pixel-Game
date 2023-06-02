@@ -226,7 +226,7 @@ namespace Pixel_Game
                 // DOWN
                 if (heightChangeDirection == 0 && GroundHeights[x_pos - 1] < worldHeight)
                 {
-                    if (random.Next(0, 9) == 0) // Changes by 2
+                    if (random.Next(0, 18) == 0) // Changes by 2
                     {
                         GroundHeights.Add(GroundHeights[x_pos - 1] + 2 * Height_ChangeAmount);
                     }
@@ -239,7 +239,7 @@ namespace Pixel_Game
                 // UP
                 else if (heightChangeDirection == 1 && GroundHeights[x_pos - 1] > 5)
                 {
-                    if (random.Next(0, 9) == 0) // Changes by 2
+                    if (random.Next(0, 18) == 0) // Changes by 2
                     {
                         GroundHeights.Add(GroundHeights[x_pos - 1] - 2 * Height_ChangeAmount);
                     }
