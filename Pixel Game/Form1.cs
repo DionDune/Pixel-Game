@@ -81,12 +81,15 @@ namespace Pixel_Game
 
         //Highlighter
         private bool Highlighter_Visible;
-        private List<int> Highlighter_StartPosition = new List<int>();
         private List<List<bool>> Highligher = new List<List<bool>>();
         private List<int> Mouse_PrevPosition = new List<int>();
         int Highlighter_Size;
         int Highlighter_placeChance;
         bool Highlighter_FluidReplace;
+
+        //Mouse
+        int Mouse_X;
+        int Mouse_Y;
 
         //UI
         private List<UIItem> UIItems = new List<UIItem>();
@@ -158,6 +161,7 @@ namespace Pixel_Game
             Highlighter_Size = 5;
             Highlighter_placeChance = 1; // Chance is 1 out of {num}
             Highlighter_FluidReplace = false;
+            Mouse_GenOutline();
 
             // UI
             Mouse_PrevPosition = new List<int>() { 0, 0 };
@@ -518,6 +522,19 @@ namespace Pixel_Game
             if (e.KeyCode == Keys.Space)
             {
                 Player_Jump = false;
+            }
+        }
+
+        private void Mouse_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Delta > 0) //Scrolling Up
+            {
+                Highlighter_ChangeSize("Up");
+            }
+
+            else //Scrolling Down
+            {
+                Highlighter_ChangeSize("Down");
             }
         }
 
@@ -1018,12 +1035,9 @@ namespace Pixel_Game
 
         #region Highlighter
 
-        private void Mouse_placeHighlight_Block(int Mouse_X, int Mouse_Y)
+        private void Mouse_GenOutline()
         {
             Highligher.Clear();
-
-            Highlighter_StartPosition = new List<int>() { Mouse_X / blockWidth - Highlighter_Size / 2,
-                    Mouse_Y / blockHeight - Highlighter_Size / 2};
 
             for (int i = 0; i < Highlighter_Size; i++)
             {
@@ -1140,6 +1154,21 @@ namespace Pixel_Game
                 }
             }
 
+        }
+
+        private void Highlighter_ChangeSize(string ChangeDirection)
+        {
+            if (ChangeDirection == "Up")
+            {
+                Highlighter_Size += 1;
+            }
+
+            else if (ChangeDirection == "Down" && Highlighter_Size > 1)
+            {
+                Highlighter_Size -= 1;
+            }
+
+            Mouse_GenOutline();
         }
 
         #endregion
@@ -1262,8 +1291,10 @@ namespace Pixel_Game
                 }
             }
             Highlighter_Visible = true;
-            Mouse_placeHighlight_Block(e.Location.X, e.Location.Y);
 
+            //Mouse
+            Mouse_X = e.Location.X;
+            Mouse_Y = e.Location.Y;
 
             if (Mouse_Clicking && Mouse_BlockChange(e.Location.X, e.Location.Y))
             {
@@ -1726,12 +1757,11 @@ namespace Pixel_Game
                         if (x_pos == 0 || x_pos == Highligher[y_pos].Count() - 1 || y_pos == 0 || y_pos == Highligher.Count() - 1)
                         {
                             canvas.FillRectangle(Block_FetchColor("Highlighter"), new Rectangle(
-                                    (x_pos + Highlighter_StartPosition[0]) * blockWidth,
-                                    (y_pos + Highlighter_StartPosition[1]) * blockHeight,
+                                    (x_pos + (Mouse_X / blockWidth - Highlighter_Size / 2)) * blockWidth,
+                                    (y_pos + (Mouse_Y / blockHeight - Highlighter_Size / 2)) * blockHeight,
                                     blockWidth, blockHeight
                                     ));
                         }
-
                     }
                 }
             }

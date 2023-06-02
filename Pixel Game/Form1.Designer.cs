@@ -46,6 +46,7 @@
             this.Screen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Mouse_Down);
             this.Screen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Mouse_Move);
             this.Screen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Mouse_Release);
+            this.Screen.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Mouse_MouseWheel);
             // 
             // gameTimer
             // 
