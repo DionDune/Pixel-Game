@@ -974,30 +974,56 @@ namespace Pixel_Game
 
         private void Execute_Player_HealthDetection()
         {
-            int Player_Y = Player.y / blockHeight;
-
-            if (Player.x > 0 && Player.x < worldWidth - 1 && Player_Y > 0 && Player_Y < worldHeight - 1)
+            //Damage
+            if (Player.x / blockWidth > 0 && Player.x / blockWidth < worldWidth - 1 && Player.y / blockHeight > 0 && Player.y / blockHeight < worldHeight - 1 &&
+                GameTick % 100 >= 75 && GameTick % 100 <= 99 && Player.Health > 0)
             {
-                //Damage
-                if ((Blocks[Player_Y][Player.x - 1] == "Enemy" ||
-                    Blocks[Player_Y][Player.x + 1] == "Enemy" ||
-                    Blocks[Player_Y - 1][Player.x] == "Enemy" ||
-                    Blocks[Player_Y + 1][Player.x] == "Enemy") &&
-                    (GameTick % 100 >= 75 && GameTick % 100 <= 99) &&
-                    Player.Health > 0)
+                if (Player.x % blockWidth == 0)
                 {
-                    Player.Health--;
-                }
-
-                //Healing
-                else if (Player.Health < Player.Health_Max && GameTick % Player_Health_RegainInterval == 0)
-                {
-                    Player.Health += Player_Health_RegainAmount;
-
-                    if (Player.Health > Player.Health_Max)
+                    if (Blocks[Player.y / blockHeight][Player.x / blockWidth - 1] == "Enemy" ||
+                        Blocks[Player.y / blockHeight][Player.x / blockWidth + 1] == "Enemy")
                     {
-                        Player.Health = Player.Health_Max;
+                        Player.Health--;
+                        return;
                     }
+                    if (Player.y % blockHeight != 0)
+                    {
+                        if (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth - 1] == "Enemy" ||
+                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == "Enemy")
+                        {
+                            Player.Health--;
+                            return;
+                        }
+                    }
+                }
+                if (Player.y % blockHeight == 0)
+                {
+                    if (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == "Enemy" ||
+                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth] == "Enemy")
+                    {
+                        Player.Health--;
+                        return;
+                    }
+                    if (Player.x % blockWidth != 0)
+                    {
+                        if (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + 1] == "Enemy" ||
+                            Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == "Enemy")
+                        {
+                            Player.Health--;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            //Healing
+            if (Player.Health < Player.Health_Max && GameTick % Player_Health_RegainInterval == 0)
+            {
+                Player.Health += Player_Health_RegainAmount;
+
+                if (Player.Health > Player.Health_Max)
+                {
+                    Player.Health = Player.Health_Max;
                 }
             }
         }
