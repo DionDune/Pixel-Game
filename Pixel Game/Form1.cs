@@ -1094,6 +1094,15 @@ namespace Pixel_Game
             {
                 Player.Breath += Player_Breath_RegainAmount;
             }
+
+            if (Player.Breath == Player.Breath_Max)
+            {
+                UIItems[2].Visible = false;
+            }
+            else if (Player.Breath < Player.Breath_Max)
+            {
+                UIItems[2].Visible = true;
+            }
         }
 
         private void Execute_PlayerSurvival()
@@ -1870,43 +1879,42 @@ namespace Pixel_Game
             //UI
             foreach (UIItem Item in UIItems)
             {
-
-                // Material Selector
-                if (Item.Type == "MaterialSelector")
+                if (Item.Visible == true)
                 {
-                    canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
-                            Item.Location_X,
-                            Item.Location_Y,
-                            Item.Size_X, Item.Size_Y
-                            ));
+                    // Material Selector
+                    if (Item.Type == "MaterialSelector")
+                    {
+                        canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
+                                Item.Location_X,
+                                Item.Location_Y,
+                                Item.Size_X, Item.Size_Y
+                                ));
 
-                    canvas.FillRectangle(Block_FetchColor(MaterialSelector_Selected), new Rectangle(
-                            Item.Location_X + 5,
-                            Item.Location_Y + 5,
-                            Item.Size_X - 10, Item.Size_Y - 10
-                            ));
-                }
+                        canvas.FillRectangle(Block_FetchColor(MaterialSelector_Selected), new Rectangle(
+                                Item.Location_X + 5,
+                                Item.Location_Y + 5,
+                                Item.Size_X - 10, Item.Size_Y - 10
+                                ));
+                    }
 
-                // Health Bar
-                if (Item.Type == "HealthBar")
-                {
-                    canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
-                            Item.Location_X,
-                            Item.Location_Y,
-                            Item.Size_X, Item.Size_Y
-                            ));
+                    // Health Bar
+                    if (Item.Type == "HealthBar")
+                    {
+                        canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
+                                Item.Location_X,
+                                Item.Location_Y,
+                                Item.Size_X, Item.Size_Y
+                                ));
 
-                    canvas.FillRectangle(Brushes.Red, new Rectangle(
-                            Item.Location_X + 5,
-                            Item.Location_Y + 5,
-                            Convert.ToInt32(Player.Health * Decimal.Divide(Item.Size_X - 10, 100)), Item.Size_Y - 10
-                            ));
-                }
+                        canvas.FillRectangle(Brushes.Red, new Rectangle(
+                                Item.Location_X + 5,
+                                Item.Location_Y + 5,
+                                Convert.ToInt32(Player.Health * Decimal.Divide(Item.Size_X - 10, 100)), Item.Size_Y - 10
+                                ));
+                    }
 
-                // Breath Bar
-                if (Item.Type == "BreathBar")
-                {
-                    if (Player.Breath < 1000)
+                    // Breath Bar
+                    if (Item.Type == "BreathBar")
                     {
                         canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
                                 Item.Location_X,
@@ -1920,49 +1928,49 @@ namespace Pixel_Game
                                 Convert.ToInt32(Player.Breath * Decimal.Divide(Item.Size_X - 10, 1000)), Item.Size_Y - 10
                                 ));
                     }
-                }
 
-                // ScrollBar Example
-                if (Item.Type == "ScrollBar")
-                {
-                    canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
-                            Item.Location_X,
-                            Item.Location_Y,
-                            Item.Size_X, Item.Size_Y
-                            ));
-                    int Box_Location_X = Item.Location_X + (Item.Active_Amount * Item.Size_X / 100) - Item.Size_Sub_X / 2;
-                    int Box_Location_Y = Item.Location_Y - Item.Size_Sub_Y / 2 + Item.Size_Y / 2;
-
-                    // Amount Selector Outer
-                    canvas.FillRectangle(Brushes.Red, new Rectangle(
-                        Box_Location_X,
-                        Box_Location_Y,
-                        Item.Size_Sub_X, Item.Size_Sub_Y
-                        ));
-
-                    //Amount Selector Inner
-                    canvas.FillRectangle(Brushes.White, new Rectangle(
-                        Box_Location_X + 5,
-                        Box_Location_Y + 5,
-                        Item.Size_Sub_X - 10, Item.Size_Sub_Y - 10
-                        ));
-
-
-                    int FontOffset = 0;
-                    if (Item.Active_Amount < 10)
+                    // ScrollBar Example
+                    if (Item.Type == "ScrollBar")
                     {
-                        FontOffset = 5;
-                    }
+                        canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
+                                Item.Location_X,
+                                Item.Location_Y,
+                                Item.Size_X, Item.Size_Y
+                                ));
+                        int Box_Location_X = Item.Location_X + (Item.Active_Amount * Item.Size_X / 100) - Item.Size_Sub_X / 2;
+                        int Box_Location_Y = Item.Location_Y - Item.Size_Sub_Y / 2 + Item.Size_Y / 2;
 
-                    //Amount Selector Text
-                    canvas.DrawString(Item.Active_Amount.ToString(),
-                        new Font("ArcadeClassic Regular", 16),
-                        Brushes.Black,
-                        //Item.Location_X + Item.Active_Amount - Item.Size_Sub_X / 4,
-                        //Item.Location_Y - Item.Size_Sub_Y / 4 + 2,
-                        Box_Location_X + 5 + FontOffset,
-                        Box_Location_Y + Item.Size_Sub_Y / 5
-                        );
+                        // Amount Selector Outer
+                        canvas.FillRectangle(Brushes.Red, new Rectangle(
+                            Box_Location_X,
+                            Box_Location_Y,
+                            Item.Size_Sub_X, Item.Size_Sub_Y
+                            ));
+
+                        //Amount Selector Inner
+                        canvas.FillRectangle(Brushes.White, new Rectangle(
+                            Box_Location_X + 5,
+                            Box_Location_Y + 5,
+                            Item.Size_Sub_X - 10, Item.Size_Sub_Y - 10
+                            ));
+
+
+                        int FontOffset = 0;
+                        if (Item.Active_Amount < 10)
+                        {
+                            FontOffset = 5;
+                        }
+
+                        //Amount Selector Text
+                        canvas.DrawString(Item.Active_Amount.ToString(),
+                            new Font("ArcadeClassic Regular", 16),
+                            Brushes.Black,
+                            //Item.Location_X + Item.Active_Amount - Item.Size_Sub_X / 4,
+                            //Item.Location_Y - Item.Size_Sub_Y / 4 + 2,
+                            Box_Location_X + 5 + FontOffset,
+                            Box_Location_Y + Item.Size_Sub_Y / 5
+                            );
+                    }
                 }
             }
         }
