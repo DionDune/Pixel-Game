@@ -1347,20 +1347,23 @@ namespace Pixel_Game
             //Highlighter
             foreach (UIItem Item in UIItems)
             {
-                int Box_Location_X = Item.Location_X + (Item.Active_Amount * Item.Size_X / 100) - Item.Size_Sub_X / 2;
-                int Box_Location_Y = Item.Location_Y - Item.Size_Sub_Y / 2 + Item.Size_Y / 2;
+                if (Item.Visible == true)
+                {
+                    int Box_Location_X = Item.Location_X + (Item.Active_Amount * Item.Size_X / 100) - Item.Size_Sub_X / 2;
+                    int Box_Location_Y = Item.Location_Y - Item.Size_Sub_Y / 2 + Item.Size_Y / 2;
 
-                if (e.Location.X >= Item.Location_X && e.Location.X <= Item.Location_X + Item.Size_X &&
-                    e.Location.Y >= Item.Location_Y && e.Location.Y <= Item.Location_Y + Item.Size_Y)
-                {
-                    Highlighter_Visible = false;
-                    return;
-                }
-                if (e.Location.X >= Box_Location_X && e.Location.X <= Box_Location_X + Item.Size_Sub_X &&
-                    e.Location.Y >= Box_Location_Y && e.Location.Y <= Box_Location_Y + Item.Size_Sub_Y)
-                {
-                    Highlighter_Visible = false;
-                    return;
+                    if (e.Location.X >= Item.Location_X && e.Location.X <= Item.Location_X + Item.Size_X &&
+                        e.Location.Y >= Item.Location_Y && e.Location.Y <= Item.Location_Y + Item.Size_Y)
+                    {
+                        Highlighter_Visible = false;
+                        return;
+                    }
+                    if (e.Location.X >= Box_Location_X && e.Location.X <= Box_Location_X + Item.Size_Sub_X &&
+                        e.Location.Y >= Box_Location_Y && e.Location.Y <= Box_Location_Y + Item.Size_Sub_Y)
+                    {
+                        Highlighter_Visible = false;
+                        return;
+                    }
                 }
             }
             Highlighter_Visible = true;
