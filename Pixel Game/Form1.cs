@@ -954,10 +954,23 @@ namespace Pixel_Game
         {
             // Nulifies moving through block
 
-            if (PlayerMovement_CollisionType_Vertical(blockHeight) == "Solid" && Player.y % blockHeight != 0)
+            //Up
+            if (Player.y % blockHeight != 0 && PlayerMovement_CollisionType_Vertical(0) == "Solid")
             {
-                Player.y = Player.y / blockHeight * blockHeight;
-                cameraOffset_y = cameraOffset_y / blockHeight * blockHeight;
+                while (Player.y % blockHeight != 0)
+                {
+                    Player.y += 1;
+                    cameraOffset_y += 1;
+                }
+            }
+            //Down
+            else if (Player.y % blockHeight != 0 && PlayerMovement_CollisionType_Vertical(blockHeight) == "Solid")
+            {
+                while (Player.y % blockHeight != 0)
+                {
+                    Player.y -= 1;
+                    cameraOffset_y -= 1;
+                }
             }
         }
 
