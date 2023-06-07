@@ -1004,22 +1004,46 @@ namespace Pixel_Game
 
         private void Execute_Player_BreathDetection()
         {
-            int Player_Y = Player.y / blockHeight;
+            bool isUnderwater = true;
+            
 
-            if (Player.x > 0 && Player.x < worldWidth - 1 && Player.y > 0 && Player.y < worldHeight - 1)
+            if (Blocks[Player.y / blockHeight][Player.x / blockWidth] == null)
             {
-                //Breath Loss
-                if (Blocks[Player_Y][Player.x] == "Water" && Blocks[Player_Y - 1][Player.x] == "Water" &&
-                    Player.Breath > 0)
-                {
-                    Player.Breath--;
-                }
+                isUnderwater = false;
+            }
 
-                // Breath Regain
-                else if (Player.Breath < Player.Breath_Max && GameTick % Player_Breath_RegainInterval == 0)
+            if (Player.x % blockWidth != 0)
+            {
+                if (Blocks[Player.y / blockHeight][Player.x / blockWidth + 1] == null)
                 {
-                    Player.Breath += Player_Breath_RegainAmount;
+                    isUnderwater = false;
                 }
+            }
+            if (Player.y % blockHeight != 0)
+            {
+                if (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth] == null)
+                {
+                    isUnderwater = false;
+                }
+                if (Player.x % blockWidth != 0)
+                {
+                    if (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == null)
+                    {
+                        isUnderwater = false;
+                    }
+                }
+            }
+
+            //Breath Loss
+            if (isUnderwater == true && Player.Breath > 0)
+            {
+                Player.Breath--;
+            }
+
+            // Breath Regain
+            else if (Player.Breath < Player.Breath_Max && GameTick % Player_Breath_RegainInterval == 0)
+            {
+                Player.Breath += Player_Breath_RegainAmount;
             }
         }
 
