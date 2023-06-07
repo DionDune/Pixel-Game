@@ -21,6 +21,8 @@ namespace Pixel_Game
         private List<List<string>> Blocks = new List<List<string>>();
         private PlayerBlock Player = new PlayerBlock();
 
+        private List<EntityBlock> Entities = new List<EntityBlock>();
+
         private List<string> BiomeRegions = new List<string>();
 
         // Colors
@@ -1856,6 +1858,17 @@ namespace Pixel_Game
                 Screen.Height / 2 - blockHeight + 2, // - (2 * blockHeight),
                 blockWidth, blockHeight // * 3
                 ));
+
+            //Entities
+            foreach (EntityBlock Entity in Entities)
+            {
+                canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                (Entity.x * blockWidth) - cameraOffset_x,
+                (Entity.y * blockHeight) - cameraOffset_y,
+                blockWidth, blockHeight
+                ));
+            }
+            
 
             //Highlighter
             if (Highlighter_Visible)
