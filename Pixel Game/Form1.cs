@@ -44,6 +44,8 @@ namespace Pixel_Game
         // Sizes
         int screenWidth;
         int screenHeight;
+        int prevScreenPixelWidth;
+        int prevScreenPixelHeight;
         int worldWidth;
         int worldHeight;
 
@@ -126,6 +128,8 @@ namespace Pixel_Game
             screenWidth = Screen.Width / blockWidth;
             worldHeight = 860;//480;
             worldWidth = 3360;//1680;
+            prevScreenPixelWidth = Screen.Width;
+            prevScreenPixelHeight = Screen.Height;
 
             // Camera
             cameraOffset_x = 0;
@@ -1714,37 +1718,62 @@ namespace Pixel_Game
 
         private void Screen_SizeChange(object sender, EventArgs e)
         {
-            Screen.Width = Size.Width - 44;
-            Screen.Height = Size.Height - 27;
+            Screen.Width = Size.Width - 27;
+            Screen.Height = Size.Height - 44;
 
             //UI
             UI_PositionUpdate();
 
-            //Player Position && Ingame window
-            Player.x -= screenWidth / 2;
-            Player.y -= screenHeight / 2;
+
+            //X
+            if (Screen.Width > prevScreenPixelWidth)
+            {
+                for (int i = 0; i < Screen.Width - prevScreenPixelWidth; i++)
+                {
+                    if ((prevScreenPixelWidth + i) % 2 == 0)
+                    {
+                        cameraOffset_x -= 1;
+                    }
+                }
+            }
+            else if (Screen.Width < prevScreenPixelWidth)
+            {
+                for (int i = 0; i < prevScreenPixelWidth - Screen.Width; i++)
+                {
+                    if ((prevScreenPixelWidth - i) % 2 == 0)
+                    {
+                        cameraOffset_x += 1;
+                    }
+                }
+            }
+
+            //Y
+            if (Screen.Height > prevScreenPixelHeight)
+            {
+                for (int i = 0; i < Screen.Height - prevScreenPixelHeight; i++)
+                {
+                    if ((prevScreenPixelHeight + i) % 2 == 1)
+                    {
+                        cameraOffset_y -= 1;
+                    }
+                }
+            }
+            else if (Screen.Height < prevScreenPixelHeight)
+            {
+                for (int i = 0; i < prevScreenPixelHeight - Screen.Height; i++)
+                {
+                    if ((prevScreenPixelHeight - i) % 2 == 1)
+                    {
+                        cameraOffset_y += 1;
+                    }
+                }
+            }
+
+            prevScreenPixelWidth = Screen.Width;
+            prevScreenPixelHeight = Screen.Height;
+
             screenHeight = Screen.Height / blockHeight;
             screenWidth = Screen.Width / blockWidth;
-            Player.x += screenWidth / 2;
-            Player.y += screenHeight / 2;
-
-            //Player Screen Position
-            if (((screenHeight * blockHeight) / 2 + playerOffset_y) % blockHeight == 0)
-            {
-                playerCameraOffset_Y = 0;
-            }
-            else
-            {
-                playerCameraOffset_Y = blockHeight / 2;
-            }
-            if (((screenHeight * blockHeight) / 2 + playerOffset_y) % blockWidth == 0)
-            {
-                playerCameraOffset_X = 0;
-            }
-            else
-            {
-                playerCameraOffset_X = blockWidth / 2;
-            }
         }
 
         private void GameTick_Handler()
