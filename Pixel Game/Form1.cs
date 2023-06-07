@@ -162,6 +162,9 @@ namespace Pixel_Game
             };
             Random_TracerActive = false;
 
+            //Entities
+            SpawnEntities();
+
             // Highlighter
             Highlighter_Visible = true;
             Highlighter_Size = 5;
@@ -989,6 +992,43 @@ namespace Pixel_Game
             Execute_PlayerMomentum_Vertical();
             Execute_PlayerMovement_Correction_Vertical();
             Execute_PlayerMomentum_Vertical_Handler();
+        }
+
+        #endregion
+
+        #region Entity Movement
+
+        private void SpawnEntities()
+        {
+            while (Entities.Count < 60)
+            {
+                int x_pos = random.Next(10, worldWidth - 10) * blockWidth;
+                int y_pos = 15 * blockHeight;
+
+                EntityBlock Entity = new EntityBlock
+                {
+                    x = x_pos,
+                    y = y_pos
+                };
+
+                Entities.Add(Entity);
+            }
+        }
+
+        private void Execute_EntityMomentum_Vertical()
+        {
+            foreach (EntityBlock Entity in Entities)
+            {
+                if (Blocks[Entity.y / blockHeight + 1][Entity.x / blockWidth] == null)
+                {
+                    Entity.y += blockHeight;
+                }
+            }
+        }
+
+        private void Execute_EntityMovement_Handler()
+        {
+            Execute_EntityMomentum_Vertical();
         }
 
         #endregion
@@ -1852,6 +1892,16 @@ namespace Pixel_Game
                 }
             }
 
+            //Entities
+            foreach (EntityBlock Entity in Entities)
+            {
+                canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                (Entity.x) - cameraOffset_x,
+                (Entity.y) - cameraOffset_y,
+                blockWidth, blockHeight
+                ));
+            }
+
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
                 Screen.Width / 2 + playerOffset_x - playerCameraOffset_X - 1,
@@ -1859,16 +1909,6 @@ namespace Pixel_Game
                 blockWidth, blockHeight // * 3
                 ));
 
-            //Entities
-            foreach (EntityBlock Entity in Entities)
-            {
-                canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
-                (Entity.x * blockWidth) - cameraOffset_x,
-                (Entity.y * blockHeight) - cameraOffset_y,
-                blockWidth, blockHeight
-                ));
-            }
-            
 
             //Highlighter
             if (Highlighter_Visible)
@@ -1998,13 +2038,14 @@ namespace Pixel_Game
             Execute_PlayerMovement_Handler();
             Execute_PlayerSurvival();
 
-
-            Execute_BlockLoadBoundary();
+            // Entities
+            Execute_EntityMovement_Handler();
 
             // Block Physics
             Execute_Physics_Fluid();
             Execute_Physics_Sand();
 
+            Execute_BlockLoadBoundary();
             Random_PlayerTracer();
 
             Screen.Invalidate();
