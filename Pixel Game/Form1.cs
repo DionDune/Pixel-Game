@@ -1564,7 +1564,6 @@ namespace Pixel_Game
                     }
                 }
             }
-            //Console.WriteLine(PhysicsMaterial_Water.Count());
         }
 
         #endregion
@@ -1905,8 +1904,8 @@ namespace Pixel_Game
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
                 Screen.Width / 2 + playerOffset_x - playerCameraOffset_X - 1,
-                Screen.Height / 2 - blockHeight + 2, // - (2 * blockHeight),
-                blockWidth, blockHeight // * 3
+                Screen.Height / 2 - blockHeight + 2,
+                blockWidth, blockHeight
                 ));
 
 
