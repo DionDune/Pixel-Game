@@ -9,6 +9,8 @@ namespace Pixel_Game
     public class UIItem
     {
         public string Type { get; set; }
+        public bool Visible { get; set; }
+
 
         public bool Active { get; set; }
         public int Active_Amount { get; set; }
@@ -26,6 +28,7 @@ namespace Pixel_Game
         public UIItem()
         {
             Type = "Checkbox";
+            Visible = true;
 
             Active = false;
             Active_Amount = 0;
