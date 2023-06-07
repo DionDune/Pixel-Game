@@ -348,12 +348,12 @@ namespace Pixel_Game
             // Entities
             for (int x_pos = 10; x_pos < GroundHeights.Count() - 1; x_pos++)
             {
-                if (random.Next(0, 40) == -1)
+                if (random.Next(0, 40) == 1)
                 {
                     Blocks[GroundHeights[x_pos] - 1][x_pos] = "Shrub";
                     Blocks[GroundHeights[x_pos] - 2][x_pos] = "Shrub";
                 }
-                if (random.Next(0, 200) == -1)
+                if (random.Next(0, 200) == 1)
                 {
                     Blocks[GroundHeights[x_pos] - 1][x_pos] = "Enemy";
                     Blocks[GroundHeights[x_pos] - 2][x_pos] = "Enemy";
