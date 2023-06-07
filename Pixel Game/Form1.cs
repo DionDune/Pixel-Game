@@ -930,17 +930,23 @@ namespace Pixel_Game
         {
             // Nulifies moving through block
 
-            //Left
-            if (PlayerMovement_ColisionType_Horizontal(0) == "Solid" && Player.x % blockWidth != 0)
-            {
-                Player.x = (Player.x / blockWidth + 1) * blockWidth;
-                cameraOffset_x = (cameraOffset_x / blockWidth + 1) * blockWidth;
-            }
             //Right
-            if (PlayerMovement_ColisionType_Horizontal(1) == "Solid" && Player.x % blockWidth != 0)
+            if (Player.x % blockWidth != 0 && PlayerMovement_ColisionType_Horizontal(1) == "Solid")
             {
-                Player.x = (Player.x / blockWidth) * blockWidth;
-                cameraOffset_x = cameraOffset_x / blockWidth * blockWidth;
+                while (Player.x % blockWidth != 0)
+                {
+                    Player.x -= 1;
+                    cameraOffset_x -= 1;
+                }
+            }
+            //Left
+            else if (Player.x % blockWidth != 0 && PlayerMovement_ColisionType_Horizontal(0) == "Solid")
+            {
+                while (Player.x % blockWidth != 0)
+                {
+                    Player.x += 1;
+                    cameraOffset_x += 1;
+                }
             }
         }
 
