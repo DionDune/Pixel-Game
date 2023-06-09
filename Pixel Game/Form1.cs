@@ -620,10 +620,10 @@ namespace Pixel_Game
             if (Player.Momentum_Vertical > 0)
             {
                 string Collision_Type = PlayerMovement_CollisionType_Vertical(Player.Momentum_Vertical);
-                string Collision_Bellow = PlayerMovement_CollisionType_Vertical(blockHeight);
+                string Collision_Type_Bellow = PlayerMovement_CollisionType_Vertical(blockHeight);
 
                 // Solid Bellow
-                if (Collision_Type == "Solid" || Collision_Bellow == "Solid")
+                if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
                 {
                     Player.Momentum_Vertical = 0;
                 }
