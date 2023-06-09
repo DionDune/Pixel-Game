@@ -57,8 +57,6 @@ namespace Pixel_Game
         //Camera
         int cameraOffset_x;
         int cameraOffset_y;
-        int playerOffset_x;
-        int playerOffset_y;
         int playerCameraOffset_Y;
         int playerCameraOffset_X;
 
@@ -70,7 +68,7 @@ namespace Pixel_Game
 
         // Player Movement
         bool goLeft, goRight, goDown, goUp;
-        bool Player_Jump, Player_Jumping;
+        bool Player_Jump;
         bool Player_ShiftMove;
         bool Player_AllowBunnyHop;
         bool Random_TracerActive;
@@ -136,8 +134,6 @@ namespace Pixel_Game
             // Camera
             cameraOffset_x = 0;
             cameraOffset_y = 0;
-            playerOffset_x = 0;
-            playerOffset_y = 0;
             playerCameraOffset_Y = blockHeight / 2;
             playerCameraOffset_X = 0; // blockWidth / 2;
 
@@ -1926,7 +1922,7 @@ namespace Pixel_Game
 
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
-                Screen.Width / 2 + playerOffset_x - playerCameraOffset_X - 1,
+                Screen.Width / 2 - playerCameraOffset_X - 1,
                 Screen.Height / 2 - blockHeight + 2,
                 blockWidth, blockHeight
                 ));
