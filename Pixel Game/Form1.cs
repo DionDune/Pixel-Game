@@ -665,8 +665,11 @@ namespace Pixel_Game
 
                 if (Collision_Type == "Solid")
                 {
-                    Player.y = Player.y / blockHeight * blockHeight;
-                    cameraOffset_y = cameraOffset_y / blockHeight * blockHeight;
+                    while (PlayerMovement_CollisionType_Vertical(-1) != "Solid")
+                    {
+                        Player.y--;
+                        cameraOffset_y--;
+                    }
                     Player.Momentum_Vertical = 0;
                 }
                 else if (Collision_Type == null || Collision_Type == "Fluid")
