@@ -1133,6 +1133,10 @@ namespace Pixel_Game
             {
                 Player.Breath--;
             }
+            else if (Player.Breath == 0 && Player.Health > 0 && GameTick % 30 == 0)
+            {
+                Player.Health -= Player.Health_Max / 20;
+            }
 
             // Breath Regain
             else if (Player.Breath < Player.Breath_Max && GameTick % Player_Breath_RegainInterval == 0)
