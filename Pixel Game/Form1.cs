@@ -1042,7 +1042,7 @@ namespace Pixel_Game
 
         private void Execute_Player_HealthDetection()
         {
-            //Damage
+            // Damage
             if (Player.x / blockWidth > 0 && Player.x / blockWidth < worldWidth - 1 && Player.y / blockHeight > 0 && Player.y / blockHeight < worldHeight - 1 &&
                 GameTick % 100 >= 75 && GameTick % 100 <= 99 && Player.Health > 0)
             {
@@ -1084,15 +1084,20 @@ namespace Pixel_Game
                 }
             }
 
-            //Healing
+            // Healing
             if (Player.Health < Player.Health_Max && GameTick % Player_Health_RegainInterval == 0)
             {
                 Player.Health += Player_Health_RegainAmount;
+            }
 
-                if (Player.Health > Player.Health_Max)
-                {
-                    Player.Health = Player.Health_Max;
-                }
+            // Corrections
+            if (Player.Health > Player.Health_Max)
+            {
+                Player.Health = Player.Health_Max;
+            }
+            else if (Player.Health < 0)
+            {
+                Player.Health = 0;
             }
         }
 
@@ -1144,6 +1149,7 @@ namespace Pixel_Game
                 Player.Breath += Player_Breath_RegainAmount;
             }
 
+            // UI
             if (Player.Breath == Player.Breath_Max)
             {
                 UIItems[2].Visible = false;
@@ -1151,6 +1157,16 @@ namespace Pixel_Game
             else if (Player.Breath < Player.Breath_Max)
             {
                 UIItems[2].Visible = true;
+            }
+
+            // Corrections
+            if (Player.Breath > Player.Breath_Max)
+            {
+                Player.Breath = Player.Breath_Max;
+            }
+            else if (Player.Breath < 0)
+            {
+                Player.Breath = 0;
             }
         }
 
