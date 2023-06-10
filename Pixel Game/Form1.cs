@@ -1003,7 +1003,7 @@ namespace Pixel_Game
 
         private void SpawnEntities()
         {
-            while (Entities.Count < 60)
+            while (Entities.Count < 6000)
             {
                 int x_pos = random.Next(10, worldWidth - 10) * blockWidth;
                 int y_pos = 15 * blockHeight;
@@ -2237,11 +2237,15 @@ namespace Pixel_Game
             //Entities
             foreach (EntityBlock Entity in Entities)
             {
-                canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
-                (Entity.x) - cameraOffset_x,
-                (Entity.y) - cameraOffset_y,
-                blockWidth, blockHeight
-                ));
+                if (Entity.x > blockBound_X_Left * blockWidth && Entity.x < blockBound_X_Right * blockWidth &&
+                    Entity.y > blockBound_Y_Left * blockHeight && Entity.y < blockBound_Y_Right * blockHeight)
+                {
+                    canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                        (Entity.x) - cameraOffset_x,
+                        (Entity.y) - cameraOffset_y,
+                        blockWidth, blockHeight
+                        ));
+                }
             }
 
             // Player
