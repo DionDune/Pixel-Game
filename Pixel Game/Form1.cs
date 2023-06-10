@@ -1026,7 +1026,7 @@ namespace Pixel_Game
             foreach (EntityBlock Entity in Entities) 
             { 
                 // Downward Movement
-                if (Player.Momentum_Vertical > 0)
+                if (Entity.Momentum_Vertical > 0)
                 {
                     string Collision_Type = CollisionType_Vertical(Entity.Momentum_Vertical, Entity.x, Entity.y);
                     string Collision_Type_Bellow = CollisionType_Vertical(blockHeight, Entity.x, Entity.y);
