@@ -1019,7 +1019,328 @@ namespace Pixel_Game
             }
         }
 
+
+        //Vertical
         private void Execute_EntityMomentum_Vertical()
+        {
+            foreach (EntityBlock Entity in Entities) 
+            { 
+                // Downward Movement
+                if (Player.Momentum_Vertical > 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(Entity.Momentum_Vertical, Entity.x, Entity.y);
+                    string Collision_Type_Bellow = CollisionType_Vertical(blockHeight, Entity.x, Entity.y);
+
+                    // Solid Bellow
+                    if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
+                    {
+                        Entity.Momentum_Vertical = 0;
+                    }
+
+                    // Water Bellow
+                    else if (Collision_Type == "Fluid")
+                    {
+                        if (Entity.Momentum_Vertical > blockHeight / 3)
+                        {
+                            Entity.Momentum_Vertical = blockHeight / 3;
+                        }
+
+                        Entity.y += Entity.Momentum_Vertical;
+
+                        if (Entity.Momentum_Vertical < blockHeight / 4 && GameTick % 12 == 0)
+                        {
+                            Entity.Momentum_Vertical += 1;
+                        }
+                    }
+
+                    // Air Bellow
+                    else if (Collision_Type == null)
+                    {
+                        Entity.y += Entity.Momentum_Vertical;
+
+                        if (Entity.Momentum_Vertical < blockHeight * 2 && GameTick % 2 == 0)
+                        {
+                            Entity.Momentum_Vertical += 1;
+                        }
+                    }
+                }
+
+                // Upward Movement
+                if (Entity.Momentum_Vertical < 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(Entity.Momentum_Vertical, Entity.x, Entity.y);
+
+                    // Solid Above
+                    if (Collision_Type == "Solid")
+                    {
+                        while (CollisionType_Vertical(-1, Entity.x, Entity.y) != "Solid")
+                        {
+                            Entity.y--;
+                        }
+                        Entity.Momentum_Vertical = 0;
+                    }
+
+                    // Other Above
+                    else if (Collision_Type == null || Collision_Type == "Fluid")
+                    {
+                        Entity.y += Entity.Momentum_Vertical;
+                        if (GameTick % 2 == 0)
+                        {
+                            Entity.Momentum_Vertical += 1;  // Change to -= 1 for fun
+                        }
+                    }
+                }
+
+                //Give gravitational momentum
+                if (Entity.Momentum_Vertical == 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(blockHeight, Entity.x, Entity.y);
+                    if ((Collision_Type == null || Collision_Type == "Fluid") && GameTick % 2 == 0)
+                    {
+                        Entity.Momentum_Vertical += 1;
+                    }
+                }
+            }
+        }
+
+        private void Execute_EntityMomentum_Vertical_Handler()
+        {
+            // Entities will jump randomly. The rate defined by instances of "random.Next(0, 200) == 100"
+
+            foreach (EntityBlock Entity in Entities)
+            {
+                if (random.Next(0, 200) == 100 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Solid")
+                {
+                    if (Entity.Momentum_Vertical == 0)
+                    {
+                        if (Blocks[Entity.y / blockHeight][Entity.x / blockWidth] != "Water")
+                        {
+                            if (random.Next(0, 50) == 25)
+                            {
+                                Entity.Momentum_Vertical = -Entity.JumpHeight;
+                            }
+                            else
+                            {
+                                Entity.Momentum_Vertical = -(Entity.JumpHeight / 4 * 3);
+                            }
+                        }
+                        else
+                        {
+                            Entity.Momentum_Vertical = -Entity.JumpHeight / 2;
+                        }
+                    }
+                }
+                else if (random.Next(0, 200) == 100 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Fluid")
+                {
+                    if (Entity.Momentum_Vertical > -Entity.JumpHeight / 5)
+                    {
+                        Entity.Momentum_Vertical -= 2;
+                    }
+                }
+            }
+        }
+
+
+        // Horizontal
+        private void Execute_EntityMomentum_Horizontal()
+        {
+            foreach (EntityBlock Entity in Entities)
+            {
+                if (Entity.Momentum_Horizontal != 0)
+                {
+                    string CollsionType = CollisionType_Horizontal(Entity.Momentum_Horizontal, Entity.x, Entity.y);
+
+
+                    // Solid Sideward
+                    if (CollsionType == "Solid")
+                    {
+                        // AutoJump
+                        int moveDirection = 1;
+                        if (Entity.Direction == "Left")
+                        {
+                            moveDirection *= -1;
+                        }
+                        if (((Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth] == null && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection] == null)
+                            || (Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth] == "Water" && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection] == "Water"))
+                            && GameTick % 1 == 0 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Solid" &&
+                            (Entity.Momentum_Horizontal > 1 || Entity.Momentum_Horizontal < -1))
+                        {
+                            Entity.x += Entity.Momentum_Horizontal;
+                            Entity.y -= blockHeight;
+                        }
+
+                        // Collision
+                        else
+                        {
+                            Entity.Momentum_Horizontal = 0;
+                        }
+                    }
+
+                    // Fluid Sideward
+                    if (CollsionType == "Water") // Collision detecting water as air
+                    {
+                        if (Entity.Momentum_Horizontal > blockWidth / 4)
+                        {
+                            Entity.Momentum_Horizontal = blockWidth / 4;
+                        }
+                        else if (Entity.Momentum_Horizontal < -blockWidth / 3)
+                        {
+                            Entity.Momentum_Horizontal = -blockWidth / 4;
+                        }
+
+                        Entity.x += Entity.Momentum_Horizontal;
+                    }
+
+                    // Air Sideward
+                    if (CollsionType == null)
+                    {
+                        Entity.x += Entity.Momentum_Horizontal;
+                    }
+                }
+            }
+        }
+
+        private void Execute_EntityMomentum_Horizontal_Handler()
+        {
+            foreach (EntityBlock Entity in Entities)
+            {
+                int MomentumChangeMultiplier = 1;
+                int MomentumSlowdown = 1;
+
+                float MaxSpeed = Entity.Speed_Base;
+
+                // Assigns max speed
+                if (false == true)
+                {
+                    MaxSpeed = Entity.Speed_Max;
+                }
+
+
+                // Left
+                if (Entity.Direction == "Left" && Entity.Momentum_Horizontal > -Convert.ToInt32(blockWidth * MaxSpeed))
+                {
+                    if (Entity.Momentum_Horizontal > 0)
+                    {
+                        MomentumChangeMultiplier *= 3;
+                    }
+
+                    if (Entity.Momentum_Horizontal == 0)
+                    {
+                        Entity.Momentum_Horizontal -= MomentumChangeMultiplier;
+                    }
+                    else if (GameTick % 4 == 0)
+                    {
+                        Entity.Momentum_Horizontal -= MomentumChangeMultiplier;
+                    }
+
+                }
+
+                // Right
+                if (Entity.Direction == "Right" && Entity.Momentum_Horizontal < Convert.ToInt32(blockWidth * MaxSpeed))
+                {
+                    if (Entity.Momentum_Horizontal < 0)
+                    {
+                        MomentumChangeMultiplier *= 3;
+                    }
+
+                    if (Entity.Momentum_Horizontal == 0)
+                    {
+                        Entity.Momentum_Horizontal += MomentumChangeMultiplier;
+                    }
+                    else if (GameTick % 4 == 0)
+                    {
+                        Entity.Momentum_Horizontal += MomentumChangeMultiplier;
+                    }
+                }
+
+
+                // Momentum Reduction
+                else if (((Entity.Direction == "Still" && Entity.Momentum_Horizontal != 0) || (true == false &&
+                    (Entity.Momentum_Horizontal > Entity.Speed_Base * blockWidth || Entity.Momentum_Horizontal < -Entity.Speed_Base * blockWidth)))
+                    && GameTick % 3 == 0)
+                {
+                    if (Entity.Momentum_Horizontal < 0)
+                    {
+                        Entity.Momentum_Horizontal += MomentumSlowdown;
+                    }
+                    else if (Entity.Momentum_Horizontal > 0)
+                    {
+                        Entity.Momentum_Horizontal -= MomentumSlowdown;
+                    }
+                }
+            }
+        }
+
+
+        //Position Corrections
+        private void Execute_EntityMovement_Correction_Horizontal()
+        {
+            // Nulifies moving through block
+
+            foreach (EntityBlock Entity in Entities)
+            {
+                //Right
+                if (Entity.x % blockWidth != 0 && CollisionType_Horizontal(1, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.x % blockWidth != 0)
+                    {
+                        Entity.x -= 1;
+                    }
+                }
+                //Left
+                else if (Entity.x % blockWidth != 0 && CollisionType_Horizontal(0, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.x % blockWidth != 0)
+                    {
+                        Entity.x += 1;
+                    }
+                }
+            }
+        }
+
+        private void Execute_EntityMovement_Correction_Vertical()
+        {
+            // Nulifies moving through block
+
+            foreach (EntityBlock Entity in Entities)
+            {
+                //Up
+                if (Entity.y % blockHeight != 0 && CollisionType_Vertical(0, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.y % blockHeight != 0)
+                    {
+                        Entity.y += 1;
+                    }
+                }
+                //Down
+                else if (Entity.y % blockHeight != 0 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.y % blockHeight != 0)
+                    {
+                        Entity.y -= 1;
+                    }
+                }
+            }
+        }
+
+
+
+        private void Execute_EntityMovement_Handler()
+        {
+            // Horizontal
+            Execute_EntityMomentum_Horizontal();
+            Execute_EntityMovement_Correction_Horizontal();
+            Execute_EntityMomentum_Horizontal_Handler();
+
+            // Vertical
+            Execute_EntityMomentum_Vertical();
+            Execute_EntityMovement_Correction_Vertical();
+            Execute_EntityMomentum_Vertical_Handler();
+        }
+
+
+        // Reduncant
+        private void Execute_EntityMomentum_Vertical1()
         {
             foreach (EntityBlock Entity in Entities)
             {
@@ -1030,7 +1351,7 @@ namespace Pixel_Game
             }
         }
 
-        private void Execute_EntityMovement_Handler()
+        private void Execute_EntityMovement_Handler1()
         {
             Execute_EntityMomentum_Vertical();
         }
