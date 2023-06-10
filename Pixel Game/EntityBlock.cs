@@ -11,13 +11,18 @@ namespace Pixel_Game
         public int x { get; set; }
         public int y { get; set; }
 
-        public string Direction { get; set; }
+        
 
         public int Health { get; set; }
         public int Health_Max { get; set; }
 
         public int Breath { get; set; }
         public int Breath_Max { get; set; }
+
+        public int Aggravation { get; set; }
+
+
+        public string Direction { get; set; }
 
         public int JumpHeight { get; set; }
 
@@ -39,6 +44,8 @@ namespace Pixel_Game
 
             Breath = 1000;
             Breath_Max = 1000;
+
+            Aggravation = 0;
 
             JumpHeight = 12;
 
