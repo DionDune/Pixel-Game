@@ -660,7 +660,6 @@ namespace Pixel_Game
             }
         }
 
-
         #endregion
 
         #region Player Movement
@@ -1322,7 +1321,6 @@ namespace Pixel_Game
                 }
             }
         }
-
 
 
         private void Execute_EntityMovement_Handler()
