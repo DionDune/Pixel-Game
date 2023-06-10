@@ -1210,7 +1210,7 @@ namespace Pixel_Game
                 float MaxSpeed = Entity.Speed_Base;
 
                 // Assigns max speed
-                if (false == true)
+                if (Entity.Aggravation > 25)
                 {
                     MaxSpeed = Entity.Speed_Max;
                 }
@@ -1255,7 +1255,7 @@ namespace Pixel_Game
 
 
                 // Momentum Reduction
-                else if (((Entity.Direction == "Still" && Entity.Momentum_Horizontal != 0) || (true == false &&
+                else if (((Entity.Direction == "Still" && Entity.Momentum_Horizontal != 0) || (Entity.Aggravation < 25 &&
                     (Entity.Momentum_Horizontal > Entity.Speed_Base * blockWidth || Entity.Momentum_Horizontal < -Entity.Speed_Base * blockWidth)))
                     && GameTick % 3 == 0)
                 {
