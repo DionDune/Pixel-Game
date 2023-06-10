@@ -1003,7 +1003,7 @@ namespace Pixel_Game
 
         private void SpawnEntities()
         {
-            while (Entities.Count < 6000)
+            while (Entities.Count < 100)
             {
                 int x_pos = random.Next(10, worldWidth - 10) * blockWidth;
                 int y_pos = 15 * blockHeight;
