@@ -557,17 +557,17 @@ namespace Pixel_Game
             bool BetweenBlocks = false;
 
 
-            if (Player.x % blockWidth != 0)
+            if (x_pos % blockWidth != 0)
             {
                 BetweenBlocks = true;
             }
 
             // Left block (Block player is standing on if not between blocks)
-            if (Blocks[(Player.y + Momentum) / blockHeight][Player.x / blockWidth] == "Water")
+            if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] == "Water")
             {
                 Type_BlockLeft = "Fluid";
             }
-            else if (Blocks[(Player.y + Momentum) / blockHeight][Player.x / blockWidth] != null)
+            else if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] != null)
             {
                 Type_BlockLeft = "Solid";
             }
@@ -575,11 +575,11 @@ namespace Pixel_Game
             // Right Block
             if (BetweenBlocks == true)
             {
-                if (Blocks[(Player.y + Momentum) / blockHeight][Player.x / blockWidth + 1] == "Water")
+                if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] == "Water")
                 {
                     Type_BlockRight = "Fluid";
                 }
-                else if (Blocks[(Player.y + Momentum) / blockHeight][Player.x / blockWidth + 1] != null)
+                else if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] != null)
                 {
                     Type_BlockRight = "Solid";
                 }
@@ -615,18 +615,18 @@ namespace Pixel_Game
                 offset = blockWidth - 1;
             }
 
-            if (Player.y % blockHeight != 0)
+            if (y_pos % blockHeight != 0)
             {
                 BetweenBlocks = true;
             }
 
 
             // Upper Pixel
-            if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] == "Water")
+            if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] == "Water")
             {
                 Type_BlockUpper = "Water";
             }
-            else if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] != null)
+            else if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] != null)
             {
                 Type_BlockUpper = "Solid";
             }
@@ -634,11 +634,11 @@ namespace Pixel_Game
             // Lower Pixel
             if (BetweenBlocks == true)
             {
-                if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] == "Water")
+                if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] == "Water")
                 {
                     Type_BlockLower = "Water";
                 }
-                else if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] != null)
+                else if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] != null)
                 {
                     Type_BlockLower = "Solid";
                 }
