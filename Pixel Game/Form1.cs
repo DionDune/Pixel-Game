@@ -547,18 +547,8 @@ namespace Pixel_Game
 
         /////////////////////////////////////////
 
-        #region Player Movement
+        #region Collision Detection
 
-        private void Random_PlayerTracer()
-        {
-            if (Random_TracerActive == true)
-            {
-                Blocks[Player.y / blockHeight][Player.x / blockWidth - 1] = "Default";
-            }
-        }
-
-
-        //Vertical
         private string CollisionType_Vertical(int Momentum, int x_pos, int y_pos)
         {
             string Type_BlockLeft = null;
@@ -610,6 +600,81 @@ namespace Pixel_Game
             }
         }
 
+        private string CollisionType_Horizontal(int Momentum, int x_pos, int y_pos)
+        {
+            string Type_BlockUpper = null;
+            string Type_BlockLower = null;
+
+            bool BetweenBlocks = false;
+
+            int offset = 0; // Needed so that detection to right works
+
+
+            if (Momentum > 0)
+            {
+                offset = blockWidth - 1;
+            }
+
+            if (Player.y % blockHeight != 0)
+            {
+                BetweenBlocks = true;
+            }
+
+
+            // Upper Pixel
+            if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] == "Water")
+            {
+                Type_BlockUpper = "Water";
+            }
+            else if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] != null)
+            {
+                Type_BlockUpper = "Solid";
+            }
+
+            // Lower Pixel
+            if (BetweenBlocks == true)
+            {
+                if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] == "Water")
+                {
+                    Type_BlockLower = "Water";
+                }
+                else if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] != null)
+                {
+                    Type_BlockLower = "Solid";
+                }
+            }
+
+
+            // Return conclusion
+            if (Type_BlockUpper == "Solid" || Type_BlockLower == "Solid")
+            {
+                return "Solid";
+            }
+            else if (Type_BlockUpper == "Water" || Type_BlockLower == "Water")
+            {
+                return "Water";
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        #endregion
+
+        #region Player Movement
+
+        private void Random_PlayerTracer()
+        {
+            if (Random_TracerActive == true)
+            {
+                Blocks[Player.y / blockHeight][Player.x / blockWidth - 1] = "Default";
+            }
+        }
+
+
+        //Vertical
         private void Execute_PlayerMomentum_Vertical()
         {
             // Downward Movement
@@ -724,66 +789,6 @@ namespace Pixel_Game
 
 
         // Horizontal
-        private string CollisionType_Horizontal(int Momentum, int x_pos, int y_pos)
-        {
-            string Type_BlockUpper = null;
-            string Type_BlockLower = null;
-
-            bool BetweenBlocks = false;
-
-            int offset = 0; // Needed so that detection to right works
-
-
-            if (Momentum > 0)
-            {
-                offset = blockWidth - 1;
-            }
-
-            if (Player.y % blockHeight != 0)
-            {
-                BetweenBlocks = true;
-            }
-
-
-            // Upper Pixel
-            if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] == "Water")
-            {
-                Type_BlockUpper = "Water";
-            }
-            else if (Blocks[Player.y / blockHeight][(Player.x + Momentum + offset) / blockWidth] != null)
-            {
-                Type_BlockUpper = "Solid";
-            }
-
-            // Lower Pixel
-            if (BetweenBlocks == true)
-            {
-                if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] == "Water")
-                {
-                    Type_BlockLower = "Water";
-                }
-                else if (Blocks[Player.y / blockHeight + 1][(Player.x + Momentum + offset) / blockWidth] != null)
-                {
-                    Type_BlockLower = "Solid";
-                }
-            }
-
-
-            // Return conclusion
-            if (Type_BlockUpper == "Solid" || Type_BlockLower == "Solid")
-            {
-                return "Solid";
-            }
-            else if (Type_BlockUpper == "Water" || Type_BlockLower == "Water")
-            {
-                return "Water";
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         private void Execute_PlayerMomentum_Horizontal()
         {
             if (Player.Momentum_Horizontal != 0)
