@@ -559,7 +559,7 @@ namespace Pixel_Game
 
 
         //Vertical
-        private string PlayerMovement_CollisionType_Vertical(int Momentum)
+        private string CollisionType_Vertical(int Momentum, int x_pos, int y_pos)
         {
             string Type_BlockLeft = null;
             string Type_BlockRight = null;
@@ -615,8 +615,8 @@ namespace Pixel_Game
             // Downward Movement
             if (Player.Momentum_Vertical > 0)
             {
-                string Collision_Type = PlayerMovement_CollisionType_Vertical(Player.Momentum_Vertical);
-                string Collision_Type_Bellow = PlayerMovement_CollisionType_Vertical(blockHeight);
+                string Collision_Type = CollisionType_Vertical(Player.Momentum_Vertical, Player.x, Player.y);
+                string Collision_Type_Bellow = CollisionType_Vertical(blockHeight, Player.x, Player.y);
 
                 // Solid Bellow
                 if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
@@ -657,11 +657,11 @@ namespace Pixel_Game
             // Upward Movement
             if (Player.Momentum_Vertical < 0)
             {
-                string Collision_Type = PlayerMovement_CollisionType_Vertical(Player.Momentum_Vertical);
+                string Collision_Type = CollisionType_Vertical(Player.Momentum_Vertical, Player.x, Player.y);
 
                 if (Collision_Type == "Solid")
                 {
-                    while (PlayerMovement_CollisionType_Vertical(-1) != "Solid")
+                    while (CollisionType_Vertical(-1, Player.x, Player.y) != "Solid")
                     {
                         Player.y--;
                         cameraOffset_y--;
@@ -682,7 +682,7 @@ namespace Pixel_Game
             //Give gravitational momentum
             if (Player.Momentum_Vertical == 0)
             {
-                string Collision_Type = PlayerMovement_CollisionType_Vertical(blockHeight);
+                string Collision_Type = CollisionType_Vertical(blockHeight, Player.x, Player.y);
                 if ((Collision_Type == null || Collision_Type == "Fluid") && GameTick % 2 == 0)
                 {
                     Player.Momentum_Vertical += 1;
@@ -692,7 +692,7 @@ namespace Pixel_Game
 
         private void Execute_PlayerMomentum_Vertical_Handler()
         {
-            if (Player_Jump && PlayerMovement_CollisionType_Vertical(blockHeight) == "Solid")
+            if (Player_Jump && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Solid")
             {
                 if (Player_AllowBunnyHop == true || Player.Momentum_Vertical == 0)
                 {
@@ -713,7 +713,7 @@ namespace Pixel_Game
                     }
                 }
             }
-            else if (Player_Jump && PlayerMovement_CollisionType_Vertical(blockHeight) == "Fluid")
+            else if (Player_Jump && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Fluid")
             {
                 if (Player.Momentum_Vertical > -Player.JumpHeight / 5)
                 {
@@ -724,7 +724,7 @@ namespace Pixel_Game
 
 
         // Horizontal
-        private string PlayerMovement_ColisionType_Horizontal(int Momentum)
+        private string CollisionType_Horizontal(int Momentum, int x_pos, int y_pos)
         {
             string Type_BlockUpper = null;
             string Type_BlockLower = null;
@@ -788,7 +788,7 @@ namespace Pixel_Game
         {
             if (Player.Momentum_Horizontal != 0)
             {
-                string CollsionType = PlayerMovement_ColisionType_Horizontal(Player.Momentum_Horizontal);
+                string CollsionType = CollisionType_Horizontal(Player.Momentum_Horizontal, Player.x, Player.y);
 
 
                 // Solid Sideward
@@ -802,7 +802,7 @@ namespace Pixel_Game
                     }
                     if (((Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == null && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection] == null)
                         || (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == "Water" && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection] == "Water"))
-                        && GameTick % 1 == 0 && PlayerMovement_CollisionType_Vertical(blockHeight) == "Solid" &&
+                        && GameTick % 1 == 0 && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Solid" &&
                         (Player.Momentum_Horizontal > 3 || Player.Momentum_Horizontal < -3 || Player_ShiftMove == true))
                     {
                         cameraOffset_x += Player.Momentum_Horizontal;
@@ -935,7 +935,7 @@ namespace Pixel_Game
             // Nulifies moving through block
 
             //Right
-            if (Player.x % blockWidth != 0 && PlayerMovement_ColisionType_Horizontal(1) == "Solid")
+            if (Player.x % blockWidth != 0 && CollisionType_Horizontal(1, Player.x, Player.y) == "Solid")
             {
                 while (Player.x % blockWidth != 0)
                 {
@@ -944,7 +944,7 @@ namespace Pixel_Game
                 }
             }
             //Left
-            else if (Player.x % blockWidth != 0 && PlayerMovement_ColisionType_Horizontal(0) == "Solid")
+            else if (Player.x % blockWidth != 0 && CollisionType_Horizontal(0, Player.x, Player.y) == "Solid")
             {
                 while (Player.x % blockWidth != 0)
                 {
@@ -959,7 +959,7 @@ namespace Pixel_Game
             // Nulifies moving through block
 
             //Up
-            if (Player.y % blockHeight != 0 && PlayerMovement_CollisionType_Vertical(0) == "Solid")
+            if (Player.y % blockHeight != 0 && CollisionType_Vertical(0, Player.x, Player.y) == "Solid")
             {
                 while (Player.y % blockHeight != 0)
                 {
@@ -968,7 +968,7 @@ namespace Pixel_Game
                 }
             }
             //Down
-            else if (Player.y % blockHeight != 0 && PlayerMovement_CollisionType_Vertical(blockHeight) == "Solid")
+            else if (Player.y % blockHeight != 0 && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Solid")
             {
                 while (Player.y % blockHeight != 0)
                 {
