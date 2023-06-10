@@ -1458,7 +1458,7 @@ namespace Pixel_Game
             {
                 Player.Breath--;
             }
-            else if (Player.Breath == 0 && Player.Health > 0 && GameTick % 30 == 0)
+            else if (Player.Breath == 0 && Player.Health > 0 && GameTick % 25 == 0)
             {
                 Player.Health -= Player.Health_Max / 20;
             }
