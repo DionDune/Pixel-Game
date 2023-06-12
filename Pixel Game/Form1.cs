@@ -2327,7 +2327,7 @@ namespace Pixel_Game
                                 Item.Size_X, Item.Size_Y
                                 ));
 
-                        canvas.FillRectangle(Block_FetchColor(MaterialSelector_Selected), new Rectangle(
+                        canvas.FillRectangle(Block_FetchColor(MaterialSelector_Materials[Item.Active_Amount]), new Rectangle(
                                 Item.Location_X + 5,
                                 Item.Location_Y + 5,
                                 Item.Size_X - 10, Item.Size_Y - 10
