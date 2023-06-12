@@ -1501,6 +1501,16 @@ namespace Pixel_Game
 
         #endregion
 
+        #region Combat
+
+        private void Attack_Projectile(int SenderLocation_X, int SenderLocation_Y, int Sent_X, int Sent_Y)
+        {
+            Player.Momentum_Horizontal = Sent_X - SenderLocation_X;
+            Player.Momentum_Vertical = Sent_Y - SenderLocation_Y;
+        }
+
+        #endregion
+
         /////////////////////////////////////////
 
         #region Highlighter
