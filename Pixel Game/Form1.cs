@@ -1731,6 +1731,19 @@ namespace Pixel_Game
                         }
                         MaterialSelector_Selected = MaterialSelector_Materials[Item.Active_Amount];
                     }
+                    if (Item.Type == "Attack")
+                    {
+                        if (Item.Active == true)
+                        {
+                            MaterialSelector_Selected = MaterialSelector_Materials[UIItems[0].Active_Amount];
+                            Item.Active = false;
+                        }
+                        else
+                        {
+                            MaterialSelector_Selected = "Attack";
+                            Item.Active = true;
+                        }
+                    }
                     return;
                 }
             }
