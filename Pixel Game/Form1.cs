@@ -1818,8 +1818,10 @@ namespace Pixel_Game
 
             if (MaterialSelector_Selected == "Attack")
             {
-                Attack_Projectile(Screen.Width / 2 - playerCameraOffset_X - 1, Screen.Height / 2 - blockHeight + 2, Mouse_X, Mouse_Y);
-                
+                //Attack_Projectile(Screen.Width / 2 - playerCameraOffset_X - 1, Screen.Height / 2 - blockHeight + 2, Mouse_X, Mouse_Y);
+                int Momentum_Horizontal = (Mouse_X - Screen.Width / 2 - playerCameraOffset_X - 1) / blockWidth;
+                int Momentum_Vertical = (Mouse_Y - Screen.Height / 2 - blockHeight + 2) / blockHeight;
+                Attack_Projectile_Create(Player.x, Player.y, Momentum_Horizontal, Momentum_Vertical);
             }
 
             //Other
