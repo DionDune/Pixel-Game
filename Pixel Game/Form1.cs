@@ -1744,7 +1744,7 @@ namespace Pixel_Game
                             Item.Active = true;
                         }
 
-                        if (Item.Active_Amount == MaterialSelector_Materials.Count() - 1)
+                        else if (Item.Active_Amount == MaterialSelector_Materials.Count() - 1)
                         {
                             Item.Active_Amount = 0;
                         }
