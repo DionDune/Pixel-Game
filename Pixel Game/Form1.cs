@@ -1752,7 +1752,7 @@ namespace Pixel_Game
             {
                 for (int x = -size / 2; x < size / 2; x++)
                 {
-                    Blocks[position_x + x][position_y + y] = null;
+                    Blocks[position_x / blockWidth + x][position_y / blockHeight + y] = null;
 
                     if (false) // Infinite exlosions
                     {
