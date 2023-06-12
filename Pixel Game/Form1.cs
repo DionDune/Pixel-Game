@@ -1738,6 +1738,11 @@ namespace Pixel_Game
                 for (int x = -size / 2; x < size / 2; x++)
                 {
                     Blocks[position_x + x][position_y + y] = null;
+
+                    if (false) // Infinite exlosions
+                    {
+                        Attack_Projectile_Create(position_x + x, position_y + y, random.Next(-15, 15), random.Next(-15, 15));
+                    }
                 }
             }
         }
