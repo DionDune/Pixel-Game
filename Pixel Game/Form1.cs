@@ -1650,7 +1650,7 @@ namespace Pixel_Game
             UIItem UI_Checkbox1 = new UIItem
             {
                 Type = "MaterialSelector",
-                Active = false,
+                Active = true,
                 Active_Amount = 0,
                 Size_X = 50,
                 Size_Y = 50,
