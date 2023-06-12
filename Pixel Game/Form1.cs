@@ -41,6 +41,9 @@ namespace Pixel_Game
         SolidBrush Color_Enemy;
         SolidBrush Color_Default;
 
+        SolidBrush Color_ButtonActive;
+        SolidBrush Color_ButtonAttack;
+
         int GameTick;
 
         // Sizes
@@ -2026,6 +2029,9 @@ namespace Pixel_Game
             Color_Enemy = new SolidBrush(Color.Black);
             Color_Standard = new SolidBrush(Color.Purple);
             Color_Default = new SolidBrush(Color.White);
+
+            Color_ButtonActive = new SolidBrush(Color.Gold);
+            Color_ButtonAttack = new SolidBrush(Color.DarkRed);
         }
 
         private Brush Block_FetchColor(string type)
@@ -2056,6 +2062,11 @@ namespace Pixel_Game
 
                 case "Enemy":
                     return Color_Enemy;
+
+                case "AttackButton":
+                    return Color_ButtonAttack;
+                case "ButtonActive":
+                    return Color_ButtonActive;
 
                 case null:
                     return Color_Void;
