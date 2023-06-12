@@ -1362,6 +1362,19 @@ namespace Pixel_Game
 
         #region Projectile Movement
 
+        private void Attack_Projectile_Create(int x_pos, int y_pos, int momentum_x, int momentum_y)
+        {
+            Projectile projectile = new Projectile
+            {
+                x = x_pos,
+                y = y_pos,
+                Momentum_Horizontal = momentum_x,
+                Momentum_Vertical = momentum_y
+            };
+            Projectiles.Add(projectile);
+        }
+
+
         //Vertical
         private void Execute_ProjectileMomentum_Vertical()
         {
