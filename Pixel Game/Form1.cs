@@ -1724,7 +1724,7 @@ namespace Pixel_Game
 
         #region Combat
 
-        private void Attack_Projectile_Create(int x_pos, int y_pos, int momentum_x, int momentum_y)
+        private void Attack_Projectile_Create(string type, int x_pos, int y_pos, int momentum_x, int momentum_y)
         {
             Projectile projectile = new Projectile
             {
@@ -1755,7 +1755,7 @@ namespace Pixel_Game
 
                     if (false) // Infinite exlosions
                     {
-                        Attack_Projectile_Create(position_x + x, position_y + y, random.Next(-15, 15), random.Next(-15, 15));
+                        Attack_Projectile_Create("Bomb", position_x + x, position_y + y, random.Next(-15, 15), random.Next(-15, 15));
                     }
                 }
             }
@@ -1847,7 +1847,7 @@ namespace Pixel_Game
             {
                 int Momentum_Horizontal = (Mouse_X - Screen.Width / 2 - playerCameraOffset_X - 1) / blockWidth;
                 int Momentum_Vertical = (Mouse_Y - Screen.Height / 2 - blockHeight + 2) / blockHeight;
-                Attack_Projectile_Create(Player.x, Player.y, Momentum_Horizontal, Momentum_Vertical);
+                Attack_Projectile_Create("Bomb", Player.x, Player.y, Momentum_Horizontal, Momentum_Vertical);
             }
 
             //Other
