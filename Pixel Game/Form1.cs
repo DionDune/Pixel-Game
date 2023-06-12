@@ -2333,7 +2333,13 @@ namespace Pixel_Game
                     // Material Selector
                     if (Item.Type == "MaterialSelector")
                     {
-                        canvas.FillRectangle(Block_FetchColor(Item.Type), new Rectangle(
+                        Brush ActiveColor = Block_FetchColor(Item.Type);
+                        if (Item.Active == true)
+                        {
+                            ActiveColor = Block_FetchColor("ButtonActive");
+                        }
+
+                        canvas.FillRectangle(ActiveColor, new Rectangle(
                                 Item.Location_X,
                                 Item.Location_Y,
                                 Item.Size_X, Item.Size_Y
