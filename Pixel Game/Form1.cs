@@ -1755,15 +1755,16 @@ namespace Pixel_Game
             {
                 for (int x = -size / 2; x < size / 2; x++)
                 {
-                    Blocks[position_x / blockWidth + x][position_y / blockHeight + y] = null;
-                    Console.WriteLine(position_x / blockWidth + x);
-                    Console.WriteLine(position_y / blockHeight + y);
-                    Console.WriteLine("\n");
-
-                    if (false) // Infinite exlosions
+                    try
                     {
-                        Attack_Projectile_Create("Bomb", position_x + x, position_y + y, random.Next(-15, 15), random.Next(-15, 15));
+                        Blocks[position_y / blockHeight + y][position_x / blockWidth + x] = null;
+
+                        if (false) // Infinite exlosions
+                        {
+                            Attack_Projectile_Create("Bomb", position_x + x, position_y + y, random.Next(-15, 15), random.Next(-15, 15));
+                        }
                     }
+                    catch { }
                 }
             }
         }
