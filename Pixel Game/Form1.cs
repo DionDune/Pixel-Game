@@ -1381,6 +1381,7 @@ namespace Pixel_Game
                     {
                         projectile.Momentum_Vertical = 0;
                         Attack_Projectile_Collision(projectile);
+                        break;
                     }
 
                     // Water Bellow
@@ -1465,6 +1466,7 @@ namespace Pixel_Game
                     {
                         projectile.Momentum_Horizontal = 0;
                         Attack_Projectile_Collision(projectile);
+                        break;
                     }
 
                     // Fluid Sideward
