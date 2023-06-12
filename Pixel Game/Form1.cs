@@ -2531,6 +2531,20 @@ namespace Pixel_Game
                 }
             }
 
+            //Projectiles
+            foreach (Projectile projectile in Projectiles)
+            {
+                if (projectile.x > blockBound_X_Left * blockWidth && projectile.x < blockBound_X_Right * blockWidth &&
+                    projectile.y > blockBound_Y_Left * blockHeight && projectile.y < blockBound_Y_Right * blockHeight)
+                {
+                    canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                        projectile.x - cameraOffset_x,
+                        projectile.y - cameraOffset_y,
+                        blockWidth, blockHeight
+                        ));
+                }
+            }
+
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
                 Screen.Width / 2 - playerCameraOffset_X - 1,
