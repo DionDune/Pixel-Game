@@ -1677,6 +1677,15 @@ namespace Pixel_Game
                 Location_Y = Screen.Height - 150
             };
             UIItems.Add(UI_BreathBar);
+
+            UIItem UI_AttackMode = new UIItem {
+                Type = "AttackMode",
+                Active = false,
+                Size_X = 50,
+                Size_Y = 50,
+                Location_X = Screen.Width - 90 - 50,
+                Location_Y = Screen.Height - 20 - 50
+                };
         }
 
         private void UI_PositionUpdate()
