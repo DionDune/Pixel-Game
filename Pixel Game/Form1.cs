@@ -1426,6 +1426,7 @@ namespace Pixel_Game
                         }
                         projectile.Momentum_Vertical = 0;
                         Attack_Projectile_Collision(projectile);
+                        break;
                     }
 
                     // Other Above
@@ -1755,6 +1756,9 @@ namespace Pixel_Game
                 for (int x = -size / 2; x < size / 2; x++)
                 {
                     Blocks[position_x / blockWidth + x][position_y / blockHeight + y] = null;
+                    Console.WriteLine(position_x / blockWidth + x);
+                    Console.WriteLine(position_y / blockHeight + y);
+                    Console.WriteLine("\n");
 
                     if (false) // Infinite exlosions
                     {
