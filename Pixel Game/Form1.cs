@@ -1726,15 +1726,6 @@ namespace Pixel_Game
 
         #endregion
 
-        #region Combat
-
-        private void Attack_Projectile(int SenderLocation_X, int SenderLocation_Y, int Sent_X, int Sent_Y)
-        {
-            Player.Momentum_Horizontal = (Sent_X - SenderLocation_X) / blockWidth;
-            Player.Momentum_Vertical = (Sent_Y - SenderLocation_Y) / blockHeight;
-        }
-
-        #endregion
 
         /////////////////////////////////////////
 
@@ -1818,7 +1809,6 @@ namespace Pixel_Game
 
             if (MaterialSelector_Selected == "Attack")
             {
-                //Attack_Projectile(Screen.Width / 2 - playerCameraOffset_X - 1, Screen.Height / 2 - blockHeight + 2, Mouse_X, Mouse_Y);
                 int Momentum_Horizontal = (Mouse_X - Screen.Width / 2 - playerCameraOffset_X - 1) / blockWidth;
                 int Momentum_Vertical = (Mouse_Y - Screen.Height / 2 - blockHeight + 2) / blockHeight;
                 Attack_Projectile_Create(Player.x, Player.y, Momentum_Horizontal, Momentum_Vertical);
