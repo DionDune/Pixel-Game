@@ -22,6 +22,7 @@ namespace Pixel_Game
         private PlayerBlock Player = new PlayerBlock();
 
         private List<EntityBlock> Entities = new List<EntityBlock>();
+        private List<Projectile> Projectiles = new List<Projectile>();
 
         private List<string> BiomeRegions = new List<string>();
 
