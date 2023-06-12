@@ -1362,17 +1362,7 @@ namespace Pixel_Game
 
         #region Projectile Movement
 
-        private void Attack_Projectile_Create(int x_pos, int y_pos, int momentum_x, int momentum_y)
-        {
-            Projectile projectile = new Projectile
-            {
-                x = x_pos,
-                y = y_pos,
-                Momentum_Horizontal = momentum_x,
-                Momentum_Vertical = momentum_y
-            };
-            Projectiles.Add(projectile);
-        }
+        
 
 
         //Vertical
@@ -1734,6 +1724,18 @@ namespace Pixel_Game
 
         #region Combat
 
+        private void Attack_Projectile_Create(int x_pos, int y_pos, int momentum_x, int momentum_y)
+        {
+            Projectile projectile = new Projectile
+            {
+                x = x_pos,
+                y = y_pos,
+                Momentum_Horizontal = momentum_x,
+                Momentum_Vertical = momentum_y
+            };
+            Projectiles.Add(projectile);
+        }
+
         private void Attack_Projectile_Collision(Projectile projectile)
         {
             if (projectile.type == "Bomb")
@@ -1742,6 +1744,7 @@ namespace Pixel_Game
                 Projectiles.Remove(projectile);
             }
         }
+
         private void Attack_Explosion(int size, int position_x, int position_y)
         {
             for (int y = -size / 2; y < size / 2; y++)
