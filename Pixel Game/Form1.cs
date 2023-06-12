@@ -1390,6 +1390,7 @@ namespace Pixel_Game
                     if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
                     {
                         projectile.Momentum_Vertical = 0;
+                        Attack_Projectile_Collision(projectile);
                     }
 
                     // Water Bellow
@@ -1433,6 +1434,7 @@ namespace Pixel_Game
                             projectile.y--;
                         }
                         projectile.Momentum_Vertical = 0;
+                        Attack_Projectile_Collision(projectile);
                     }
 
                     // Other Above
@@ -1472,6 +1474,7 @@ namespace Pixel_Game
                     if (CollsionType == "Solid")
                     {
                         projectile.Momentum_Horizontal = 0;
+                        Attack_Projectile_Collision(projectile);
                     }
 
                     // Fluid Sideward
@@ -1731,6 +1734,14 @@ namespace Pixel_Game
 
         #region Combat
 
+        private void Attack_Projectile_Collision(Projectile projectile)
+        {
+            if (projectile.type == "Bomb")
+            {
+                Attack_Explosion(10, projectile.x, projectile.y);
+                Projectiles.Remove(projectile);
+            }
+        }
         private void Attack_Explosion(int size, int position_x, int position_y)
         {
             for (int y = -size / 2; y < size / 2; y++)

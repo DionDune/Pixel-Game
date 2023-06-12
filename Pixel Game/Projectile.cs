@@ -8,6 +8,8 @@ namespace Pixel_Game
 {
     internal class Projectile
     {
+        public string type { get; set; }
+
         public int x { get; set; }
         public int y { get; set; }
 
@@ -16,6 +18,8 @@ namespace Pixel_Game
 
         public Projectile()
         {
+            type = "standard";
+
             x = 0;
             y = 0;
 
