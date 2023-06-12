@@ -1360,6 +1360,217 @@ namespace Pixel_Game
 
         #endregion
 
+        #region Projectile Movement
+
+        //Vertical
+        private void Execute_ProjectileMomentum_Vertical()
+        {
+            foreach (Projectile projectile in Projectiles)
+            {
+                // Downward Movement
+                if (projectile.Momentum_Vertical > 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(projectile.Momentum_Vertical, projectile.x, projectile.y);
+                    string Collision_Type_Bellow = CollisionType_Vertical(blockHeight, projectile.x, projectile.y);
+
+                    // Solid Bellow
+                    if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
+                    {
+                        projectile.Momentum_Vertical = 0;
+                    }
+
+                    // Water Bellow
+                    else if (Collision_Type == "Fluid")
+                    {
+                        if (projectile.Momentum_Vertical > blockHeight / 3)
+                        {
+                            projectile.Momentum_Vertical = blockHeight / 3;
+                        }
+
+                        projectile.y += projectile.Momentum_Vertical;
+
+                        if (projectile.Momentum_Vertical < blockHeight / 4 && GameTick % 12 == 0)
+                        {
+                            projectile.Momentum_Vertical += 1;
+                        }
+                    }
+
+                    // Air Bellow
+                    else if (Collision_Type == null)
+                    {
+                        projectile.y += projectile.Momentum_Vertical;
+
+                        if (projectile.Momentum_Vertical < blockHeight * 2 && GameTick % 2 == 0)
+                        {
+                            projectile.Momentum_Vertical += 1;
+                        }
+                    }
+                }
+
+                // Upward Movement
+                if (projectile.Momentum_Vertical < 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(projectile.Momentum_Vertical, projectile.x, projectile.y);
+
+                    // Solid Above
+                    if (Collision_Type == "Solid")
+                    {
+                        while (CollisionType_Vertical(-1, projectile.x, projectile.y) != "Solid")
+                        {
+                            projectile.y--;
+                        }
+                        projectile.Momentum_Vertical = 0;
+                    }
+
+                    // Other Above
+                    else if (Collision_Type == null || Collision_Type == "Fluid")
+                    {
+                        projectile.y += projectile.Momentum_Vertical;
+                        if (GameTick % 2 == 0)
+                        {
+                            projectile.Momentum_Vertical += 1;  // Change to -= 1 for fun
+                        }
+                    }
+                }
+
+                //Give gravitational momentum
+                if (projectile.Momentum_Vertical == 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(blockHeight, projectile.x, projectile.y);
+                    if ((Collision_Type == null || Collision_Type == "Fluid") && GameTick % 2 == 0)
+                    {
+                        projectile.Momentum_Vertical += 1;
+                    }
+                }
+            }
+        }
+
+        // Horizontal
+        private void Execute_ProjectileMomentum_Horizontal()
+        {
+            foreach (Projectile projectile in Projectiles)
+            {
+                if (projectile.Momentum_Horizontal != 0)
+                {
+                    string CollsionType = CollisionType_Horizontal(projectile.Momentum_Horizontal, projectile.x, projectile.y);
+
+
+                    // Solid Sideward
+                    if (CollsionType == "Solid")
+                    {
+                        projectile.Momentum_Horizontal = 0;
+                    }
+
+                    // Fluid Sideward
+                    if (CollsionType == "Water") // Collision detecting water as air
+                    {
+                        if (projectile.Momentum_Horizontal > blockWidth / 4)
+                        {
+                            projectile.Momentum_Horizontal = blockWidth / 4;
+                        }
+                        else if (projectile.Momentum_Horizontal < -blockWidth / 3)
+                        {
+                            projectile.Momentum_Horizontal = -blockWidth / 4;
+                        }
+
+                        projectile.x += projectile.Momentum_Horizontal;
+                    }
+
+                    // Air Sideward
+                    if (CollsionType == null)
+                    {
+                        projectile.x += projectile.Momentum_Horizontal;
+                    }
+                }
+            }
+        }
+
+        private void Execute_ProjectileMomentum_Horizontal_Handler()
+        {
+            foreach (Projectile projectile in Projectiles)
+            {
+                int MomentumSlowdown = 1;
+
+                // Momentum Reduction
+                if (projectile.Momentum_Horizontal < 0)
+                {
+                    projectile.Momentum_Horizontal += MomentumSlowdown;
+                }
+                else if (projectile.Momentum_Horizontal > 0)
+                {
+                    projectile.Momentum_Horizontal -= MomentumSlowdown;
+                }
+            }
+        }
+
+
+        //Position Corrections
+        private void Execute_ProjectileMovement_Correction_Horizontal()
+        {
+            // Nulifies moving through block
+
+            foreach (EntityBlock Entity in Entities)
+            {
+                //Right
+                if (Entity.x % blockWidth != 0 && CollisionType_Horizontal(1, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.x % blockWidth != 0)
+                    {
+                        Entity.x -= 1;
+                    }
+                }
+                //Left
+                else if (Entity.x % blockWidth != 0 && CollisionType_Horizontal(0, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.x % blockWidth != 0)
+                    {
+                        Entity.x += 1;
+                    }
+                }
+            }
+        }
+
+        private void Execute_ProjectileMovement_Correction_Vertical()
+        {
+            // Nulifies moving through block
+
+            foreach (EntityBlock Entity in Entities)
+            {
+                //Up
+                if (Entity.y % blockHeight != 0 && CollisionType_Vertical(0, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.y % blockHeight != 0)
+                    {
+                        Entity.y += 1;
+                    }
+                }
+                //Down
+                else if (Entity.y % blockHeight != 0 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Solid")
+                {
+                    while (Entity.y % blockHeight != 0)
+                    {
+                        Entity.y -= 1;
+                    }
+                }
+            }
+        }
+
+
+        private void Execute_ProjectileMovement_Handler()
+        {
+            // Horizontal
+            Execute_ProjectileMomentum_Horizontal();
+            //Execute_EntityMovement_Correction_Horizontal();
+            Execute_ProjectileMomentum_Horizontal_Handler();
+
+            // Vertical
+            Execute_ProjectileMomentum_Vertical();
+            //Execute_EntityMovement_Correction_Vertical();
+        }
+
+
+        #endregion
+
         /////////////////////////////////////////
 
         #region Player Survival
@@ -2481,6 +2692,7 @@ namespace Pixel_Game
 
             // Entities
             Execute_EntityMovement_Handler();
+            Execute_ProjectileMovement_Handler();
 
             // Block Physics
             Execute_Physics_Fluid();
