@@ -1505,13 +1505,16 @@ namespace Pixel_Game
                 int MomentumSlowdown = 1;
 
                 // Momentum Reduction
-                if (projectile.Momentum_Horizontal < 0)
+                if (GameTick % 20 == 0)
                 {
-                    projectile.Momentum_Horizontal += MomentumSlowdown;
-                }
-                else if (projectile.Momentum_Horizontal > 0)
-                {
-                    projectile.Momentum_Horizontal -= MomentumSlowdown;
+                    if (projectile.Momentum_Horizontal < 0)
+                    {
+                        projectile.Momentum_Horizontal += MomentumSlowdown;
+                    }
+                    else if (projectile.Momentum_Horizontal > 0)
+                    {
+                        projectile.Momentum_Horizontal -= MomentumSlowdown;
+                    }
                 }
             }
         }
