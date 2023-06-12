@@ -1728,6 +1728,7 @@ namespace Pixel_Game
         {
             Projectile projectile = new Projectile
             {
+                type = type,
                 x = x_pos,
                 y = y_pos,
                 Momentum_Horizontal = momentum_x,
