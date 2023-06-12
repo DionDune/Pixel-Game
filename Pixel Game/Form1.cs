@@ -1744,7 +1744,7 @@ namespace Pixel_Game
                         }
                         MaterialSelector_Selected = MaterialSelector_Materials[Item.Active_Amount];
                     }
-                    if (Item.Type == "Attack")
+                    if (Item.Type == "AttackMode")
                     {
                         if (Item.Active == true)
                         {
