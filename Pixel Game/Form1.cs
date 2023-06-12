@@ -1591,6 +1591,12 @@ namespace Pixel_Game
                 Highlighter_Execute_Eraser(Mouse_X, Mouse_Y);
             }
 
+            if (MaterialSelector_Selected == "Attack")
+            {
+                Attack_Projectile(Screen.Width / 2 - playerCameraOffset_X - 1, Screen.Height / 2 - blockHeight + 2, Mouse_X, Mouse_Y);
+                
+            }
+
             //Other
             else
             {
