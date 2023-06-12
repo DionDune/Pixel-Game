@@ -1689,6 +1689,7 @@ namespace Pixel_Game
                 Location_X = Screen.Width - 90 - 50,
                 Location_Y = Screen.Height - 20 - 50
                 };
+            UIItems.Add(UI_AttackMode);
         }
 
         private void UI_PositionUpdate()
@@ -2333,6 +2334,7 @@ namespace Pixel_Game
                                 ));
                     }
 
+                    // Attack Mode Button
                     if (Item.Type == "AttackMode")
                     {
                         Brush ActiveColor = Block_FetchColor(Item.Type);
