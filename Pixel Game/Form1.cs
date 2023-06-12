@@ -2333,6 +2333,27 @@ namespace Pixel_Game
                                 ));
                     }
 
+                    if (Item.Type == "AttackMode")
+                    {
+                        Brush ActiveColor = Block_FetchColor(Item.Type);
+                        if (Item.Active == true)
+                        {
+                            ActiveColor = Block_FetchColor("ButtonActive");
+                        }
+
+                        canvas.FillRectangle(ActiveColor, new Rectangle(
+                                Item.Location_X,
+                                Item.Location_Y,
+                                Item.Size_X, Item.Size_Y
+                                ));
+
+                        canvas.FillRectangle(Block_FetchColor("AttackButton"), new Rectangle(
+                                Item.Location_X + 5,
+                                Item.Location_Y + 5,
+                                Item.Size_X - 10, Item.Size_Y - 10
+                                ));
+                    }
+
                     // Health Bar
                     if (Item.Type == "HealthBar")
                     {
