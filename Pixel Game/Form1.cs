@@ -1738,6 +1738,12 @@ namespace Pixel_Game
                 {
                     if (Item.Type == "MaterialSelector")
                     {
+                        if (Item.Active == false)
+                        {
+                            UIItems[3].Active = false;
+                            Item.Active = true;
+                        }
+
                         if (Item.Active_Amount == MaterialSelector_Materials.Count() - 1)
                         {
                             Item.Active_Amount = 0;
@@ -1747,16 +1753,22 @@ namespace Pixel_Game
                             Item.Active_Amount++;
                         }
                         MaterialSelector_Selected = MaterialSelector_Materials[Item.Active_Amount];
+
+                        
                     }
                     if (Item.Type == "AttackMode")
                     {
                         if (Item.Active == true)
                         {
                             MaterialSelector_Selected = MaterialSelector_Materials[UIItems[0].Active_Amount];
+                            UIItems[0].Active = true;
+
                             Item.Active = false;
                         }
                         else
                         {
+                            UIItems[0].Active = false;
+
                             MaterialSelector_Selected = "Attack";
                             Item.Active = true;
                         }
