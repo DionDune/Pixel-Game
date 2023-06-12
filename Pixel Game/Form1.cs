@@ -1729,6 +1729,20 @@ namespace Pixel_Game
 
         #endregion
 
+        #region Combat
+
+        private void Attack_Explosion(int size, int position_x, int position_y)
+        {
+            for (int y = -size / 2; y < size / 2; y++)
+            {
+                for (int x = -size / 2; x < size / 2; x++)
+                {
+                    Blocks[position_x + x][position_y + y] = null;
+                }
+            }
+        }
+
+        #endregion
 
         /////////////////////////////////////////
 
