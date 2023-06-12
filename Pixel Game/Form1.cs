@@ -1525,22 +1525,22 @@ namespace Pixel_Game
         {
             // Nulifies moving through block
 
-            foreach (EntityBlock Entity in Entities)
+            foreach (Projectile projectile in Projectiles)
             {
                 //Right
-                if (Entity.x % blockWidth != 0 && CollisionType_Horizontal(1, Entity.x, Entity.y) == "Solid")
+                if (projectile.x % blockWidth != 0 && CollisionType_Horizontal(1, projectile.x, projectile.y) == "Solid")
                 {
-                    while (Entity.x % blockWidth != 0)
+                    while (projectile.x % blockWidth != 0)
                     {
-                        Entity.x -= 1;
+                        projectile.x -= 1;
                     }
                 }
                 //Left
-                else if (Entity.x % blockWidth != 0 && CollisionType_Horizontal(0, Entity.x, Entity.y) == "Solid")
+                else if (projectile.x % blockWidth != 0 && CollisionType_Horizontal(0, projectile.x, projectile.y) == "Solid")
                 {
-                    while (Entity.x % blockWidth != 0)
+                    while (projectile.x % blockWidth != 0)
                     {
-                        Entity.x += 1;
+                        projectile.x += 1;
                     }
                 }
             }
@@ -1550,22 +1550,22 @@ namespace Pixel_Game
         {
             // Nulifies moving through block
 
-            foreach (EntityBlock Entity in Entities)
+            foreach (Projectile projectile in Projectiles)
             {
                 //Up
-                if (Entity.y % blockHeight != 0 && CollisionType_Vertical(0, Entity.x, Entity.y) == "Solid")
+                if (projectile.y % blockHeight != 0 && CollisionType_Vertical(0, projectile.x, projectile.y) == "Solid")
                 {
-                    while (Entity.y % blockHeight != 0)
+                    while (projectile.y % blockHeight != 0)
                     {
-                        Entity.y += 1;
+                        projectile.y += 1;
                     }
                 }
                 //Down
-                else if (Entity.y % blockHeight != 0 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Solid")
+                else if (projectile.y % blockHeight != 0 && CollisionType_Vertical(blockHeight, projectile.x, projectile.y) == "Solid")
                 {
-                    while (Entity.y % blockHeight != 0)
+                    while (projectile.y % blockHeight != 0)
                     {
-                        Entity.y -= 1;
+                        projectile.y -= 1;
                     }
                 }
             }
@@ -1576,12 +1576,12 @@ namespace Pixel_Game
         {
             // Horizontal
             Execute_ProjectileMomentum_Horizontal();
-            //Execute_EntityMovement_Correction_Horizontal();
+            Execute_ProjectileMovement_Correction_Horizontal();
             Execute_ProjectileMomentum_Horizontal_Handler();
 
             // Vertical
             Execute_ProjectileMomentum_Vertical();
-            //Execute_EntityMovement_Correction_Vertical();
+            Execute_ProjectileMovement_Correction_Vertical();
         }
 
 
