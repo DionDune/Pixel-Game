@@ -1708,7 +1708,7 @@ namespace Pixel_Game
 
             //Attack Mode Button
             UIItems[3].Location_X = Screen.Width - 90 - 50;
-            UIItems[3].Location_Y = Screen.Height - 20 - 50;
+            UIItems[3].Location_Y = Screen.Height - 40 - 50;
         }
 
         #endregion
