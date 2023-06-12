@@ -1701,6 +1701,10 @@ namespace Pixel_Game
             //BreathBar
             UIItems[2].Location_X = 70;
             UIItems[2].Location_Y = Screen.Height - 150;
+
+            //Attack Mode Button
+            UIItems[3].Location_X = Screen.Width - 90 - 50;
+            UIItems[3].Location_Y = Screen.Height - 20 - 50;
         }
 
         #endregion
