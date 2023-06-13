@@ -591,7 +591,7 @@ namespace Pixel_Game
                     }
                 }
             }
-            catch { }
+            catch { return "Solid"; }
 
             // Return conclusion
             if (Type_BlockLeft == "Solid" || Type_BlockRight == "Solid")
@@ -653,7 +653,7 @@ namespace Pixel_Game
                     }
                 }
             }
-            catch { }
+            catch { return "Solid"; }
 
 
             // Return conclusion
