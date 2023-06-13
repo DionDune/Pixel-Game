@@ -208,7 +208,7 @@ namespace Pixel_Game
 
                 for (int x_pos = 0; x_pos < worldWidth; x_pos++)
                 {
-                    if ((x_pos < 10 || x_pos > worldWidth - 10 || y_pos < 10 || y_pos > worldHeight - 10) && random.Next(1, 6) != 3)
+                    if ((x_pos < 10 || x_pos > worldWidth - 10 || y_pos < 10 || y_pos > worldHeight - 10) && random.Next(1, 5) != 3)
                     {
                         Blocks[y_pos].Add("Red");
                     }
