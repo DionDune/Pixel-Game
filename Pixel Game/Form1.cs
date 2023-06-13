@@ -2619,8 +2619,8 @@ namespace Pixel_Game
 
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
-                Screen.Width / 2 - playerCameraOffset_X - 1,
-                Screen.Height / 2 - blockHeight + 2,
+                Screen.Width / 2 - playerCameraOffset_X - 7,
+                Screen.Height / 2 - blockHeight + 14,
                 blockWidth, blockHeight
                 ));
 
