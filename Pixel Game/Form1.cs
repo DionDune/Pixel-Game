@@ -1768,7 +1768,7 @@ namespace Pixel_Game
                 {
                     try
                     {
-                        Blocks[position_y / blockHeight + y][position_x / blockWidth + x] = null;
+                        Material_ErasePixel(position_x / blockWidth + x, position_y / blockHeight + y);
 
                         if (false) // Infinite exlosions
                         {
