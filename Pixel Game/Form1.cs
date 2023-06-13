@@ -2353,6 +2353,8 @@ namespace Pixel_Game
                 case "Blue":
                     return Color_Blue;
 
+                case "Barrier":
+                    return Color_Red;
                 case "Grass":
                     return Color_Grass;
                 case "Shrub":
