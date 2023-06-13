@@ -1465,6 +1465,20 @@ namespace Pixel_Game
                     // Solid Sideward
                     if (CollsionType == "Solid")
                     {
+                        // Correction
+                        int MoveAmount = 1;
+                        int checkDistance = 1;
+                        if (projectile.Momentum_Horizontal < 0)
+                        {
+                            MoveAmount *= -1;
+                            checkDistance = 0;
+                        }
+                        while (projectile.Momentum_Horizontal != 0 && CollisionType_Horizontal(checkDistance, projectile.x, projectile.y) != "Solid")
+                        {
+                            projectile.x += MoveAmount;
+                            projectile.Momentum_Horizontal -= MoveAmount;
+                        }
+
                         projectile.Momentum_Horizontal = 0;
                         Attack_Projectile_Collision(projectile);
                         break;
