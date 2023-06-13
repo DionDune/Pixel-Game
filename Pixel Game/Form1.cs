@@ -2015,7 +2015,7 @@ namespace Pixel_Game
         private void Mouse_Down(object sender, MouseEventArgs e)
         {
             Mouse_Clicking = true;
-            if (Highlighter_Visible != false)
+            if (Highlighter_Visible)
             {
                 Highlighter_PlacePixels(e.Location.X, e.Location.Y);
                 return;
