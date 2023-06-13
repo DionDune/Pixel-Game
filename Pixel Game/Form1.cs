@@ -210,7 +210,7 @@ namespace Pixel_Game
                 {
                     if ((x_pos < 10 || x_pos > worldWidth - 10 || y_pos < 10 || y_pos > worldHeight - 10) && random.Next(1, 5) != 3)
                     {
-                        Blocks[y_pos].Add("Red");
+                        Blocks[y_pos].Add("Barrier");
                     }
                     else
                     {
