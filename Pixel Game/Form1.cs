@@ -1867,6 +1867,7 @@ namespace Pixel_Game
             if (MaterialSelector_Selected == null)
             {
                 Highlighter_Execute_Eraser(Mouse_X, Mouse_Y);
+                return;
             }
 
             if (MaterialSelector_Selected == "Attack")
