@@ -1362,9 +1362,6 @@ namespace Pixel_Game
 
         #region Projectile Movement
 
-        
-
-
         //Vertical
         private void Execute_ProjectileMomentum_Vertical()
         {
@@ -1911,7 +1908,7 @@ namespace Pixel_Game
             {
                 for (int x_pos = placeBound_X_Left; x_pos < placeBound_X_Right; x_pos++)
                 {
-                    Material_ErasePixel(Blocks[y_pos][x_pos], x_pos, y_pos);
+                    Material_ErasePixel(x_pos, y_pos);
                 }
             }
 
@@ -2248,8 +2245,10 @@ namespace Pixel_Game
 
         #region Blocks Create/Erase
 
-        private void Material_ErasePixel(string BlockType, int x_pos, int y_pos)
+        private void Material_ErasePixel(int x_pos, int y_pos)
         {
+            string BlockType = Blocks[y_pos][x_pos];
+
             if (BlockType == "Water")
             {
                 foreach (List<int> Particle in PhysicsMaterial_Water)
@@ -2287,7 +2286,7 @@ namespace Pixel_Game
                 }
                 else
                 {
-                    Material_ErasePixel(Blocks[y_pos][x_pos], x_pos, y_pos);
+                    Material_ErasePixel(x_pos, y_pos);
                 }
             }
 
