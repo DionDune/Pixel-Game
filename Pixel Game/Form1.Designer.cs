@@ -37,9 +37,9 @@
             // Screen
             // 
             this.Screen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.Screen.Location = new System.Drawing.Point(-1, 2);
+            this.Screen.Location = new System.Drawing.Point(-1, -1);
             this.Screen.Name = "Screen";
-            this.Screen.Size = new System.Drawing.Size(1473, 956);
+            this.Screen.Size = new System.Drawing.Size(1484, 962);
             this.Screen.TabIndex = 3;
             this.Screen.TabStop = false;
             this.Screen.Paint += new System.Windows.Forms.PaintEventHandler(this.UpdateScreen);
