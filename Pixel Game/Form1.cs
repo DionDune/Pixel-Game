@@ -2256,6 +2256,11 @@ namespace Pixel_Game
         {
             string BlockType = Blocks[y_pos][x_pos];
 
+            if (BlockType == "Barrier")
+            {
+                return;
+            }
+
             if (BlockType == "Water")
             {
                 foreach (List<int> Particle in PhysicsMaterial_Water)
