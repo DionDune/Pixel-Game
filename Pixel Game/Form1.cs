@@ -325,7 +325,7 @@ namespace Pixel_Game
             }
 
             // Gens sub terrain
-            for (int y_pos = 10; y_pos < Blocks.Count(); y_pos++)
+            for (int y_pos = 10; y_pos < Blocks.Count() - 9; y_pos++)
             {
                 for (int x_pos = 10; x_pos < GroundHeights.Count(); x_pos++)
                 {
