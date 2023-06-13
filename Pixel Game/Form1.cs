@@ -566,28 +566,32 @@ namespace Pixel_Game
                 BetweenBlocks = true;
             }
 
-            // Left block (Block player is standing on if not between blocks)
-            if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] == "Water")
+            try
             {
-                Type_BlockLeft = "Fluid";
-            }
-            else if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] != null)
-            {
-                Type_BlockLeft = "Solid";
-            }
+                // Left block (Block player is standing on if not between blocks)
+                if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] == "Water")
+                {
+                    Type_BlockLeft = "Fluid";
+                }
+                else if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] != null)
+                {
+                    Type_BlockLeft = "Solid";
+                }
 
-            // Right Block
-            if (BetweenBlocks == true)
-            {
-                if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] == "Water")
+                // Right Block
+                if (BetweenBlocks == true)
                 {
-                    Type_BlockRight = "Fluid";
-                }
-                else if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] != null)
-                {
-                    Type_BlockRight = "Solid";
+                    if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] == "Water")
+                    {
+                        Type_BlockRight = "Fluid";
+                    }
+                    else if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] != null)
+                    {
+                        Type_BlockRight = "Solid";
+                    }
                 }
             }
+            catch { }
 
             // Return conclusion
             if (Type_BlockLeft == "Solid" || Type_BlockRight == "Solid")
@@ -624,29 +628,32 @@ namespace Pixel_Game
                 BetweenBlocks = true;
             }
 
-
-            // Upper Pixel
-            if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] == "Water")
+            try
             {
-                Type_BlockUpper = "Water";
-            }
-            else if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] != null)
-            {
-                Type_BlockUpper = "Solid";
-            }
-
-            // Lower Pixel
-            if (BetweenBlocks == true)
-            {
-                if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] == "Water")
+                // Upper Pixel
+                if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] == "Water")
                 {
-                    Type_BlockLower = "Water";
+                    Type_BlockUpper = "Water";
                 }
-                else if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] != null)
+                else if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] != null)
                 {
-                    Type_BlockLower = "Solid";
+                    Type_BlockUpper = "Solid";
+                }
+
+                // Lower Pixel
+                if (BetweenBlocks == true)
+                {
+                    if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] == "Water")
+                    {
+                        Type_BlockLower = "Water";
+                    }
+                    else if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] != null)
+                    {
+                        Type_BlockLower = "Solid";
+                    }
                 }
             }
+            catch { }
 
 
             // Return conclusion
