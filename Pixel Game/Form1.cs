@@ -2488,8 +2488,8 @@ namespace Pixel_Game
 
         private void Screen_SizeChange(object sender, EventArgs e)
         {
-            Screen.Width = Size.Width - 27;
-            Screen.Height = Size.Height - 44;
+            Screen.Width = Size.Width - 16;
+            Screen.Height = Size.Height - 38;
 
             //UI
             UI_PositionUpdate();
