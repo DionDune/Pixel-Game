@@ -1372,6 +1372,10 @@ namespace Pixel_Game
         //Vertical
         private void Execute_ProjectileMomentum_Vertical()
         {
+            int index = 0;
+
+            restart:
+
             foreach (Projectile projectile in Projectiles)
             {
                 // Downward Movement
@@ -1385,7 +1389,11 @@ namespace Pixel_Game
                     {
                         projectile.Momentum_Vertical = 0;
                         Attack_Projectile_Collision(projectile);
-                        break;
+
+                        if (projectile.type == "Bomb")
+                        {
+                            goto restart;
+                        }
                     }
 
                     // Water Bellow
@@ -1453,14 +1461,21 @@ namespace Pixel_Game
                         projectile.Momentum_Vertical += 1;
                     }
                 }
+
+                index++;
             }
         }
 
         // Horizontal
         private void Execute_ProjectileMomentum_Horizontal()
         {
-            foreach (Projectile projectile in Projectiles)
+            int index = 0;
+
+            restart:
+
+            foreach (Projectile projectile in Projectiles.Skip(index))
             {
+                
                 if (projectile.Momentum_Horizontal != 0)
                 {
                     string CollsionType = CollisionType_Horizontal(projectile.Momentum_Horizontal, projectile.x, projectile.y);
@@ -1485,7 +1500,11 @@ namespace Pixel_Game
 
                         projectile.Momentum_Horizontal = 0;
                         Attack_Projectile_Collision(projectile);
-                        break;
+
+                        if (projectile.type == "Bomb")
+                        {
+                            goto restart;
+                        }
                     }
 
                     // Fluid Sideward
@@ -1508,6 +1527,8 @@ namespace Pixel_Game
                     {
                         projectile.x += projectile.Momentum_Horizontal;
                     }
+
+                    index++;
                 }
             }
         }
