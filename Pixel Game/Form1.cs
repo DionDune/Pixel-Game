@@ -1347,24 +1347,6 @@ namespace Pixel_Game
             Execute_EntityMomentum_Vertical_Handler();
         }
 
-
-        // Reduncant
-        private void Execute_EntityMomentum_Vertical1()
-        {
-            foreach (EntityBlock Entity in Entities)
-            {
-                if (Blocks[Entity.y / blockHeight + 1][Entity.x / blockWidth] == null)
-                {
-                    Entity.y += blockHeight;
-                }
-            }
-        }
-
-        private void Execute_EntityMovement_Handler1()
-        {
-            Execute_EntityMomentum_Vertical();
-        }
-
         #endregion
 
         #region Projectile Movement
