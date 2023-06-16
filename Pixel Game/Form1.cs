@@ -817,7 +817,7 @@ namespace Pixel_Game
                     }
                     if (((Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == null && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection] == null)
                         || (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == "Water" && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection] == "Water"))
-                        && GameTick % 1 == 0 && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Solid" &&
+                        && GameTick % 1 == 0 && CollisionType_Vertical(blockWidth, Player.x, Player.y) == "Solid" &&
                         (Player.Momentum_Horizontal > 3 || Player.Momentum_Horizontal < -3 || Player_ShiftMove == true))
                     {
                         cameraOffset_x += Player.Momentum_Horizontal;
@@ -1172,7 +1172,7 @@ namespace Pixel_Game
                         }
                         if (((Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth] == null && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection] == null)
                             || (Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth] == "Water" && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection] == "Water"))
-                            && GameTick % 1 == 0 && CollisionType_Vertical(blockHeight, Entity.x, Entity.y) == "Solid" &&
+                            && GameTick % 1 == 0 && CollisionType_Vertical(blockWidth, Entity.x, Entity.y) == "Solid" &&
                             (Entity.Momentum_Horizontal > 1 || Entity.Momentum_Horizontal < -1))
                         {
                             Entity.x += Entity.Momentum_Horizontal;
