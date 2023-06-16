@@ -158,7 +158,7 @@ namespace Pixel_Game
                 Breath = 1000,
                 JumpHeight = 12,
                 Speed_Base = 0.33F,
-                Speed_Max = 0.66F
+                Speed_Max = 0.5F
             };
             Random_TracerActive = false;
 
