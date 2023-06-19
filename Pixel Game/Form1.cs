@@ -486,6 +486,7 @@ namespace Pixel_Game
                 BiomeRegions.Clear();
                 PhysicsMaterial_Water.Clear();
                 PhysicsMaterial_Sand.Clear();
+                Entities.Clear();
                 Block_Generation_Border();
                 Terrain_Generation_GenBiomes();
                 Terrain_Generation();
