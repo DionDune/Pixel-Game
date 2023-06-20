@@ -2152,46 +2152,59 @@ namespace Pixel_Game
 
         private void Execute_Physics_Sand()
         {
+            int index = 0;
+            restart:
+
             foreach (List<int> Particle in PhysicsMaterial_Sand)
             {
-                if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
-                    Particle[1] >= blockBound_Y_Left / 2 && Particle[1] <= blockBound_Y_Right * 2)
+                try
                 {
-                    string Sand_Type = "Sand";
-                    if (Particle[2] == 1)
+                    if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
+                        Particle[1] >= blockBound_Y_Left / 2 && Particle[1] <= blockBound_Y_Right * 2)
                     {
-                        Sand_Type = "Red Sand";
-                    }
-
-                    //Vertical Gravity
-                    if (Blocks[Particle[1] + 1][Particle[0]] == null)
-                    {
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        Blocks[Particle[1] + 1][Particle[0]] = Sand_Type;
-                        Particle[1] += 1;
-                    }
-
-                    //Diagonal Gravity
-                    int Direction = random.Next(0, 1);
-                    if (Direction == 0)
-                    {
-                        Direction = -1;
-                    }
-                    for (int i = 0; i < 2; i++)
-                    {
-                        if (Blocks[Particle[1] + 1][Particle[0] + Direction] == null && Blocks[Particle[1] + 1][Particle[0]] != null)
+                        string Sand_Type = "Sand";
+                        if (Particle[2] == 1)
                         {
-                            if (random.Next(0, 6) != 3) // slight randomnes to movement, breaks up moving pillars
-                            {
-                                Blocks[Particle[1]][Particle[0]] = null;
-                                Blocks[Particle[1] + 1][Particle[0] + Direction] = Sand_Type;
-                                Particle[1] += 1;
-                                Particle[0] += Direction;
-                            }
-                            break;
+                            Sand_Type = "Red Sand";
                         }
-                        Direction *= -1;
+
+                        //Vertical Gravity
+                        if (Blocks[Particle[1] + 1][Particle[0]] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Blocks[Particle[1] + 1][Particle[0]] = Sand_Type;
+                            Particle[1] += 1;
+                        }
+
+                        //Diagonal Gravity
+                        int Direction = random.Next(0, 1);
+                        if (Direction == 0)
+                        {
+                            Direction = -1;
+                        }
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (Blocks[Particle[1] + 1][Particle[0] + Direction] == null && Blocks[Particle[1] + 1][Particle[0]] != null)
+                            {
+                                if (random.Next(0, 6) != 3) // slight randomnes to movement, breaks up moving pillars
+                                {
+                                    Blocks[Particle[1]][Particle[0]] = null;
+                                    Blocks[Particle[1] + 1][Particle[0] + Direction] = Sand_Type;
+                                    Particle[1] += 1;
+                                    Particle[0] += Direction;
+                                }
+                                break;
+                            }
+                            Direction *= -1;
+                        }
                     }
+                    index++;
+                }
+                catch
+                {
+                    Blocks[Particle[1]][Particle[0]] = null;
+                    PhysicsMaterial_Sand.Remove(Particle);
+                    goto restart;
                 }
             }
         }
