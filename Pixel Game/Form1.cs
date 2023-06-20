@@ -2198,73 +2198,86 @@ namespace Pixel_Game
 
         private void Execute_Physics_Fluid()
         {
-            foreach (List<int> Particle in PhysicsMaterial_Water)
+            int index = 0;
+            restart:
+
+            foreach (List<int> Particle in PhysicsMaterial_Water.Skip(index))
             {
-                if (Blocks[Particle[1] + 1][Particle[0]] == null)
+                try
                 {
-                    // Verical Gravity
-                    Blocks[Particle[1] + 1][Particle[0]] = "Water";
-                    Blocks[Particle[1]][Particle[0]] = null;
-                    Particle[1] += 1;
+                    if (Blocks[Particle[1] + 1][Particle[0]] == null)
+                    {
+                        // Verical Gravity
+                        Blocks[Particle[1] + 1][Particle[0]] = "Water";
+                        Blocks[Particle[1]][Particle[0]] = null;
+                        Particle[1] += 1;
 
-                    // Sideways Flow
-                    if (random.Next(0, 15) == 1 && Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
-                    {
-                        Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        Particle[0] += Particle[2];
+                        // Sideways Flow
+                        if (random.Next(0, 15) == 1 && Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] += Particle[2];
+                        }
+                        else if (random.Next(0, 25) == 1 && Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] += (Particle[2] * -1);
+                        }
                     }
-                    else if (random.Next(0, 25) == 1 && Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                    else
                     {
-                        Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        Particle[0] += (Particle[2] * -1);
+                        // Sand Sink
+                        if (Blocks[Particle[1] - 1][Particle[0]] == "Sand")
+                        {
+                            foreach (List<int> SandParticle in PhysicsMaterial_Sand)
+                            {
+                                if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
+                                {
+                                    SandParticle[1] += 1;
+                                }
+                            }
+                            Blocks[Particle[1] - 1][Particle[0]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = "Sand";
+                            Particle[1] -= 1;
+                        }
+                        if (Blocks[Particle[1] - 1][Particle[0]] == "Red Sand")
+                        {
+                            foreach (List<int> SandParticle in PhysicsMaterial_Sand)
+                            {
+                                if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
+                                {
+                                    SandParticle[1] += 1;
+                                }
+                            }
+                            Blocks[Particle[1] - 1][Particle[0]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = "Red Sand";
+                            Particle[1] -= 1;
+                        }
+
+                        // Sideways Flow
+                        if (Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] += Particle[2];
+                        }
+                        else if (Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] -= Particle[2];
+                            Particle[2] *= -1;
+                        }
                     }
+                    index++;
                 }
-                else
+                catch
                 {
-                    // Sand Sink
-                    if (Blocks[Particle[1] - 1][Particle[0]] == "Sand")
-                    {
-                        foreach (List<int> SandParticle in PhysicsMaterial_Sand)
-                        {
-                            if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
-                            {
-                                SandParticle[1] += 1;
-                            }
-                        }
-                        Blocks[Particle[1] - 1][Particle[0]] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = "Sand";
-                        Particle[1] -= 1;
-                    }
-                    if (Blocks[Particle[1] - 1][Particle[0]] == "Red Sand")
-                    {
-                        foreach (List<int> SandParticle in PhysicsMaterial_Sand)
-                        {
-                            if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
-                            {
-                                SandParticle[1] += 1;
-                            }
-                        }
-                        Blocks[Particle[1] - 1][Particle[0]] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = "Red Sand";
-                        Particle[1] -= 1;
-                    }
-
-                    // Sideways Flow
-                    if (Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
-                    {
-                        Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        Particle[0] += Particle[2];
-                    }
-                    else if (Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
-                    {
-                        Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        Particle[0] -= Particle[2];
-                        Particle[2] *= -1;
-                    }
+                    Blocks[Particle[1]][Particle[0]] = null;
+                    PhysicsMaterial_Water.Remove(Particle);
+                    goto restart;
                 }
             }
         }
