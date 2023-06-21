@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Pixel_Game
 {
     public partial class Form1 : Form
     {
+        DateTime _lastCheckTime;
+        long _frameCount;
+
         Random random = new Random();
 
         private List<List<Particle>> Blocks = new List<List<Particle>>();
@@ -115,7 +119,11 @@ namespace Pixel_Game
 
         public void StartGame()
         {
+            DateTime _lastCheckTime = DateTime.Now;
+            long _frameCount = 0;
+
             GameTick = 0;
+
 
             // Sizes
             blockHeight = 15;
@@ -2466,6 +2474,21 @@ namespace Pixel_Game
 
         #region Fundamentals
 
+        private void FPS_counter()
+        {
+            Interlocked.Increment(ref _frameCount);
+
+            double secondsElapsed = (DateTime.Now - _lastCheckTime).TotalSeconds;
+            long count = Interlocked.Exchange(ref _frameCount, 0);
+            double fps = count / secondsElapsed;
+            _lastCheckTime = DateTime.Now;
+
+            if (GameTick % 3 == 0)
+            {
+                Console.WriteLine(Convert.ToInt32(fps));
+            }
+        }
+
         private void Screen_SizeChange(object sender, EventArgs e)
         {
             Screen.Width = Size.Width - 16;
@@ -2754,6 +2777,7 @@ namespace Pixel_Game
         private void gameTimerEvent(object sender, EventArgs e)
         {
             GameTick_Handler();
+            FPS_counter();
 
             Execute_Movement();
 
