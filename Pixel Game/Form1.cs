@@ -130,8 +130,8 @@ namespace Pixel_Game
             // Camera
             cameraOffset_x = 0;
             cameraOffset_y = 0;
-            playerCameraOffset_Y = blockHeight / 2;
-            playerCameraOffset_X = 0; // blockWidth / 2;
+            playerCameraOffset_Y = 0;
+            playerCameraOffset_X = 0;
 
             // Player
             Player_isMortal = true;
@@ -452,30 +452,7 @@ namespace Pixel_Game
             // Regen World
             if (e.KeyCode == Keys.Tab)
             {
-                Blocks.Clear();
-                BiomeRegions.Clear();
-                Entities.Clear();
-                Block_Generation_Border();
-                Terrain_Generation_GenBiomes();
-                Terrain_Generation();
-                SpawnEntities();
-
-                cameraOffset_x = 0;
-                cameraOffset_y = 0;
-                playerCameraOffset_Y = blockHeight / 2;
-                playerCameraOffset_X = 0;
-                Player = new PlayerBlock
-                {
-                    x = (Screen.Width / 2) / blockWidth * blockWidth,
-                    y = (Screen.Height / 2) / blockHeight * blockHeight,
-                    Health_Max = 100,
-                    Health = 100,
-                    Breath_Max = 1000,
-                    Breath = 1000,
-                    JumpHeight = 12,
-                    Speed_Base = 0.33F,
-                    Speed_Max = 0.5F
-                };
+                RegenerateWorld();
             }
 
             // Random Fun
@@ -2440,6 +2417,36 @@ namespace Pixel_Game
             }
         }
 
+        private void RegenerateWorld()
+        {
+            Blocks.Clear();
+            BiomeRegions.Clear();
+            PhysicsMaterial_Water.Clear();
+            PhysicsMaterial_Sand.Clear();
+            Entities.Clear();
+            Block_Generation_Border();
+            Terrain_Generation_GenBiomes();
+            Terrain_Generation();
+            SpawnEntities();
+
+            cameraOffset_x = 0;
+            cameraOffset_y = 0;
+            playerCameraOffset_Y = 0;
+            playerCameraOffset_X = 0;
+            Player = new PlayerBlock
+            {
+                x = (Screen.Width / 2) / blockWidth * blockWidth,
+                y = (Screen.Height / 2) / blockHeight * blockHeight,
+                Health_Max = 100,
+                Health = 100,
+                Breath_Max = 1000,
+                Breath = 1000,
+                JumpHeight = 12,
+                Speed_Base = 0.33F,
+                Speed_Max = 0.5F
+            };
+        }
+
         #endregion
 
         /////////////////////////////////////////
@@ -2580,7 +2587,7 @@ namespace Pixel_Game
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
                 Screen.Width / 2 - playerCameraOffset_X - 7,
-                Screen.Height / 2 - blockHeight + 14,
+                Screen.Height / 2 - playerCameraOffset_Y - 1,
                 blockWidth, blockHeight
                 ));
 
