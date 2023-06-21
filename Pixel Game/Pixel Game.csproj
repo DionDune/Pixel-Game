@@ -53,6 +53,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Particle.cs" />
     <Compile Include="PlayerBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />
