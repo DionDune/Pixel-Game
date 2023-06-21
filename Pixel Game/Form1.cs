@@ -10,7 +10,7 @@ namespace Pixel_Game
     {
         Random random = new Random();
 
-        private List<List<string>> Blocks = new List<List<string>>();
+        private List<List<Particle>> Blocks = new List<List<Particle>>();
         private PlayerBlock Player = new PlayerBlock();
 
         private List<EntityBlock> Entities = new List<EntityBlock>();
@@ -95,8 +95,8 @@ namespace Pixel_Game
 
         //Materials
         private List<string> MaterialSelector_Materials = new List<string>();
-        private List<List<int>> PhysicsMaterial_Water = new List<List<int>>();
-        private List<List<int>> PhysicsMaterial_Sand = new List<List<int>>();
+        private HashSet<Point> PhysicsMaterial_Water = new HashSet<Point>();
+        private HashSet<Point> PhysicsMaterial_Sand = new HashSet<Point>();
         string MaterialSelector_Selected;
 
 
@@ -172,9 +172,8 @@ namespace Pixel_Game
             Colors_Generate();
             MaterialSelector_Materials = new List<string>() { "Default", "Sand", "Red Sand", "Water", null };
             MaterialSelector_Selected = MaterialSelector_Materials[0];
-            PhysicsMaterial_Water = new List<List<int>>();
-            PhysicsMaterial_Sand = new List<List<int>>();
-
+            PhysicsMaterial_Water = new HashSet<Point>();
+            PhysicsMaterial_Sand = new HashSet<Point>();
 
 
             // Terrain Generation
@@ -196,13 +195,13 @@ namespace Pixel_Game
         {
             for (int y_pos = 0; y_pos < worldHeight; y_pos++)
             {
-                Blocks.Add(new List<string>());
+                Blocks.Add(new List<Particle>());
 
                 for (int x_pos = 0; x_pos < worldWidth; x_pos++)
                 {
                     if ((x_pos < 10 || x_pos > worldWidth - 10 || y_pos < 10 || y_pos > worldHeight - 10) && random.Next(1, 15) != 3)
                     {
-                        Blocks[y_pos].Add("Barrier");
+                        Blocks[y_pos].Add(new Particle(x_pos, y_pos, "Barrier"));
                     }
                     else
                     {
@@ -304,15 +303,11 @@ namespace Pixel_Game
             for (int x_pos = 10; x_pos < GroundHeights.Count(); x_pos++)
             {
                 string Block_Type = BiomeRegions[x_pos];
-                Blocks[GroundHeights[x_pos]][x_pos] = Block_Type;
+                Blocks[GroundHeights[x_pos]][x_pos] = new Particle(x_pos, GroundHeights[x_pos], Block_Type);
 
-                if (Block_Type == "Sand")
+                if (Block_Type == "Sand" || Block_Type == "Red Sand")
                 {
-                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, GroundHeights[x_pos], 0 });
-                }
-                else if (Block_Type == "Red Sand")
-                {
-                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, GroundHeights[x_pos], 1 });
+                    PhysicsMaterial_Sand.Add(new Point(x_pos, GroundHeights[x_pos]));
                 }
             }
 
@@ -331,7 +326,7 @@ namespace Pixel_Game
                             if (BiomeRegions[x_pos] == "Sand")
                             {
                                 type = BiomeRegions[x_pos];
-                                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 0 });
+                                PhysicsMaterial_Sand.Add(new Point(x_pos, y_pos));
                             }
                         }
                         if (y_pos > Blocks.Count() - 50)
@@ -341,7 +336,7 @@ namespace Pixel_Game
                                 type = "Bed Rock";
                             }
                         }
-                        Blocks[y_pos][x_pos] = type;
+                        Blocks[y_pos][x_pos] = new Particle(x_pos, y_pos, type);
                     }
                 }
             }
@@ -351,15 +346,15 @@ namespace Pixel_Game
             {
                 if (random.Next(0, 40) == 1)
                 {
-                    Blocks[GroundHeights[x_pos] - 1][x_pos] = "Shrub";
-                    Blocks[GroundHeights[x_pos] - 2][x_pos] = "Shrub";
+                    Blocks[GroundHeights[x_pos] - 1][x_pos] = new Particle(x_pos, GroundHeights[x_pos] - 1, "Shrub");
+                    Blocks[GroundHeights[x_pos] - 2][x_pos] = new Particle(x_pos, GroundHeights[x_pos] - 2, "Shrub");
                 }
                 if (random.Next(0, 200) == 1)
                 {
-                    Blocks[GroundHeights[x_pos] - 1][x_pos] = "Enemy";
-                    Blocks[GroundHeights[x_pos] - 2][x_pos] = "Enemy";
-                    Blocks[GroundHeights[x_pos] - 2][x_pos + 1] = "Enemy";
-                    Blocks[GroundHeights[x_pos] - 1][x_pos + 1] = "Enemy";
+                    Blocks[GroundHeights[x_pos] - 1][x_pos] = new Particle(x_pos, GroundHeights[x_pos] - 1, "Enemy");
+                    Blocks[GroundHeights[x_pos] - 2][x_pos] = new Particle(x_pos, GroundHeights[x_pos] - 2, "Enemy");
+                    Blocks[GroundHeights[x_pos] - 2][x_pos + 1] = new Particle(x_pos + 1, GroundHeights[x_pos] - 2, "Enemy");
+                    Blocks[GroundHeights[x_pos] - 1][x_pos + 1] = new Particle(x_pos + 1, GroundHeights[x_pos] - 1, "Enemy");
                 }
             }
         }
@@ -374,15 +369,11 @@ namespace Pixel_Game
             for (int x_pos = 10; x_pos < worldWidth - 10; x_pos++)
             {
                 string Block_Type = BiomeRegions[x_pos];
-                Blocks[SurfaceHeight][x_pos] = Block_Type;
+                Blocks[SurfaceHeight][x_pos] = new Particle(x_pos, SurfaceHeight, Block_Type);
 
-                if (Block_Type == "Sand")
+                if (Block_Type == "Sand" || Block_Type == "Red Sand")
                 {
-                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, SurfaceHeight, 0 });
-                }
-                else if (Block_Type == "Red Sand")
-                {
-                    PhysicsMaterial_Sand.Add(new List<int>() { x_pos, SurfaceHeight, 1 });
+                    PhysicsMaterial_Sand.Add(new Point(x_pos, SurfaceHeight));
                 }
             }
 
@@ -401,7 +392,7 @@ namespace Pixel_Game
                             if (BiomeRegions[x_pos] == "Sand")
                             {
                                 type = BiomeRegions[x_pos];
-                                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 0 });
+                                PhysicsMaterial_Sand.Add(new Point(x_pos, y_pos));
                             }
                         }
                         if (y_pos > Blocks.Count() - 50)
@@ -411,7 +402,7 @@ namespace Pixel_Game
                                 type = "Bed Rock";
                             }
                         }
-                        Blocks[y_pos][x_pos] = type;
+                        Blocks[y_pos][x_pos] = new Particle(x_pos, y_pos, type);
                     }
                 }
             }
@@ -419,17 +410,17 @@ namespace Pixel_Game
             // Entities
             for (int x_pos = 10; x_pos < worldWidth - 10; x_pos++)
             {
-                if (random.Next(0, 40) == -1)
+                if (random.Next(0, 40) == 1)
                 {
-                    Blocks[SurfaceHeight - 1][x_pos] = "Shrub";
-                    Blocks[SurfaceHeight - 2][x_pos] = "Shrub";
+                    Blocks[SurfaceHeight - 1][x_pos] = new Particle(x_pos, SurfaceHeight - 1, "Shrub");
+                    Blocks[SurfaceHeight - 2][x_pos] = new Particle(x_pos, SurfaceHeight - 2, "Shrub");
                 }
-                if (random.Next(0, 200) == -1)
+                if (random.Next(0, 200) == 1)
                 {
-                    Blocks[SurfaceHeight - 1][x_pos] = "Enemy";
-                    Blocks[SurfaceHeight - 2][x_pos] = "Enemy";
-                    Blocks[SurfaceHeight - 2][x_pos + 1] = "Enemy";
-                    Blocks[SurfaceHeight - 1][x_pos + 1] = "Enemy";
+                    Blocks[SurfaceHeight - 1][x_pos] = new Particle(x_pos, SurfaceHeight - 1, "Enemy");
+                    Blocks[SurfaceHeight - 2][x_pos] = new Particle(x_pos, SurfaceHeight - 2, "Enemy");
+                    Blocks[SurfaceHeight - 2][x_pos + 1] = new Particle(x_pos + 1, SurfaceHeight - 2, "Enemy");
+                    Blocks[SurfaceHeight - 1][x_pos + 1] = new Particle(x_pos + 1, SurfaceHeight - 1, "Enemy");
                 }
             }
         }
@@ -555,7 +546,7 @@ namespace Pixel_Game
             try
             {
                 // Left block (Block player is standing on if not between blocks)
-                if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth] == "Water")
+                if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth]?.ParticleType == "Water")
                 {
                     Type_BlockLeft = "Fluid";
                 }
@@ -567,7 +558,7 @@ namespace Pixel_Game
                 // Right Block
                 if (BetweenBlocks == true)
                 {
-                    if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1] == "Water")
+                    if (Blocks[(y_pos + Momentum) / blockHeight][x_pos / blockWidth + 1]?.ParticleType == "Water")
                     {
                         Type_BlockRight = "Fluid";
                     }
@@ -617,7 +608,7 @@ namespace Pixel_Game
             try
             {
                 // Upper Pixel
-                if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth] == "Water")
+                if (Blocks[y_pos / blockHeight][(x_pos + Momentum + offset) / blockWidth]?.ParticleType == "Water")
                 {
                     Type_BlockUpper = "Water";
                 }
@@ -629,7 +620,7 @@ namespace Pixel_Game
                 // Lower Pixel
                 if (BetweenBlocks == true)
                 {
-                    if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth] == "Water")
+                    if (Blocks[y_pos / blockHeight + 1][(x_pos + Momentum + offset) / blockWidth]?.ParticleType == "Water")
                     {
                         Type_BlockLower = "Water";
                     }
@@ -665,7 +656,7 @@ namespace Pixel_Game
         {
             if (Random_TracerActive == true)
             {
-                Blocks[Player.y / blockHeight][Player.x / blockWidth - 1] = "Default";
+                Blocks[Player.y / blockHeight][Player.x / blockWidth - 1] = new Particle(Player.x / blockWidth - 1, Player.y / blockHeight, "Default");
             }
         }
 
@@ -757,7 +748,7 @@ namespace Pixel_Game
             {
                 if (Player_AllowBunnyHop == true || Player.Momentum_Vertical == 0)
                 {
-                    if (Blocks[Player.y / blockHeight][Player.x / blockWidth] != "Water")
+                    if (Blocks[Player.y / blockHeight][Player.x / blockWidth]?.ParticleType != "Water")
                     {
                         if (Player_ShiftMove)
                         {
@@ -802,7 +793,8 @@ namespace Pixel_Game
                         moveDirection *= -1;
                     }
                     if (((Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == null && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection] == null)
-                        || (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == "Water" && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection] == "Water"))
+                        || (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth]?.ParticleType == "Water"
+                        && Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + moveDirection]?.ParticleType == "Water"))
                         && GameTick % 1 == 0 && CollisionType_Vertical(blockWidth, Player.x, Player.y) == "Solid" &&
                         (Player.Momentum_Horizontal > 3 || Player.Momentum_Horizontal < -3 || Player_ShiftMove == true))
                     {
@@ -1109,7 +1101,7 @@ namespace Pixel_Game
                 {
                     if (Entity.Momentum_Vertical == 0)
                     {
-                        if (Blocks[Entity.y / blockHeight][Entity.x / blockWidth] != "Water")
+                        if (Blocks[Entity.y / blockHeight][Entity.x / blockWidth]?.ParticleType != "Water")
                         {
                             if (random.Next(0, 50) == 25)
                             {
@@ -1157,7 +1149,8 @@ namespace Pixel_Game
                             moveDirection *= -1;
                         }
                         if (((Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth] == null && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection] == null)
-                            || (Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth] == "Water" && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection] == "Water"))
+                            || (Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth]?.ParticleType == "Water"
+                            && Blocks[Entity.y / blockHeight - 1][Entity.x / blockWidth + moveDirection]?.ParticleType == "Water"))
                             && GameTick % 1 == 0 && CollisionType_Vertical(blockWidth, Entity.x, Entity.y) == "Solid" &&
                             (Entity.Momentum_Horizontal > 1 || Entity.Momentum_Horizontal < -1))
                         {
@@ -1583,16 +1576,16 @@ namespace Pixel_Game
             {
                 if (Player.x % blockWidth == 0)
                 {
-                    if (Blocks[Player.y / blockHeight][Player.x / blockWidth - 1] == "Enemy" ||
-                        Blocks[Player.y / blockHeight][Player.x / blockWidth + 1] == "Enemy")
+                    if (Blocks[Player.y / blockHeight][Player.x / blockWidth - 1]?.ParticleType == "Enemy" ||
+                        Blocks[Player.y / blockHeight][Player.x / blockWidth + 1]?.ParticleType == "Enemy")
                     {
                         Player.Health--;
                         return;
                     }
                     if (Player.y % blockHeight != 0)
                     {
-                        if (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth - 1] == "Enemy" ||
-                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == "Enemy")
+                        if (Blocks[Player.y / blockHeight + 1][Player.x / blockWidth - 1]?.ParticleType == "Enemy" ||
+                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1]?.ParticleType == "Enemy")
                         {
                             Player.Health--;
                             return;
@@ -1601,16 +1594,16 @@ namespace Pixel_Game
                 }
                 if (Player.y % blockHeight == 0)
                 {
-                    if (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth] == "Enemy" ||
-                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth] == "Enemy")
+                    if (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth]?.ParticleType == "Enemy" ||
+                        Blocks[Player.y / blockHeight + 1][Player.x / blockWidth]?.ParticleType == "Enemy")
                     {
                         Player.Health--;
                         return;
                     }
                     if (Player.x % blockWidth != 0)
                     {
-                        if (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + 1] == "Enemy" ||
-                            Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1] == "Enemy")
+                        if (Blocks[Player.y / blockHeight - 1][Player.x / blockWidth + 1]?.ParticleType == "Enemy" ||
+                            Blocks[Player.y / blockHeight + 1][Player.x / blockWidth + 1]?.ParticleType == "Enemy")
                         {
                             Player.Health--;
                             return;
@@ -2090,27 +2083,22 @@ namespace Pixel_Game
 
         private void Execute_Physics_Sand()
         {
-            // Iterate list backwards so that elements can be removed
-            for (int i = PhysicsMaterial_Sand.Count - 1; i >= 0; i--)
+            foreach (Point particlePos in new HashSet<Point>(PhysicsMaterial_Sand))
             {
-                List<int> Particle = PhysicsMaterial_Sand[i];
+                Particle particle = Blocks[particlePos.Y][particlePos.X];
                 try
                 {
-                    if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
-                        Particle[1] >= blockBound_Y_Left / 2 && Particle[1] <= blockBound_Y_Right * 2)
+                    if (particle.X >= blockBound_X_Left / 2 && particle.X <= blockBound_X_Right * 2 &&
+                        particle.Y >= blockBound_Y_Left / 2 && particle.Y <= blockBound_Y_Right * 2)
                     {
-                        string Sand_Type = "Sand";
-                        if (Particle[2] == 1)
-                        {
-                            Sand_Type = "Red Sand";
-                        }
-
                         //Vertical Gravity
-                        if (Blocks[Particle[1] + 1][Particle[0]] == null)
+                        if (Blocks[particle.Y + 1][particle.X] == null)
                         {
-                            Blocks[Particle[1]][Particle[0]] = null;
-                            Blocks[Particle[1] + 1][Particle[0]] = Sand_Type;
-                            Particle[1] += 1;
+                            Blocks[particle.Y][particle.X] = null;
+                            Blocks[particle.Y + 1][particle.X] = particle;
+                            PhysicsMaterial_Sand.Remove(new Point(particle.X, particle.Y));
+                            particle.Y += 1;
+                            PhysicsMaterial_Sand.Add(new Point(particle.X, particle.Y));
                         }
 
                         //Diagonal Gravity
@@ -2121,14 +2109,16 @@ namespace Pixel_Game
                         }
                         for (int j = 0; j < 2; j++)
                         {
-                            if (Blocks[Particle[1] + 1][Particle[0] + Direction] == null && Blocks[Particle[1] + 1][Particle[0]] != null)
+                            if (Blocks[particle.Y + 1][particle.X + Direction] == null && Blocks[particle.Y + 1][particle.X] != null)
                             {
                                 if (random.Next(0, 6) != 3) // slight randomnes to movement, breaks up moving pillars
                                 {
-                                    Blocks[Particle[1]][Particle[0]] = null;
-                                    Blocks[Particle[1] + 1][Particle[0] + Direction] = Sand_Type;
-                                    Particle[1] += 1;
-                                    Particle[0] += Direction;
+                                    Blocks[particle.Y][particle.X] = null;
+                                    Blocks[particle.Y + 1][particle.X + Direction] = particle;
+                                    PhysicsMaterial_Sand.Remove(new Point(particle.X, particle.Y));
+                                    particle.Y += 1;
+                                    particle.X += Direction;
+                                    PhysicsMaterial_Sand.Add(new Point(particle.X, particle.Y));
                                 }
                                 break;
                             }
@@ -2138,91 +2128,91 @@ namespace Pixel_Game
                 }
                 catch
                 {
-                    Blocks[Particle[1]][Particle[0]] = null;
-                    PhysicsMaterial_Sand.Remove(Particle);
+                    Blocks[particle.Y][particle.X] = null;
+                    PhysicsMaterial_Sand.Remove(new Point(particle.X, particle.Y));
                 }
             }
         }
 
         private void Execute_Physics_Fluid()
         {
-            // Iterate list backwards so that elements can be removed
-            for (int i = PhysicsMaterial_Water.Count - 1; i >= 0; i--)
+            foreach (Point particlePos in new HashSet<Point>(PhysicsMaterial_Water))
             {
-                List<int> Particle = PhysicsMaterial_Water[i];
+                Particle particle = Blocks[particlePos.Y][particlePos.X];
                 try
                 {
-                    if (Blocks[Particle[1] + 1][Particle[0]] == null)
+                    if (Blocks[particle.Y + 1][particle.X] == null)
                     {
                         // Verical Gravity
-                        Blocks[Particle[1] + 1][Particle[0]] = "Water";
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        Particle[1] += 1;
+                        Blocks[particle.Y + 1][particle.X] = particle;
+                        Blocks[particle.Y][particle.X] = null;
+                        PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
+                        particle.Y += 1;
+                        PhysicsMaterial_Water.Add(new Point(particle.X, particle.Y));
 
                         // Sideways Flow
-                        if (random.Next(0, 15) == 1 && Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
+                        if (random.Next(0, 15) == 1 && Blocks[particle.Y][particle.X + particle.Tag] == null)
                         {
-                            Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = null;
-                            Particle[0] += Particle[2];
+                            Blocks[particle.Y][particle.X + particle.Tag] = particle;
+                            Blocks[particle.Y][particle.X] = null;
+                            PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
+                            particle.X += particle.Tag;
+                            PhysicsMaterial_Water.Add(new Point(particle.X, particle.Y));
                         }
-                        else if (random.Next(0, 25) == 1 && Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                        else if (random.Next(0, 25) == 1 && Blocks[particle.Y][particle.X + (particle.Tag * -1)] == null)
                         {
-                            Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = null;
-                            Particle[0] += (Particle[2] * -1);
+                            Blocks[particle.Y][particle.X + (particle.Tag * -1)] = particle;
+                            Blocks[particle.Y][particle.X] = null;
+                            PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
+                            particle.X += (particle.Tag * -1);
+                            PhysicsMaterial_Water.Add(new Point(particle.X, particle.Y));
                         }
                     }
                     else
                     {
                         // Sand Sink
-                        if (Blocks[Particle[1] - 1][Particle[0]] == "Sand")
+                        string particleType = Blocks[particle.Y - 1][particle.X]?.ParticleType;
+                        if (particleType == "Sand" || particleType == "Red Sand")
                         {
-                            foreach (List<int> SandParticle in PhysicsMaterial_Sand)
-                            {
-                                if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
-                                {
-                                    SandParticle[1] += 1;
-                                }
-                            }
-                            Blocks[Particle[1] - 1][Particle[0]] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = "Sand";
-                            Particle[1] -= 1;
-                        }
-                        if (Blocks[Particle[1] - 1][Particle[0]] == "Red Sand")
-                        {
-                            foreach (List<int> SandParticle in PhysicsMaterial_Sand)
-                            {
-                                if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
-                                {
-                                    SandParticle[1] += 1;
-                                }
-                            }
-                            Blocks[Particle[1] - 1][Particle[0]] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = "Red Sand";
-                            Particle[1] -= 1;
+                            PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
+                            PhysicsMaterial_Sand.Remove(new Point(particle.X, particle.Y - 1));
+                            PhysicsMaterial_Water.Add(new Point(particle.X, particle.Y - 1));
+                            PhysicsMaterial_Sand.Add(new Point(particle.X, particle.Y));
+
+                            Particle topBlock = Blocks[particle.Y - 1][particle.X];
+                            Particle bottomBlock = Blocks[particle.Y][particle.X];
+
+                            Blocks[particle.Y - 1][particle.X] = bottomBlock;
+                            Blocks[particle.Y][particle.X] = topBlock;
+
+                            topBlock.Y += 1;
+                            bottomBlock.Y -= 1;
                         }
 
                         // Sideways Flow
-                        if (Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
+                        if (Blocks[particle.Y][particle.X + particle.Tag] == null)
                         {
-                            Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = null;
-                            Particle[0] += Particle[2];
+                            Blocks[particle.Y][particle.X + particle.Tag] = particle;
+                            Blocks[particle.Y][particle.X] = null;
+                            PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
+                            particle.X += particle.Tag;
+                            PhysicsMaterial_Water.Add(new Point(particle.X, particle.Y));
                         }
-                        else if (Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                        else if (Blocks[particle.Y][particle.X + (particle.Tag * -1)] == null)
                         {
-                            Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = null;
-                            Particle[0] -= Particle[2];
-                            Particle[2] *= -1;
+                            Blocks[particle.Y][particle.X + (particle.Tag * -1)] = particle;
+                            Blocks[particle.Y][particle.X] = null;
+                            PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
+                            particle.X -= particle.Tag;
+                            particle.Tag *= -1;
+                            PhysicsMaterial_Water.Add(new Point(particle.X, particle.Y));
                         }
                     }
                 }
                 catch
                 {
-                    Blocks[Particle[1]][Particle[0]] = null;
-                    PhysicsMaterial_Water.Remove(Particle);
+                    Blocks[particle.Y][particle.X] = null;
+                    PhysicsMaterial_Water.Remove(new Point(particle.X, particle.Y));
                 }
             }
         }
@@ -2235,34 +2225,19 @@ namespace Pixel_Game
 
         private void Material_ErasePixel(int x_pos, int y_pos)
         {
-            string BlockType = Blocks[y_pos][x_pos];
+            string BlockType = Blocks[y_pos][x_pos]?.ParticleType;
 
             if (BlockType == "Barrier")
             {
                 return;
             }
-
-            if (BlockType == "Water")
-            {
-                foreach (List<int> Particle in PhysicsMaterial_Water)
-                {
-                    if (Particle[0] == x_pos && Particle[1] == y_pos)
-                    {
-                        PhysicsMaterial_Water.Remove(Particle);
-                        break;
-                    }
-                }
-            }
             if (BlockType == "Sand" || BlockType == "Red Sand")
             {
-                foreach (List<int> Particle in PhysicsMaterial_Sand)
-                {
-                    if (Particle[0] == x_pos && Particle[1] == y_pos)
-                    {
-                        PhysicsMaterial_Sand.Remove(Particle);
-                        break;
-                    }
-                }
+                PhysicsMaterial_Sand.Remove(new Point(x_pos, y_pos));
+            }
+            if (BlockType == "Water")
+            {
+                PhysicsMaterial_Water.Remove(new Point(x_pos, y_pos));
             }
 
             Blocks[y_pos][x_pos] = null;
@@ -2284,23 +2259,18 @@ namespace Pixel_Game
             }
 
             // Create New Pixel
+            int newTag = 0;
             if (BlockType == "Water")
             {
-                PhysicsMaterial_Water.Add(new List<int>() { x_pos, y_pos, 1 });
-                return;
+                PhysicsMaterial_Water.Add(new Point(x_pos, y_pos));
+                newTag = 1;
             }
-            if (BlockType == "Sand")
+            if (BlockType == "Sand" || BlockType == "Red Sand")
             {
-                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 0 });
-                return;
-            }
-            if (BlockType == "Red Sand")
-            {
-                PhysicsMaterial_Sand.Add(new List<int>() { x_pos, y_pos, 1 });
-                return;
+                PhysicsMaterial_Sand.Add(new Point(x_pos, y_pos));
             }
 
-            Blocks[y_pos][x_pos] = BlockType;
+            Blocks[y_pos][x_pos] = new Particle(x_pos, y_pos, BlockType, newTag);
         }
 
         #endregion
@@ -2577,7 +2547,7 @@ namespace Pixel_Game
                 {
                     if (false)
                     {
-                        if (Blocks[y_pos][x_pos] == "Dirt") //SEIZURE DIRT
+                        if (Blocks[y_pos][x_pos]?.ParticleType == "Dirt") //SEIZURE DIRT
                         {
                             canvas.FillRectangle(new SolidBrush(Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255))), new Rectangle(
                                 (x_pos * blockWidth) - cameraOffset_x,
@@ -2590,7 +2560,7 @@ namespace Pixel_Game
 
                     if (Blocks[y_pos][x_pos] != null)
                     {
-                        canvas.FillRectangle(Block_FetchColor(Blocks[y_pos][x_pos]), new Rectangle(
+                        canvas.FillRectangle(Block_FetchColor(Blocks[y_pos][x_pos]?.ParticleType), new Rectangle(
                             (x_pos * blockWidth) - cameraOffset_x,
                             (y_pos * blockHeight) - cameraOffset_y,
                             blockWidth, blockHeight
