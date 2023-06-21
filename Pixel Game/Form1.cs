@@ -1340,12 +1340,10 @@ namespace Pixel_Game
         //Vertical
         private void Execute_ProjectileMomentum_Vertical()
         {
-            int index = 0;
-
-        restart:
-
-            foreach (Projectile projectile in Projectiles)
+            // Iterate list backwards so that elements can be removed
+            for (int i = Projectiles.Count - 1;  i >= 0; i--)
             {
+                Projectile projectile = Projectiles[i];
                 // Downward Movement
                 if (projectile.Momentum_Vertical > 0)
                 {
@@ -1357,11 +1355,6 @@ namespace Pixel_Game
                     {
                         projectile.Momentum_Vertical = 0;
                         Attack_Projectile_Collision(projectile);
-
-                        if (projectile.type == "Bomb")
-                        {
-                            goto restart;
-                        }
                     }
 
                     // Water Bellow
@@ -1429,21 +1422,16 @@ namespace Pixel_Game
                         projectile.Momentum_Vertical += 1;
                     }
                 }
-
-                index++;
             }
         }
 
         // Horizontal
         private void Execute_ProjectileMomentum_Horizontal()
         {
-            int index = 0;
-
-        restart:
-
-            foreach (Projectile projectile in Projectiles.Skip(index))
+            // Iterate list backwards so that elements can be removed
+            for (int i = Projectiles.Count - 1; i >= 0; i--)
             {
-
+                Projectile projectile = Projectiles[i];
                 if (projectile.Momentum_Horizontal != 0)
                 {
                     string CollsionType = CollisionType_Horizontal(projectile.Momentum_Horizontal, projectile.x, projectile.y);
@@ -1468,11 +1456,6 @@ namespace Pixel_Game
 
                         projectile.Momentum_Horizontal = 0;
                         Attack_Projectile_Collision(projectile);
-
-                        if (projectile.type == "Bomb")
-                        {
-                            goto restart;
-                        }
                     }
 
                     // Fluid Sideward
@@ -1495,8 +1478,6 @@ namespace Pixel_Game
                     {
                         projectile.x += projectile.Momentum_Horizontal;
                     }
-
-                    index++;
                 }
             }
         }
@@ -1890,17 +1871,6 @@ namespace Pixel_Game
             int placeBound_X_Right = Boundaries[2];
             int placeBound_Y_Right = Boundaries[3];
 
-            /* IDK
-            restart:
-            foreach (as wads in awdsad)
-            {
-                if (wads == asdljasdk)
-                {
-                    goto restart:
-                }
-            }
-            */
-
             for (int y_pos = placeBound_Y_Left; y_pos < placeBound_Y_Right; y_pos++)
             {
                 for (int x_pos = placeBound_X_Left; x_pos < placeBound_X_Right; x_pos++)
@@ -2120,11 +2090,10 @@ namespace Pixel_Game
 
         private void Execute_Physics_Sand()
         {
-            int index = 0;
-        restart:
-
-            foreach (List<int> Particle in PhysicsMaterial_Sand)
+            // Iterate list backwards so that elements can be removed
+            for (int i = PhysicsMaterial_Sand.Count - 1; i >= 0; i--)
             {
+                List<int> Particle = PhysicsMaterial_Sand[i];
                 try
                 {
                     if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
@@ -2150,7 +2119,7 @@ namespace Pixel_Game
                         {
                             Direction = -1;
                         }
-                        for (int i = 0; i < 2; i++)
+                        for (int j = 0; j < 2; j++)
                         {
                             if (Blocks[Particle[1] + 1][Particle[0] + Direction] == null && Blocks[Particle[1] + 1][Particle[0]] != null)
                             {
@@ -2166,24 +2135,21 @@ namespace Pixel_Game
                             Direction *= -1;
                         }
                     }
-                    index++;
                 }
                 catch
                 {
                     Blocks[Particle[1]][Particle[0]] = null;
                     PhysicsMaterial_Sand.Remove(Particle);
-                    goto restart;
                 }
             }
         }
 
         private void Execute_Physics_Fluid()
         {
-            int index = 0;
-        restart:
-
-            foreach (List<int> Particle in PhysicsMaterial_Water.Skip(index))
+            // Iterate list backwards so that elements can be removed
+            for (int i = PhysicsMaterial_Water.Count - 1; i >= 0; i--)
             {
+                List<int> Particle = PhysicsMaterial_Water[i];
                 try
                 {
                     if (Blocks[Particle[1] + 1][Particle[0]] == null)
@@ -2252,13 +2218,11 @@ namespace Pixel_Game
                             Particle[2] *= -1;
                         }
                     }
-                    index++;
                 }
                 catch
                 {
                     Blocks[Particle[1]][Particle[0]] = null;
                     PhysicsMaterial_Water.Remove(Particle);
-                    goto restart;
                 }
             }
         }
