@@ -2117,7 +2117,7 @@ namespace Pixel_Game
                         }
                         for (int j = 0; j < 2; j++)
                         {
-                            if (Blocks[particle.Y + 1][particle.X + Direction] == null && Blocks[particle.Y + 1][particle.X] != null)
+                            if (Blocks[particle.Y + 1][particle.X + Direction] == null && Blocks[particle.Y][particle.X + Direction] == null && Blocks[particle.Y + 1][particle.X] != null)
                             {
                                 if (random.Next(0, 6) != 3) // slight randomnes to movement, breaks up moving pillars
                                 {
