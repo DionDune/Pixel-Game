@@ -304,6 +304,11 @@ namespace Pixel_Game
             {
                 string Block_Type = BiomeRegions[x_pos];
                 Blocks[GroundHeights[x_pos]][x_pos] = new Particle(x_pos, GroundHeights[x_pos], Block_Type);
+
+                if (Block_Type == "Sand" || Block_Type == "Red Sand")
+                {
+                    PhysicsMaterial_Sand.Add(new Point(x_pos, GroundHeights[x_pos]));
+                }
             }
 
             // Gens sub terrain
@@ -321,6 +326,7 @@ namespace Pixel_Game
                             if (BiomeRegions[x_pos] == "Sand")
                             {
                                 type = BiomeRegions[x_pos];
+                                PhysicsMaterial_Sand.Add(new Point(x_pos, y_pos));
                             }
                         }
                         if (y_pos > Blocks.Count() - 50)
@@ -364,6 +370,11 @@ namespace Pixel_Game
             {
                 string Block_Type = BiomeRegions[x_pos];
                 Blocks[SurfaceHeight][x_pos] = new Particle(x_pos, SurfaceHeight, Block_Type);
+
+                if (Block_Type == "Sand" || Block_Type == "Red Sand")
+                {
+                    PhysicsMaterial_Sand.Add(new Point(x_pos, SurfaceHeight));
+                }
             }
 
             // Gens sub terrain
@@ -381,6 +392,7 @@ namespace Pixel_Game
                             if (BiomeRegions[x_pos] == "Sand")
                             {
                                 type = BiomeRegions[x_pos];
+                                PhysicsMaterial_Sand.Add(new Point(x_pos, y_pos));
                             }
                         }
                         if (y_pos > Blocks.Count() - 50)
