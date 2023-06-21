@@ -130,8 +130,8 @@ namespace Pixel_Game
             // Camera
             cameraOffset_x = 0;
             cameraOffset_y = 0;
-            playerCameraOffset_Y = blockHeight / 2;
-            playerCameraOffset_X = 0; // blockWidth / 2;
+            playerCameraOffset_Y = 0;
+            playerCameraOffset_X = 0;
 
             // Player
             Player_isMortal = true;
@@ -2510,7 +2510,7 @@ namespace Pixel_Game
 
             cameraOffset_x = 0;
             cameraOffset_y = 0;
-            playerCameraOffset_Y = blockHeight / 2;
+            playerCameraOffset_Y = 0;
             playerCameraOffset_X = 0;
             Player = new PlayerBlock
             {
@@ -2666,7 +2666,7 @@ namespace Pixel_Game
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
                 Screen.Width / 2 - playerCameraOffset_X - 7,
-                Screen.Height / 2 - blockHeight + 14,
+                Screen.Height / 2 - playerCameraOffset_Y - 1,
                 blockWidth, blockHeight
                 ));
 
