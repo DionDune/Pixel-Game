@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Security.Authentication.ExtendedProtection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Pixel_Game
 {
@@ -1052,8 +1044,8 @@ namespace Pixel_Game
         //Vertical
         private void Execute_EntityMomentum_Vertical()
         {
-            foreach (EntityBlock Entity in Entities) 
-            { 
+            foreach (EntityBlock Entity in Entities)
+            {
                 // Downward Movement
                 if (Entity.Momentum_Vertical > 0)
                 {
@@ -1672,7 +1664,7 @@ namespace Pixel_Game
         private void Execute_Player_BreathDetection()
         {
             bool isUnderwater = true;
-            
+
 
             if (Blocks[Player.y / blockHeight][Player.x / blockWidth] == null)
             {
@@ -1969,14 +1961,15 @@ namespace Pixel_Game
             };
             UIItems.Add(UI_BreathBar);
 
-            UIItem UI_AttackMode = new UIItem {
+            UIItem UI_AttackMode = new UIItem
+            {
                 Type = "AttackMode",
                 Active = false,
                 Size_X = 50,
                 Size_Y = 50,
                 Location_X = Screen.Width - 90 - 50,
                 Location_Y = Screen.Height - 20 - 50
-                };
+            };
             UIItems.Add(UI_AttackMode);
         }
 
@@ -2042,7 +2035,7 @@ namespace Pixel_Game
                         }
                         MaterialSelector_Selected = MaterialSelector_Materials[Item.Active_Amount];
 
-                        
+
                     }
                     if (Item.Type == "AttackMode")
                     {
