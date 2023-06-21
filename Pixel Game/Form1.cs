@@ -1373,100 +1373,87 @@ namespace Pixel_Game
         //Vertical
         private void Execute_ProjectileMomentum_Vertical()
         {
-            int index = 0;
-
-            bool restart = true;
-            while (restart)
+            // Iterate list backwards so that elements can be removed
+            for (int i = Projectiles.Count - 1;  i >= 0; i--)
             {
-                restart = false;
-                foreach (Projectile projectile in Projectiles)
+                Projectile projectile = Projectiles[i];
+                // Downward Movement
+                if (projectile.Momentum_Vertical > 0)
                 {
-                    // Downward Movement
-                    if (projectile.Momentum_Vertical > 0)
+                    string Collision_Type = CollisionType_Vertical(projectile.Momentum_Vertical, projectile.x, projectile.y);
+                    string Collision_Type_Bellow = CollisionType_Vertical(blockHeight, projectile.x, projectile.y);
+
+                    // Solid Bellow
+                    if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
                     {
-                        string Collision_Type = CollisionType_Vertical(projectile.Momentum_Vertical, projectile.x, projectile.y);
-                        string Collision_Type_Bellow = CollisionType_Vertical(blockHeight, projectile.x, projectile.y);
-
-                        // Solid Bellow
-                        if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
-                        {
-                            projectile.Momentum_Vertical = 0;
-                            Attack_Projectile_Collision(projectile);
-
-                            if (projectile.type == "Bomb")
-                            {
-                                restart = true;
-                                break;
-                            }
-                        }
-
-                        // Water Bellow
-                        else if (Collision_Type == "Fluid")
-                        {
-                            if (projectile.Momentum_Vertical > blockHeight / 3)
-                            {
-                                projectile.Momentum_Vertical = blockHeight / 3;
-                            }
-
-                            projectile.y += projectile.Momentum_Vertical;
-
-                            if (projectile.Momentum_Vertical < blockHeight / 4 && GameTick % 12 == 0)
-                            {
-                                projectile.Momentum_Vertical += 1;
-                            }
-                        }
-
-                        // Air Bellow
-                        else if (Collision_Type == null)
-                        {
-                            projectile.y += projectile.Momentum_Vertical;
-
-                            if (projectile.Momentum_Vertical < blockHeight * 2 && GameTick % 2 == 0)
-                            {
-                                projectile.Momentum_Vertical += 1;
-                            }
-                        }
+                        projectile.Momentum_Vertical = 0;
+                        Attack_Projectile_Collision(projectile);
                     }
 
-                    // Upward Movement
-                    if (projectile.Momentum_Vertical < 0)
+                    // Water Bellow
+                    else if (Collision_Type == "Fluid")
                     {
-                        string Collision_Type = CollisionType_Vertical(projectile.Momentum_Vertical, projectile.x, projectile.y);
-
-                        // Solid Above
-                        if (Collision_Type == "Solid")
+                        if (projectile.Momentum_Vertical > blockHeight / 3)
                         {
-                            while (CollisionType_Vertical(-1, projectile.x, projectile.y) != "Solid")
-                            {
-                                projectile.y--;
-                            }
-                            projectile.Momentum_Vertical = 0;
-                            Attack_Projectile_Collision(projectile);
-                            break;
+                            projectile.Momentum_Vertical = blockHeight / 3;
                         }
 
-                        // Other Above
-                        else if (Collision_Type == null || Collision_Type == "Fluid")
-                        {
-                            projectile.y += projectile.Momentum_Vertical;
-                            if (GameTick % 2 == 0)
-                            {
-                                projectile.Momentum_Vertical += 1;  // Change to -= 1 for fun
-                            }
-                        }
-                    }
+                        projectile.y += projectile.Momentum_Vertical;
 
-                    //Give gravitational momentum
-                    if (projectile.Momentum_Vertical == 0)
-                    {
-                        string Collision_Type = CollisionType_Vertical(blockHeight, projectile.x, projectile.y);
-                        if ((Collision_Type == null || Collision_Type == "Fluid") && GameTick % 2 == 0)
+                        if (projectile.Momentum_Vertical < blockHeight / 4 && GameTick % 12 == 0)
                         {
                             projectile.Momentum_Vertical += 1;
                         }
                     }
 
-                    index++;
+                    // Air Bellow
+                    else if (Collision_Type == null)
+                    {
+                        projectile.y += projectile.Momentum_Vertical;
+
+                        if (projectile.Momentum_Vertical < blockHeight * 2 && GameTick % 2 == 0)
+                        {
+                            projectile.Momentum_Vertical += 1;
+                        }
+                    }
+                }
+
+                // Upward Movement
+                if (projectile.Momentum_Vertical < 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(projectile.Momentum_Vertical, projectile.x, projectile.y);
+
+                    // Solid Above
+                    if (Collision_Type == "Solid")
+                    {
+                        while (CollisionType_Vertical(-1, projectile.x, projectile.y) != "Solid")
+                        {
+                            projectile.y--;
+                        }
+                        projectile.Momentum_Vertical = 0;
+                        Attack_Projectile_Collision(projectile);
+                        break;
+                    }
+
+                    // Other Above
+                    else if (Collision_Type == null || Collision_Type == "Fluid")
+                    {
+                        projectile.y += projectile.Momentum_Vertical;
+                        if (GameTick % 2 == 0)
+                        {
+                            projectile.Momentum_Vertical += 1;  // Change to -= 1 for fun
+                        }
+                    }
+                }
+
+                //Give gravitational momentum
+                if (projectile.Momentum_Vertical == 0)
+                {
+                    string Collision_Type = CollisionType_Vertical(blockHeight, projectile.x, projectile.y);
+                    if ((Collision_Type == null || Collision_Type == "Fluid") && GameTick % 2 == 0)
+                    {
+                        projectile.Momentum_Vertical += 1;
+                    }
                 }
             }
         }
@@ -1474,69 +1461,55 @@ namespace Pixel_Game
         // Horizontal
         private void Execute_ProjectileMomentum_Horizontal()
         {
-            int index = 0;
-
-            bool restart = true;
-            while (restart)
+            // Iterate list backwards so that elements can be removed
+            for (int i = Projectiles.Count - 1; i >= 0; i--)
             {
-                restart = false;
-                foreach (Projectile projectile in Projectiles.Skip(index))
+                Projectile projectile = Projectiles[i];
+                if (projectile.Momentum_Horizontal != 0)
                 {
+                    string CollsionType = CollisionType_Horizontal(projectile.Momentum_Horizontal, projectile.x, projectile.y);
 
-                    if (projectile.Momentum_Horizontal != 0)
+
+                    // Solid Sideward
+                    if (CollsionType == "Solid")
                     {
-                        string CollsionType = CollisionType_Horizontal(projectile.Momentum_Horizontal, projectile.x, projectile.y);
-
-
-                        // Solid Sideward
-                        if (CollsionType == "Solid")
+                        // Correction
+                        int MoveAmount = 1;
+                        int checkDistance = 1;
+                        if (projectile.Momentum_Horizontal < 0)
                         {
-                            // Correction
-                            int MoveAmount = 1;
-                            int checkDistance = 1;
-                            if (projectile.Momentum_Horizontal < 0)
-                            {
-                                MoveAmount *= -1;
-                                checkDistance = 0;
-                            }
-                            while (projectile.Momentum_Horizontal != 0 && CollisionType_Horizontal(checkDistance, projectile.x, projectile.y) != "Solid")
-                            {
-                                projectile.x += MoveAmount;
-                                projectile.Momentum_Horizontal -= MoveAmount;
-                            }
-
-                            projectile.Momentum_Horizontal = 0;
-                            Attack_Projectile_Collision(projectile);
-
-                            if (projectile.type == "Bomb")
-                            {
-                                restart = true;
-                                break;
-                            }
+                            MoveAmount *= -1;
+                            checkDistance = 0;
+                        }
+                        while (projectile.Momentum_Horizontal != 0 && CollisionType_Horizontal(checkDistance, projectile.x, projectile.y) != "Solid")
+                        {
+                            projectile.x += MoveAmount;
+                            projectile.Momentum_Horizontal -= MoveAmount;
                         }
 
-                        // Fluid Sideward
-                        if (CollsionType == "Water") // Collision detecting water as air
-                        {
-                            if (projectile.Momentum_Horizontal > blockWidth / 4)
-                            {
-                                projectile.Momentum_Horizontal = blockWidth / 4;
-                            }
-                            else if (projectile.Momentum_Horizontal < -blockWidth / 3)
-                            {
-                                projectile.Momentum_Horizontal = -blockWidth / 4;
-                            }
+                        projectile.Momentum_Horizontal = 0;
+                        Attack_Projectile_Collision(projectile);
+                    }
 
-                            projectile.x += projectile.Momentum_Horizontal;
+                    // Fluid Sideward
+                    if (CollsionType == "Water") // Collision detecting water as air
+                    {
+                        if (projectile.Momentum_Horizontal > blockWidth / 4)
+                        {
+                            projectile.Momentum_Horizontal = blockWidth / 4;
+                        }
+                        else if (projectile.Momentum_Horizontal < -blockWidth / 3)
+                        {
+                            projectile.Momentum_Horizontal = -blockWidth / 4;
                         }
 
-                        // Air Sideward
-                        if (CollsionType == null)
-                        {
-                            projectile.x += projectile.Momentum_Horizontal;
-                        }
+                        projectile.x += projectile.Momentum_Horizontal;
+                    }
 
-                        index++;
+                    // Air Sideward
+                    if (CollsionType == null)
+                    {
+                        projectile.x += projectile.Momentum_Horizontal;
                     }
                 }
             }
@@ -2149,157 +2122,139 @@ namespace Pixel_Game
 
         private void Execute_Physics_Sand()
         {
-            int index = 0;
-
-            bool restart = true;
-            while (restart)
+            // Iterate list backwards so that elements can be removed
+            for (int i = PhysicsMaterial_Sand.Count - 1; i >= 0; i--)
             {
-                restart = false;
-                foreach (List<int> Particle in PhysicsMaterial_Sand)
+                List<int> Particle = PhysicsMaterial_Sand[i];
+                try
                 {
-                    try
+                    if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
+                        Particle[1] >= blockBound_Y_Left / 2 && Particle[1] <= blockBound_Y_Right * 2)
                     {
-                        if (Particle[0] >= blockBound_X_Left / 2 && Particle[0] <= blockBound_X_Right * 2 &&
-                            Particle[1] >= blockBound_Y_Left / 2 && Particle[1] <= blockBound_Y_Right * 2)
+                        string Sand_Type = "Sand";
+                        if (Particle[2] == 1)
                         {
-                            string Sand_Type = "Sand";
-                            if (Particle[2] == 1)
-                            {
-                                Sand_Type = "Red Sand";
-                            }
-
-                            //Vertical Gravity
-                            if (Blocks[Particle[1] + 1][Particle[0]] == null)
-                            {
-                                Blocks[Particle[1]][Particle[0]] = null;
-                                Blocks[Particle[1] + 1][Particle[0]] = Sand_Type;
-                                Particle[1] += 1;
-                            }
-
-                            //Diagonal Gravity
-                            int Direction = random.Next(0, 1);
-                            if (Direction == 0)
-                            {
-                                Direction = -1;
-                            }
-                            for (int i = 0; i < 2; i++)
-                            {
-                                if (Blocks[Particle[1] + 1][Particle[0] + Direction] == null && Blocks[Particle[1] + 1][Particle[0]] != null)
-                                {
-                                    if (random.Next(0, 6) != 3) // slight randomnes to movement, breaks up moving pillars
-                                    {
-                                        Blocks[Particle[1]][Particle[0]] = null;
-                                        Blocks[Particle[1] + 1][Particle[0] + Direction] = Sand_Type;
-                                        Particle[1] += 1;
-                                        Particle[0] += Direction;
-                                    }
-                                    break;
-                                }
-                                Direction *= -1;
-                            }
+                            Sand_Type = "Red Sand";
                         }
-                        index++;
-                    }
-                    catch
-                    {
-                        Blocks[Particle[1]][Particle[0]] = null;
-                        PhysicsMaterial_Sand.Remove(Particle);
 
-                        restart = true;
-                        break;
+                        //Vertical Gravity
+                        if (Blocks[Particle[1] + 1][Particle[0]] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Blocks[Particle[1] + 1][Particle[0]] = Sand_Type;
+                            Particle[1] += 1;
+                        }
+
+                        //Diagonal Gravity
+                        int Direction = random.Next(0, 1);
+                        if (Direction == 0)
+                        {
+                            Direction = -1;
+                        }
+                        for (int j = 0; j < 2; j++)
+                        {
+                            if (Blocks[Particle[1] + 1][Particle[0] + Direction] == null && Blocks[Particle[1] + 1][Particle[0]] != null)
+                            {
+                                if (random.Next(0, 6) != 3) // slight randomnes to movement, breaks up moving pillars
+                                {
+                                    Blocks[Particle[1]][Particle[0]] = null;
+                                    Blocks[Particle[1] + 1][Particle[0] + Direction] = Sand_Type;
+                                    Particle[1] += 1;
+                                    Particle[0] += Direction;
+                                }
+                                break;
+                            }
+                            Direction *= -1;
+                        }
                     }
+                }
+                catch
+                {
+                    Blocks[Particle[1]][Particle[0]] = null;
+                    PhysicsMaterial_Sand.Remove(Particle);
                 }
             }
         }
 
         private void Execute_Physics_Fluid()
         {
-            int index = 0;
-
-            bool restart = true;
-            while (restart)
+            // Iterate list backwards so that elements can be removed
+            for (int i = PhysicsMaterial_Water.Count - 1; i >= 0; i--)
             {
-                restart = false;
-                foreach (List<int> Particle in PhysicsMaterial_Water.Skip(index))
+                List<int> Particle = PhysicsMaterial_Water[i];
+                try
                 {
-                    try
+                    if (Blocks[Particle[1] + 1][Particle[0]] == null)
                     {
-                        if (Blocks[Particle[1] + 1][Particle[0]] == null)
-                        {
-                            // Verical Gravity
-                            Blocks[Particle[1] + 1][Particle[0]] = "Water";
-                            Blocks[Particle[1]][Particle[0]] = null;
-                            Particle[1] += 1;
-
-                            // Sideways Flow
-                            if (random.Next(0, 15) == 1 && Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
-                            {
-                                Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
-                                Blocks[Particle[1]][Particle[0]] = null;
-                                Particle[0] += Particle[2];
-                            }
-                            else if (random.Next(0, 25) == 1 && Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
-                            {
-                                Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
-                                Blocks[Particle[1]][Particle[0]] = null;
-                                Particle[0] += (Particle[2] * -1);
-                            }
-                        }
-                        else
-                        {
-                            // Sand Sink
-                            if (Blocks[Particle[1] - 1][Particle[0]] == "Sand")
-                            {
-                                foreach (List<int> SandParticle in PhysicsMaterial_Sand)
-                                {
-                                    if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
-                                    {
-                                        SandParticle[1] += 1;
-                                    }
-                                }
-                                Blocks[Particle[1] - 1][Particle[0]] = "Water";
-                                Blocks[Particle[1]][Particle[0]] = "Sand";
-                                Particle[1] -= 1;
-                            }
-                            if (Blocks[Particle[1] - 1][Particle[0]] == "Red Sand")
-                            {
-                                foreach (List<int> SandParticle in PhysicsMaterial_Sand)
-                                {
-                                    if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
-                                    {
-                                        SandParticle[1] += 1;
-                                    }
-                                }
-                                Blocks[Particle[1] - 1][Particle[0]] = "Water";
-                                Blocks[Particle[1]][Particle[0]] = "Red Sand";
-                                Particle[1] -= 1;
-                            }
-
-                            // Sideways Flow
-                            if (Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
-                            {
-                                Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
-                                Blocks[Particle[1]][Particle[0]] = null;
-                                Particle[0] += Particle[2];
-                            }
-                            else if (Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
-                            {
-                                Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
-                                Blocks[Particle[1]][Particle[0]] = null;
-                                Particle[0] -= Particle[2];
-                                Particle[2] *= -1;
-                            }
-                        }
-                        index++;
-                    }
-                    catch
-                    {
+                        // Verical Gravity
+                        Blocks[Particle[1] + 1][Particle[0]] = "Water";
                         Blocks[Particle[1]][Particle[0]] = null;
-                        PhysicsMaterial_Water.Remove(Particle);
+                        Particle[1] += 1;
 
-                        restart = true;
-                        break;
+                        // Sideways Flow
+                        if (random.Next(0, 15) == 1 && Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] += Particle[2];
+                        }
+                        else if (random.Next(0, 25) == 1 && Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] += (Particle[2] * -1);
+                        }
                     }
+                    else
+                    {
+                        // Sand Sink
+                        if (Blocks[Particle[1] - 1][Particle[0]] == "Sand")
+                        {
+                            foreach (List<int> SandParticle in PhysicsMaterial_Sand)
+                            {
+                                if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
+                                {
+                                    SandParticle[1] += 1;
+                                }
+                            }
+                            Blocks[Particle[1] - 1][Particle[0]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = "Sand";
+                            Particle[1] -= 1;
+                        }
+                        if (Blocks[Particle[1] - 1][Particle[0]] == "Red Sand")
+                        {
+                            foreach (List<int> SandParticle in PhysicsMaterial_Sand)
+                            {
+                                if (SandParticle[1] == Particle[1] - 1 && SandParticle[0] == Particle[0])
+                                {
+                                    SandParticle[1] += 1;
+                                }
+                            }
+                            Blocks[Particle[1] - 1][Particle[0]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = "Red Sand";
+                            Particle[1] -= 1;
+                        }
+
+                        // Sideways Flow
+                        if (Blocks[Particle[1]][Particle[0] + Particle[2]] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + Particle[2]] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] += Particle[2];
+                        }
+                        else if (Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] == null)
+                        {
+                            Blocks[Particle[1]][Particle[0] + (Particle[2] * -1)] = "Water";
+                            Blocks[Particle[1]][Particle[0]] = null;
+                            Particle[0] -= Particle[2];
+                            Particle[2] *= -1;
+                        }
+                    }
+                }
+                catch
+                {
+                    Blocks[Particle[1]][Particle[0]] = null;
+                    PhysicsMaterial_Water.Remove(Particle);
                 }
             }
         }
