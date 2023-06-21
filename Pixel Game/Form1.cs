@@ -172,7 +172,8 @@ namespace Pixel_Game
             Colors_Generate();
             MaterialSelector_Materials = new List<string>() { "Default", "Sand", "Red Sand", "Water", null };
             MaterialSelector_Selected = MaterialSelector_Materials[0];
-
+            PhysicsMaterial_Water = new HashSet<Point>();
+            PhysicsMaterial_Sand = new HashSet<Point>();
 
 
             // Terrain Generation
