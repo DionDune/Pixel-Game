@@ -534,6 +534,19 @@ namespace Pixel_Game
             {
                 Player_Jump = false;
             }
+
+            //Weather
+            if (e.KeyCode == Keys.R)
+            {
+                if (isRaining)
+                {
+                    isRaining = false;
+                }
+                else
+                {
+                    isRaining = true;
+                }
+            }
         }
 
         private void Mouse_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
