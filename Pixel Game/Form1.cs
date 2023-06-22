@@ -758,6 +758,12 @@ namespace Pixel_Game
                     }
                     Player.Momentum_Vertical = 0;
                 }
+                else if (Collision_Type == null && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Fluid" && Player_ShiftMove)
+                {
+                    Player.Momentum_Vertical = -blockHeight / 2;
+                    Player.y += Player.Momentum_Vertical;
+                    cameraOffset_y += Player.Momentum_Vertical;
+                }
                 else if (Collision_Type == null || Collision_Type == "Fluid")
                 {
                     Player.y += Player.Momentum_Vertical;
