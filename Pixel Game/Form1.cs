@@ -105,6 +105,8 @@ namespace Pixel_Game
         private HashSet<Particle> PhysicsMaterial_Sand_Iterate = new HashSet<Particle>();
         string MaterialSelector_Selected;
 
+        //Weather
+        bool isRaining;
 
 
 
@@ -184,6 +186,9 @@ namespace Pixel_Game
             MaterialSelector_Selected = MaterialSelector_Materials[0];
             PhysicsMaterial_Water = new HashSet<Particle>();
             PhysicsMaterial_Sand = new HashSet<Particle>();
+
+            //Weather
+            isRaining = false;
 
             // Used to store a copy of physics materials while iterating
             PhysicsMaterial_Water_Iterate = new HashSet<Particle>();
@@ -2222,6 +2227,24 @@ namespace Pixel_Game
 
         #endregion
 
+        #region Weather
+
+        private void Execute_Rain()
+        {
+            if (isRaining)
+            {
+                for (int x_pos = blockBound_X_Left; x_pos < blockBound_X_Right; x_pos++)
+                {
+                    if (random.Next(0, 200) == 0)
+                    {
+                        Material_CreatePixel("Water", x_pos, blockBound_Y_Left);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         /////////////////////////////////////////
 
         #region Blocks Create/Erase
@@ -2788,6 +2811,8 @@ namespace Pixel_Game
 
             Execute_BlockLoadBoundary();
             Random_PlayerTracer();
+
+            Execute_Rain();
 
             Screen.Invalidate();
         }
