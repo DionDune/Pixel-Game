@@ -2245,7 +2245,10 @@ namespace Pixel_Game
                 {
                     if (random.Next(0, 200) == 0)
                     {
-                        Material_CreatePixel("Water", x_pos, 10);
+                        if (x_pos > 0 && x_pos < worldWidth)
+                        {
+                            Material_CreatePixel("Water", x_pos, 10);
+                        } 
                     }
                 }
             }
