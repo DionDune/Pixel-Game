@@ -154,7 +154,7 @@ namespace Pixel_Game
             Player_AllowBunnyHop = false;
             Player = new PlayerBlock
             {
-                x = (Screen.Width / 2) / blockWidth * blockWidth,
+                x = ((Screen.Width / 2) / blockWidth * blockWidth) + blockWidth / 2,
                 y = (Screen.Height / 2) / blockHeight * blockHeight,
                 Health_Max = 100,
                 Health = 100,
@@ -2657,7 +2657,7 @@ namespace Pixel_Game
 
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
-                Screen.Width / 2 - playerCameraOffset_X - 7,
+                Screen.Width / 2 - playerCameraOffset_X,
                 Screen.Height / 2 - playerCameraOffset_Y - 1,
                 blockWidth, blockHeight
                 ));
