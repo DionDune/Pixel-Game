@@ -14,6 +14,7 @@ Controls:  (WASD interchangeable with arrow keys)
         + If shifting, Force player down
      - Space:
         + If shifting, Medium jump
+        + If shifting and on fluid surface, jump from water
         + If not shifting, Small jump
      - Shift: Activates shift mode
  
