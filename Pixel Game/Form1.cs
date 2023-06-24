@@ -2241,7 +2241,7 @@ namespace Pixel_Game
         {
             if (isRaining)
             {
-                for (int x_pos = blockBound_X_Left; x_pos < blockBound_X_Right; x_pos++)
+                for (int x_pos = blockBound_X_Left - 150; x_pos < blockBound_X_Right + 150; x_pos++)
                 {
                     if (random.Next(0, 200) == 0)
                     {
