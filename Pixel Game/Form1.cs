@@ -538,14 +538,7 @@ namespace Pixel_Game
             //Weather
             if (e.KeyCode == Keys.R)
             {
-                if (isRaining)
-                {
-                    isRaining = false;
-                }
-                else
-                {
-                    isRaining = true;
-                }
+                isRaining = !isRaining;
             }
         }
 
