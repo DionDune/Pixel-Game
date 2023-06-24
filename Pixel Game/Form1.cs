@@ -2245,7 +2245,7 @@ namespace Pixel_Game
                 {
                     if (random.Next(0, 200) == 0)
                     {
-                        Material_CreatePixel("Water", x_pos, blockBound_Y_Left);
+                        Material_CreatePixel("Water", x_pos, 10);
                     }
                 }
             }
