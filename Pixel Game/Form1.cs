@@ -494,13 +494,9 @@ namespace Pixel_Game
             }
 
             // Random Fun
-            if (e.KeyCode == Keys.E && Random_TracerActive == false)
+            if (e.KeyCode == Keys.E)
             {
-                Random_TracerActive = true;
-            }
-            else if (e.KeyCode == Keys.E && Random_TracerActive == true)
-            {
-                Random_TracerActive = false;
+                Random_TracerActive = !Random_TracerActive;
             }
         }
 
