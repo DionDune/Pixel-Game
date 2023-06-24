@@ -494,13 +494,9 @@ namespace Pixel_Game
             }
 
             // Random Fun
-            if (e.KeyCode == Keys.E && Random_TracerActive == false)
+            if (e.KeyCode == Keys.E)
             {
-                Random_TracerActive = true;
-            }
-            else if (e.KeyCode == Keys.E && Random_TracerActive == true)
-            {
-                Random_TracerActive = false;
+                Random_TracerActive = !Random_TracerActive;
             }
         }
 
@@ -538,14 +534,7 @@ namespace Pixel_Game
             //Weather
             if (e.KeyCode == Keys.R)
             {
-                if (isRaining)
-                {
-                    isRaining = false;
-                }
-                else
-                {
-                    isRaining = true;
-                }
+                isRaining = !isRaining;
             }
         }
 
@@ -2252,11 +2241,14 @@ namespace Pixel_Game
         {
             if (isRaining)
             {
-                for (int x_pos = blockBound_X_Left; x_pos < blockBound_X_Right; x_pos++)
+                for (int x_pos = blockBound_X_Left - 150; x_pos < blockBound_X_Right + 150; x_pos++)
                 {
                     if (random.Next(0, 200) == 0)
                     {
-                        Material_CreatePixel("Water", x_pos, blockBound_Y_Left);
+                        if (x_pos > 0 && x_pos < worldWidth)
+                        {
+                            Material_CreatePixel("Water", x_pos, 10);
+                        } 
                     }
                 }
             }
