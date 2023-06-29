@@ -105,8 +105,10 @@ namespace Pixel_Game
         private HashSet<Particle> PhysicsMaterial_Sand_Iterate = new HashSet<Particle>();
         string MaterialSelector_Selected;
 
-        //Weather
+        // GameRules
         bool isRaining;
+        bool Bouncy;
+        int Bounce_MomentumDivision; //Momentum set to -(Momentum / Bounce_MomentumLost)
 
 
 
@@ -187,8 +189,11 @@ namespace Pixel_Game
             PhysicsMaterial_Water = new HashSet<Particle>();
             PhysicsMaterial_Sand = new HashSet<Particle>();
 
-            //Weather
+            // Game Rules
             isRaining = false;
+            Bouncy = true;
+            Bounce_MomentumDivision = 5;
+            
 
             // Used to store a copy of physics materials while iterating
             PhysicsMaterial_Water_Iterate = new HashSet<Particle>();
@@ -700,7 +705,14 @@ namespace Pixel_Game
                 // Solid Bellow
                 if (Collision_Type == "Solid" || Collision_Type_Bellow == "Solid")
                 {
-                    Player.Momentum_Vertical = 0;
+                    if (!Bouncy || Player.Momentum_Vertical < 12 || (Player.Momentum_Vertical < 20 && Player_Jump)) //or jumping
+                    {
+                        Player.Momentum_Vertical = 0;
+                    }
+                    else
+                    {
+                        Player.Momentum_Vertical = -(Player.Momentum_Vertical / Bounce_MomentumDivision);
+                    }
                 }
 
                 // Water Bellow
@@ -745,7 +757,16 @@ namespace Pixel_Game
                         Player.y--;
                         cameraOffset_y--;
                     }
-                    Player.Momentum_Vertical = 0;
+
+                    if (!Bouncy)
+                    {
+                        Player.Momentum_Vertical = 0;
+                    }
+                    else
+                    {
+                        Player.Momentum_Vertical = -(Player.Momentum_Vertical / Bounce_MomentumDivision);
+                    }
+                    
                 }
                 else if (Collision_Type == null && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Fluid" && Player_ShiftMove)
                 {
