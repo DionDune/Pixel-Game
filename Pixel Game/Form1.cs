@@ -1045,7 +1045,7 @@ namespace Pixel_Game
 
         #endregion
 
-        #region Entity Movement
+        #region Entities
 
         private void VoidEnemy_Movement()
         {
@@ -1123,20 +1123,21 @@ namespace Pixel_Game
 
                 Entities.Add(Entity);
             }
+        }
 
-            //Void Enemies
-            x_pos = random.Next(10, worldWidth - 10) * blockWidth;
-            y_pos = random.Next(10, worldHeight - 10) * blockHeight;
+        private void SpawnVoidEnemies()
+        {
+            int x_pos = random.Next(10, worldWidth - 10) * blockWidth;
+            int y_pos = random.Next(10, worldHeight - 10) * blockHeight;
 
             int ConnectionWidth = blockWidth;
             int ConnectionHeight = blockHeight;
 
             VoidEnemies.Add(new List<EntityBlock>());
-            foreach(List<EntityBlock> VoidEnemy in VoidEnemies)
+            foreach (List<EntityBlock> VoidEnemy in VoidEnemies)
             {
                 for (int i = 1; i < 100; i++)
                 {
-                    //VoidEnemy.Add(new List<int>() { x_pos2, y_pos2 - (blockHeight * i) });
                     VoidEnemy.Add(new EntityBlock()
                     {
                         x = x_pos,
