@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,6 +20,8 @@ namespace Pixel_Game
 
         private List<EntityBlock> Entities = new List<EntityBlock>();
         private List<Projectile> Projectiles = new List<Projectile>();
+
+        private List<List<EntityBlock>> VoidEnemies = new List<List<EntityBlock>>();
 
         private List<string> BiomeRegions = new List<string>();
 
@@ -193,7 +196,7 @@ namespace Pixel_Game
             isRaining = false;
             Bouncy = true;
             Bounce_MomentumDivision = 5;
-            
+
 
             // Used to store a copy of physics materials while iterating
             PhysicsMaterial_Water_Iterate = new HashSet<Particle>();
@@ -766,7 +769,7 @@ namespace Pixel_Game
                     {
                         Player.Momentum_Vertical = -(Player.Momentum_Vertical / Bounce_MomentumDivision);
                     }
-                    
+
                 }
                 else if (Collision_Type == null && CollisionType_Vertical(blockHeight, Player.x, Player.y) == "Fluid" && Player_ShiftMove)
                 {
@@ -1044,12 +1047,73 @@ namespace Pixel_Game
 
         #region Entity Movement
 
+        private void VoidEnemy_Movement()
+        {
+            foreach (List<EntityBlock> VoidEnemy in VoidEnemies)
+            {
+                VoidEnemy[0].x = Player.x + random.Next(-1, 1);
+                VoidEnemy[0].y = Player.y + random.Next(-1, 1);
+
+                int Range_X = 0;
+                int Range_Y = 0;
+
+                for (int index = 1; index < VoidEnemy.Count() - 1; index++)
+                {
+                    Range_X = VoidEnemy[index - 1].x - VoidEnemy[index + 1].x;
+                    Range_Y = VoidEnemy[index - 1].y - VoidEnemy[index + 1].y;
+
+                    //X
+                    if (Range_X >= -blockWidth && Range_X <= blockWidth)
+                    {
+                        VoidEnemy[index].x = VoidEnemy[index - 1].x + (Range_X / 2);
+                    }
+                    else
+                    {
+                        if (Range_X > 0)
+                        {
+                            VoidEnemy[index].x = VoidEnemy[index - 1].x - blockWidth;
+                        }
+                        else if (Range_X < 0)
+                        {
+                            VoidEnemy[index].x = VoidEnemy[index - 1].x + blockWidth;
+                        }
+                    }
+                    //Y
+                    if (Range_Y >= -blockHeight && Range_Y <= blockHeight)
+                    {
+                        VoidEnemy[index].y = VoidEnemy[index - 1].y + (Range_Y / 2);
+                    }
+                    else
+                    {
+                        if (Range_Y > 0)
+                        {
+                            VoidEnemy[index].y = VoidEnemy[index - 1].y - blockHeight;
+                        }
+                        else if (Range_Y < 0)
+                        {
+                            VoidEnemy[index].y = VoidEnemy[index - 1].y + blockHeight;
+                        }
+                    }
+                }
+
+                //Last link
+                Range_X = VoidEnemy[VoidEnemy.Count() - 1].x - VoidEnemy[VoidEnemy.Count() - 2].x;
+                Range_Y = VoidEnemy[VoidEnemy.Count() - 1].y - VoidEnemy[VoidEnemy.Count() - 2].y;
+
+                VoidEnemy[VoidEnemy.Count() - 1].x = VoidEnemy[VoidEnemy.Count() - 2].x + (Range_X / 2);
+                VoidEnemy[VoidEnemy.Count() - 1].y = VoidEnemy[VoidEnemy.Count() - 2].y + (Range_Y / 2);
+            }
+        }
+
+
         private void SpawnEntities()
         {
-            while (Entities.Count < 100)
+            int x_pos;
+            int y_pos;
+            while (Entities.Count < 200)
             {
-                int x_pos = random.Next(10, worldWidth - 10) * blockWidth;
-                int y_pos = 15 * blockHeight;
+                x_pos = random.Next(10, worldWidth - 10) * blockWidth;
+                y_pos = 15 * blockHeight;
 
                 EntityBlock Entity = new EntityBlock
                 {
@@ -1058,6 +1122,27 @@ namespace Pixel_Game
                 };
 
                 Entities.Add(Entity);
+            }
+
+            //Void Enemies
+            x_pos = random.Next(10, worldWidth - 10) * blockWidth;
+            y_pos = random.Next(10, worldHeight - 10) * blockHeight;
+
+            int ConnectionWidth = blockWidth;
+            int ConnectionHeight = blockHeight;
+
+            VoidEnemies.Add(new List<EntityBlock>());
+            foreach(List<EntityBlock> VoidEnemy in VoidEnemies)
+            {
+                for (int i = 1; i < 100; i++)
+                {
+                    //VoidEnemy.Add(new List<int>() { x_pos2, y_pos2 - (blockHeight * i) });
+                    VoidEnemy.Add(new EntityBlock()
+                    {
+                        x = x_pos,
+                        y = y_pos - (blockHeight * i)
+                    });
+                }
             }
         }
 
@@ -1378,6 +1463,8 @@ namespace Pixel_Game
             Execute_EntityMomentum_Vertical();
             Execute_EntityMovement_Correction_Vertical();
             Execute_EntityMomentum_Vertical_Handler();
+
+            VoidEnemy_Movement();
         }
 
         #endregion
@@ -1388,7 +1475,7 @@ namespace Pixel_Game
         private void Execute_ProjectileMomentum_Vertical()
         {
             // Iterate list backwards so that elements can be removed
-            for (int i = Projectiles.Count - 1;  i >= 0; i--)
+            for (int i = Projectiles.Count - 1; i >= 0; i--)
             {
                 Projectile projectile = Projectiles[i];
                 // Downward Movement
@@ -2269,7 +2356,7 @@ namespace Pixel_Game
                         if (x_pos > 0 && x_pos < worldWidth)
                         {
                             Material_CreatePixel("Water", x_pos, 10);
-                        } 
+                        }
                     }
                 }
             }
@@ -2674,6 +2761,20 @@ namespace Pixel_Game
                 Screen.Height / 2 - playerCameraOffset_Y - 1,
                 blockWidth, blockHeight
                 ));
+
+
+            //Void Enemy
+            foreach (List<EntityBlock> VoidEnemy in VoidEnemies)
+            {
+                foreach (EntityBlock Link in VoidEnemy)
+                {
+                    canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                    Link.x - cameraOffset_x,
+                    Link.y - cameraOffset_y,
+                    blockWidth, blockHeight
+                    ));
+                }
+            }
 
 
             //Highlighter
