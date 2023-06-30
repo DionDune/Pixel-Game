@@ -544,6 +544,12 @@ namespace Pixel_Game
             {
                 isRaining = !isRaining;
             }
+
+            //Void Enemies
+            if (e.KeyCode == Keys.V)
+            {
+                SpawnVoidEnemies();
+            }
         }
 
         private void Mouse_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
