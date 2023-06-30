@@ -548,7 +548,7 @@ namespace Pixel_Game
             //Void Enemies
             if (e.KeyCode == Keys.V)
             {
-                SpawnVoidEnemies();
+                SpawnVoidEnemy();
             }
         }
 
@@ -1131,7 +1131,7 @@ namespace Pixel_Game
             }
         }
 
-        private void SpawnVoidEnemies()
+        private void SpawnVoidEnemy()
         {
             int x_pos = random.Next(10, worldWidth - 10) * blockWidth;
             int y_pos = random.Next(10, worldHeight - 10) * blockHeight;
