@@ -8,6 +8,9 @@ namespace Pixel_Game
 {
     internal class EntityBlock
     {
+        public string Tag { get; set; }
+
+
         public int x { get; set; }
         public int y { get; set; }
 
@@ -34,6 +37,9 @@ namespace Pixel_Game
 
         public EntityBlock()
         {
+            Tag = "Standard";
+
+
             x = 0;
             y = 0;
 
