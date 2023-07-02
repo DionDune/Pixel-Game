@@ -1063,13 +1063,28 @@ namespace Pixel_Game
                     VoidEnemies.Remove(VoidEnemy);
                     return;
                 }
+                
+                //Void enemy chases player
+                if (VoidEnemy[0].x < Player.x)
+                {
+                    VoidEnemy[0].x += blockHeight / 2;
+                }
+                if (VoidEnemy[0].x > Player.x)
+                {
+                    VoidEnemy[0].x -= blockHeight / 2;
+                }
+                if (VoidEnemy[0].y < Player.y)
+                {
+                    VoidEnemy[0].y += blockHeight / 2;
+                }
+                if (VoidEnemy[0].y > Player.y)
+                {
+                    VoidEnemy[0].y -= blockHeight / 2;
+                }
 
-                VoidEnemy[0].x = Player.x + random.Next(-1, 1);
-                VoidEnemy[0].y = Player.y + random.Next(-1, 1);
-
+                //Void Enemy follows itself
                 int Range_X = 0;
                 int Range_Y = 0;
-
                 for (int index = 1; index < VoidEnemy.Count() - 1; index++)
                 {
                     Range_X = VoidEnemy[index - 1].x - VoidEnemy[index + 1].x;
