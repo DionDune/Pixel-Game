@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading;
 using System.Windows.Forms;
@@ -1057,6 +1058,12 @@ namespace Pixel_Game
         {
             foreach (List<EntityBlock> VoidEnemy in VoidEnemies)
             {
+                if (VoidEnemy.Count() <= 6) //Enemy Dies
+                {
+                    VoidEnemies.Remove(VoidEnemy);
+                    return;
+                }
+
                 VoidEnemy[0].x = Player.x + random.Next(-1, 1);
                 VoidEnemy[0].y = Player.y + random.Next(-1, 1);
 
@@ -1707,6 +1714,9 @@ namespace Pixel_Game
             // Vertical
             Execute_ProjectileMomentum_Vertical();
             Execute_ProjectileMovement_Correction_Vertical();
+
+
+            Attack_Projectile_EntityCollisionDetection();
         }
 
 
@@ -1873,7 +1883,7 @@ namespace Pixel_Game
         {
             if (projectile.type == "Bomb")
             {
-                Attack_Explosion(10, projectile.x, projectile.y);
+                Attack_Explosion(7, projectile.x, projectile.y);
                 Projectiles.Remove(projectile);
             }
         }
@@ -1896,6 +1906,38 @@ namespace Pixel_Game
                     catch { }
                 }
             }
+        }
+
+        private void Attack_Projectile_EntityCollisionDetection()
+        {
+            if (VoidEnemies.Count() != 0 && Projectiles.Count() != 0)
+            {
+                for (int ProjIndex = Projectiles.Count() - 1; ProjIndex >= 0; ProjIndex--)
+                {
+                    bool BreakLoop = false;
+                    foreach (List<EntityBlock> VoidEnemy in VoidEnemies)
+                    {
+                        for (int BlockIndex = VoidEnemy.Count() - 1; BlockIndex >= 0; BlockIndex--)
+                        {
+                            if (((Projectiles[ProjIndex].x >= VoidEnemy[BlockIndex].x && Projectiles[ProjIndex].x <= VoidEnemy[BlockIndex].x + blockWidth) ||
+                                (Projectiles[ProjIndex].x + blockWidth >= VoidEnemy[BlockIndex].x && Projectiles[ProjIndex].x + blockWidth <= VoidEnemy[BlockIndex].x + blockWidth)) &&
+                                ((Projectiles[ProjIndex].y >= VoidEnemy[BlockIndex].y && Projectiles[ProjIndex].y <= VoidEnemy[BlockIndex].y + blockHeight) ||
+                                (Projectiles[ProjIndex].y + blockHeight >= VoidEnemy[BlockIndex].y && Projectiles[ProjIndex].y + blockHeight <= VoidEnemy[BlockIndex].y + blockHeight)))
+                            {
+                                VoidEnemy.RemoveAt(BlockIndex);
+                                Projectiles.RemoveAt(ProjIndex);
+                                BreakLoop = true;
+                                break;
+                            }
+                        }
+                        if (BreakLoop == true)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
         }
 
         #endregion
