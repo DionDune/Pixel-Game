@@ -2853,8 +2853,8 @@ namespace Pixel_Game
                         if (x_pos == 0 || x_pos == Highligher[y_pos].Count() - 1 || y_pos == 0 || y_pos == Highligher.Count() - 1)
                         {
                             canvas.FillRectangle(Block_FetchColor("Highlighter"), new Rectangle(
-                                    (x_pos + (Mouse_X / blockWidth - Highlighter_Size / 2)) * blockWidth,
-                                    (y_pos + (Mouse_Y / blockHeight - Highlighter_Size / 2)) * blockHeight,
+                                    (((x_pos - Highlighter_Size / 2) * blockWidth) - (cameraOffset_x % blockWidth)) + (Mouse_X + (cameraOffset_x % blockWidth)) / blockWidth * blockWidth,
+                                    (((y_pos - Highlighter_Size / 2) * blockHeight) - (cameraOffset_y % blockHeight)) + (Mouse_Y + (cameraOffset_y % blockHeight)) / blockHeight * blockHeight,
                                     blockWidth, blockHeight
                                     ));
                         }
