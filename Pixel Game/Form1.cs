@@ -2143,16 +2143,16 @@ namespace Pixel_Game
             };
             UIItems.Add(UI_BreathBar);
 
-            UIItem UI_AttackMode = new UIItem
+            UIItem UI_AbilitySelector = new UIItem
             {
-                Type = "AttackMode",
+                Type = "AbilitySelector",
                 Active = false,
                 Size_X = 50,
                 Size_Y = 50,
                 Location_X = Screen.Width - 90 - 50,
                 Location_Y = Screen.Height - 20 - 50
             };
-            UIItems.Add(UI_AttackMode);
+            UIItems.Add(UI_AbilitySelector);
         }
 
         private void UI_PositionUpdate()
@@ -2237,7 +2237,7 @@ namespace Pixel_Game
 
 
                     }
-                    if (Item.Type == "AttackMode")
+                    if (Item.Type == "AbilitySelector")
                     {
                         Item.Active_Amount++;
                         if (Item.Active_Amount >= Abilities.Count())
@@ -2913,7 +2913,7 @@ namespace Pixel_Game
                     }
 
                     // Attack Mode Button
-                    if (Item.Type == "AttackMode")
+                    if (Item.Type == "AbilitySelector")
                     {
                         Brush ActiveColor = Block_FetchColor(Item.Type);
 
