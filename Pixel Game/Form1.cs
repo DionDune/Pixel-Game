@@ -2696,10 +2696,11 @@ namespace Pixel_Game
             };
         }
 
-        private void FillRectangle(Graphics canvas, SolidBrush Colour, int StartX, int StartY, int SizeX, int SizeY)
+        private void Drawing_FillIngameBlock(Graphics canvas, SolidBrush Colour, int StartX, int StartY, int SizeX, int SizeY)
         {
             canvas.FillRectangle(Colour, new Rectangle(
-                SizeX, StartY,
+                StartX - cameraOffset_x,
+                StartY - cameraOffset_y,
                 SizeX, SizeY
                 ));
         }
