@@ -99,7 +99,8 @@ namespace Pixel_Game
 
         //UI
         private List<UIItem> UIItems = new List<UIItem>();
-        bool Mouse_Clicking;
+        bool Mouse_Clicking_Right;
+        bool Mouse_Clicking_Left;
 
         //Materials
         private List<string> MaterialSelector_Materials = new List<string>();
@@ -2181,7 +2182,15 @@ namespace Pixel_Game
 
         private void Mouse_Down(object sender, MouseEventArgs e)
         {
-            Mouse_Clicking = true;
+            if (e.Button == MouseButtons.Right)
+            {
+                Mouse_Clicking_Right = true;
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                Mouse_Clicking_Left = true;
+            }
+            
             if (Highlighter_Visible)
             {
                 Highlighter_PlacePixels(e.Location.X, e.Location.Y);
@@ -2191,7 +2200,15 @@ namespace Pixel_Game
 
         private void Mouse_Release(object sender, MouseEventArgs e)
         {
-            Mouse_Clicking = false;
+            if (e.Button == MouseButtons.Right)
+            {
+                Mouse_Clicking_Right = false;
+            }
+            if (e.Button == MouseButtons.Left)
+            {
+                Mouse_Clicking_Left = false;
+            }
+            
 
             foreach (UIItem Item in UIItems)
             {
@@ -2256,7 +2273,7 @@ namespace Pixel_Game
             Mouse_X = e.Location.X;
             Mouse_Y = e.Location.Y;
 
-            if (Mouse_Clicking && Mouse_BlockChange(e.Location.X, e.Location.Y))
+            if (Mouse_Clicking_Right && Mouse_BlockChange(e.Location.X, e.Location.Y))
             {
                 Execute_BlockPlaceBoundary(e.Location.X, e.Location.Y);
                 Highlighter_PlacePixels(e.Location.X, e.Location.Y);
