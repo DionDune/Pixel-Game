@@ -109,6 +109,10 @@ namespace Pixel_Game
         private HashSet<Particle> PhysicsMaterial_Sand_Iterate = new HashSet<Particle>();
         string MaterialSelector_Selected;
 
+        //Player Ability Selector
+        private List<string> Abilities = new List<string>();
+        string Abilities_Selected;
+
         // GameRules
         bool isRaining;
         bool Bouncy;
@@ -192,6 +196,10 @@ namespace Pixel_Game
             MaterialSelector_Selected = MaterialSelector_Materials[0];
             PhysicsMaterial_Water = new HashSet<Particle>();
             PhysicsMaterial_Sand = new HashSet<Particle>();
+
+            //Abilities
+            Abilities = new List<string>() { "Projectile", null };
+            Abilities_Selected = Abilities[0];
 
             // Game Rules
             isRaining = false;
