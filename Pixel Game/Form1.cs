@@ -2696,14 +2696,6 @@ namespace Pixel_Game
             };
         }
 
-        private void FillRectangle(Graphics canvas, SolidBrush Colour, int StartX, int StartY, int SizeX, int SizeY)
-        {
-            canvas.FillRectangle(Colour, new Rectangle(
-                SizeX, StartY,
-                SizeX, SizeY
-                ));
-        }
-
         #endregion
 
         /////////////////////////////////////////
