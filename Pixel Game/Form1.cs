@@ -193,7 +193,7 @@ namespace Pixel_Game
 
             // Materials
             Colors_Generate();
-            MaterialSelector_Materials = new List<string>() { "Default", "Sand", "Red Sand", "Water", null };
+            MaterialSelector_Materials = new List<string>() { "Default", "Sand", "Red Sand", "Water"};
             MaterialSelector_Selected = MaterialSelector_Materials[0];
             PhysicsMaterial_Water = new HashSet<Particle>();
             PhysicsMaterial_Sand = new HashSet<Particle>();
