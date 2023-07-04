@@ -2092,12 +2092,12 @@ namespace Pixel_Game
         {
             if (ChangeDirection == "Up")
             {
-                Highlighter_Size += 1;
+                Highlighter_Size += 2;
             }
 
             else if (ChangeDirection == "Down" && Highlighter_Size > 1)
             {
-                Highlighter_Size -= 1;
+                Highlighter_Size -= 2;
             }
 
             Mouse_GenOutline();
