@@ -2031,7 +2031,7 @@ namespace Pixel_Game
             return new List<int>() { placeBound_X_Left, placeBound_Y_Left, placeBound_X_Right, placeBound_Y_Right };
         }
 
-        private void Highlighter_PlacePixels(int Mouse_X, int Mouse_Y)
+        private void Highlighter_PlacePixels(int Mouse_X, int Mouse_Y, string ClickType)
         {
             List<int> Boundaries = Execute_BlockPlaceBoundary(Mouse_X, Mouse_Y);
             int placeBound_X_Left = Boundaries[0];
@@ -2039,23 +2039,8 @@ namespace Pixel_Game
             int placeBound_X_Right = Boundaries[2];
             int placeBound_Y_Right = Boundaries[3];
 
-
-            //Eraser
-            if (MaterialSelector_Selected == null)
-            {
-                Highlighter_Execute_Eraser(Mouse_X, Mouse_Y);
-                return;
-            }
-
-            if (MaterialSelector_Selected == "Attack")
-            {
-                int Momentum_Horizontal = (Mouse_X - Screen.Width / 2 - playerCameraOffset_X - 1) / blockWidth;
-                int Momentum_Vertical = (Mouse_Y - Screen.Height / 2 - blockHeight + 2) / blockHeight;
-                Attack_Projectile_Create("Bomb", Player.x, Player.y, Momentum_Horizontal, Momentum_Vertical);
-            }
-
-            //Other
-            else
+            //Pixels
+            if (ClickType == "Left")
             {
                 for (int y_pos = placeBound_Y_Left; y_pos < placeBound_Y_Right; y_pos++)
                 {
@@ -2066,6 +2051,21 @@ namespace Pixel_Game
                             Material_CreatePixel(MaterialSelector_Selected, x_pos, y_pos);
                         }
                     }
+                }
+            }
+            //Abilities
+            if (ClickType == "Right")
+            {
+                if (Abilities_Selected == "Projectile")
+                {
+                    int Momentum_Horizontal = (Mouse_X - Screen.Width / 2 - playerCameraOffset_X - 1) / blockWidth;
+                    int Momentum_Vertical = (Mouse_Y - Screen.Height / 2 - blockHeight + 2) / blockHeight;
+                    Attack_Projectile_Create("Bomb", Player.x, Player.y, Momentum_Horizontal, Momentum_Vertical);
+                }
+                if (Abilities_Selected == null)
+                {
+                    Highlighter_Execute_Eraser(Mouse_X, Mouse_Y);
+                    return;
                 }
             }
         }
@@ -2193,7 +2193,15 @@ namespace Pixel_Game
             
             if (Highlighter_Visible)
             {
-                Highlighter_PlacePixels(e.Location.X, e.Location.Y);
+                if (e.Button == MouseButtons.Left)
+                {
+                    Highlighter_PlacePixels(e.Location.X, e.Location.Y, "Left");
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    Highlighter_PlacePixels(e.Location.X, e.Location.Y, "Right");
+                }
+
                 return;
             }
         }
@@ -2273,10 +2281,18 @@ namespace Pixel_Game
             Mouse_X = e.Location.X;
             Mouse_Y = e.Location.Y;
 
-            if (Mouse_Clicking_Right && Mouse_BlockChange(e.Location.X, e.Location.Y))
+            if (Mouse_BlockChange(e.Location.X, e.Location.Y))
             {
                 Execute_BlockPlaceBoundary(e.Location.X, e.Location.Y);
-                Highlighter_PlacePixels(e.Location.X, e.Location.Y);
+                if (Mouse_Clicking_Right)
+                {
+                    Highlighter_PlacePixels(e.Location.X, e.Location.Y, "Right");
+                }
+                if (Mouse_Clicking_Left)
+                {
+                    Highlighter_PlacePixels(e.Location.X, e.Location.Y, "Left");
+                }
+                
             }
         }
 
