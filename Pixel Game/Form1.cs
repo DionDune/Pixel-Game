@@ -2898,10 +2898,6 @@ namespace Pixel_Game
                     if (Item.Type == "MaterialSelector")
                     {
                         Brush ActiveColor = Block_FetchColor(Item.Type);
-                        if (Item.Active == true)
-                        {
-                            ActiveColor = Block_FetchColor("ButtonActive");
-                        }
 
                         canvas.FillRectangle(ActiveColor, new Rectangle(
                                 Item.Location_X,
@@ -2920,10 +2916,6 @@ namespace Pixel_Game
                     if (Item.Type == "AttackMode")
                     {
                         Brush ActiveColor = Block_FetchColor(Item.Type);
-                        if (Item.Active == true)
-                        {
-                            ActiveColor = Block_FetchColor("ButtonActive");
-                        }
 
                         canvas.FillRectangle(ActiveColor, new Rectangle(
                                 Item.Location_X,
@@ -2931,7 +2923,13 @@ namespace Pixel_Game
                                 Item.Size_X, Item.Size_Y
                                 ));
 
-                        canvas.FillRectangle(Block_FetchColor("AttackButton"), new Rectangle(
+                        Brush AbilityColor = Block_FetchColor("AttackButton");
+                        if (Abilities_Selected != "Projectile")
+                        {
+                            AbilityColor = Block_FetchColor(Abilities_Selected);
+                        }
+
+                        canvas.FillRectangle(AbilityColor, new Rectangle(
                                 Item.Location_X + 5,
                                 Item.Location_Y + 5,
                                 Item.Size_X - 10, Item.Size_Y - 10
