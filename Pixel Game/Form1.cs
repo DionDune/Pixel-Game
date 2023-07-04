@@ -2200,13 +2200,7 @@ namespace Pixel_Game
                 {
                     if (Item.Type == "MaterialSelector")
                     {
-                        if (Item.Active == false)
-                        {
-                            UIItems[3].Active = false;
-                            Item.Active = true;
-                        }
-
-                        else if (Item.Active_Amount == MaterialSelector_Materials.Count() - 1)
+                        if (Item.Active_Amount == MaterialSelector_Materials.Count() - 1)
                         {
                             Item.Active_Amount = 0;
                         }
@@ -2220,22 +2214,14 @@ namespace Pixel_Game
                     }
                     if (Item.Type == "AttackMode")
                     {
-                        if (Item.Active == true)
+                        Item.Active_Amount++;
+                        if (Item.Active_Amount >= Abilities.Count())
                         {
-                            MaterialSelector_Selected = MaterialSelector_Materials[UIItems[0].Active_Amount];
-                            UIItems[0].Active = true;
-
-                            Item.Active = false;
+                            Item.Active_Amount = 0;
                         }
-                        else
-                        {
-                            UIItems[0].Active = false;
 
-                            MaterialSelector_Selected = "Attack";
-                            Item.Active = true;
-                        }
+                        Abilities_Selected = Abilities[Item.Active_Amount];
                     }
-                    return;
                 }
             }
         }
