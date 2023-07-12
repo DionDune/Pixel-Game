@@ -2000,6 +2000,36 @@ namespace Pixel_Game
 
         }
 
+
+        private void ForceField_Create(float angle, float distance)
+        {
+            int PosX = Player.x;
+            int PosY = Player.y;
+
+            float AngleX = (float)Math.Sin(angle);
+            float AngleY = (float)Math.Cos(angle);
+
+            PosX += Convert.ToInt32(distance * AngleX);
+            PosY += Convert.ToInt32(distance * AngleY);
+
+            int distanceX = PosX - Player.x;
+            int distanceY = PosY - Player.y;
+
+            ForceField.Add(new Projectile()
+            {
+                Health = 100,
+
+                float_X = Screen.Width / 2,
+                float_Y = Screen.Height / 2,
+
+                Momentum_Power = 20,
+                //momentumFloat_Slowdown = 1F
+
+                gradient_X = (float)distanceX / 20,
+                gradient_Y = (float)distanceY / 20
+            });
+        }
+
         #endregion
 
         /////////////////////////////////////////
@@ -3064,6 +3094,7 @@ namespace Pixel_Game
             // Entities
             Execute_EntityMovement_Handler();
             Execute_ProjectileMovement_Handler();
+            Execute_ForceFieldPhysics();
 
             // Block Physics
             Execute_Physics_Fluid();
