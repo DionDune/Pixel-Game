@@ -2920,6 +2920,15 @@ namespace Pixel_Game
                 blockWidth, blockHeight
                 ));
 
+            //ForceField
+            foreach (Projectile ForceFieldLink in ForceField)
+            {
+                canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                        Convert.ToInt32(ForceFieldLink.float_X) - cameraOffset_x,
+                        Convert.ToInt32(ForceFieldLink.float_Y) - cameraOffset_y,
+                        blockWidth, blockHeight
+                        ));
+            }
 
             //Void Enemy
             foreach (List<EntityBlock> VoidEnemy in VoidEnemies)
