@@ -1771,8 +1771,8 @@ namespace Pixel_Game
                         if (FieldLink.float_X >= Entity.x && FieldLink.float_X <= Entity.x + blockWidth &&
                             FieldLink.float_Y >= Entity.y && FieldLink.float_Y <= Entity.y + blockHeight)
                         {
-                            Entity.x = Convert.ToInt32((float)Entity.x + (FieldLink.gradient_X * 2));
-                            Entity.y = Convert.ToInt32((float)Entity.y + (FieldLink.gradient_Y * 2));
+                            Entity.x = Convert.ToInt32((float)Entity.x + (FieldLink.gradient_X * 5));
+                            Entity.y = Convert.ToInt32((float)Entity.y + (FieldLink.gradient_Y * 5));
                         }
                     }
                 }
