@@ -1749,6 +1749,21 @@ namespace Pixel_Game
 
 
 
+        private void Execute_ForceFieldPhysics()
+        {
+            foreach (Projectile FieldLink in ForceField)
+            {
+                Projectile_PhysicsAngular(FieldLink, true);
+            }
+
+            for (int index = ForceField.Count() - 1; index >= 0; index--)
+            {
+                if (ForceField[index].Health <= 0)
+                {
+                    ForceField.RemoveAt(index);
+                }
+            }
+        }
 
         private void Projectile_PhysicsAngular(Projectile projectile, bool Friction)
         {
