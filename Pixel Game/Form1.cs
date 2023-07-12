@@ -566,7 +566,7 @@ namespace Pixel_Game
             {
                 for (int i = 0; i < 240; i++)
                 {
-                    ForceField_Create(i, 120);
+                    ForceField_Create(i, 180);
                 }
                 
             }
