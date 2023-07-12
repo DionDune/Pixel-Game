@@ -14,6 +14,9 @@ namespace Pixel_Game
         public int x { get; set; }
         public int y { get; set; }
 
+        public float Float_X { get; set; }
+        public float Float_Y { get; set; }
+
         
 
         public int Health { get; set; }
