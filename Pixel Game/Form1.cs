@@ -1177,6 +1177,9 @@ namespace Pixel_Game
                 {
                     VoidEnemy.Add(new EntityBlock()
                     {
+                        Float_X = x_pos,
+                        Float_Y = y_pos,
+
                         x = x_pos,
                         y = y_pos - (blockHeight * i)
                     });
