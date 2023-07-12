@@ -2945,7 +2945,7 @@ namespace Pixel_Game
             //ForceField
             foreach (Projectile ForceFieldLink in ForceField)
             {
-                canvas.FillRectangle(Block_FetchColor("Enemy"), new Rectangle(
+                canvas.FillRectangle(Brushes.BlueViolet, new Rectangle(
                         Convert.ToInt32(ForceFieldLink.float_X) - cameraOffset_x,
                         Convert.ToInt32(ForceFieldLink.float_Y) - cameraOffset_y,
                         blockWidth, blockHeight
