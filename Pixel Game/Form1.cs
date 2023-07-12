@@ -1748,6 +1748,23 @@ namespace Pixel_Game
         }
 
 
+
+
+        private void Projectile_PhysicsAngular(Projectile projectile, bool Friction)
+        {
+            projectile.float_X += projectile.gradient_X;
+            projectile.float_Y += projectile.gradient_Y;
+
+            if (Friction)
+            {
+                projectile.gradient_X -= projectile.gradient_X / 20;
+                projectile.gradient_Y -= projectile.gradient_Y / 20;
+            }
+
+            projectile.Health--;
+        }
+
+
         #endregion
 
         /////////////////////////////////////////
