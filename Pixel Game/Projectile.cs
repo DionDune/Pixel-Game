@@ -22,8 +22,8 @@ namespace Pixel_Game
         public float float_X { get; set; }
         public float float_Y { get; set; }
 
-        public float angle_X { get; set; }
-        public float angle_Y { get; set; }
+        public float gradient_X { get; set; }
+        public float gradient_Y { get; set; }
 
         public float Momentum_Power { get; set; }
 
