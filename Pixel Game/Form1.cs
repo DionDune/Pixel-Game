@@ -2019,11 +2019,10 @@ namespace Pixel_Game
             {
                 Health = 100,
 
-                float_X = Screen.Width / 2,
-                float_Y = Screen.Height / 2,
+                float_X = Player.x,
+                float_Y = Player.y,
 
                 Momentum_Power = 20,
-                //momentumFloat_Slowdown = 1F
 
                 gradient_X = (float)distanceX / 20,
                 gradient_Y = (float)distanceY / 20
