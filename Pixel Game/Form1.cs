@@ -21,8 +21,9 @@ namespace Pixel_Game
 
         private List<EntityBlock> Entities = new List<EntityBlock>();
         private List<Projectile> Projectiles = new List<Projectile>();
-
         private List<List<EntityBlock>> VoidEnemies = new List<List<EntityBlock>>();
+
+        private List<Projectile> ForceField = new List<Projectile>();
 
         private List<string> BiomeRegions = new List<string>();
 
