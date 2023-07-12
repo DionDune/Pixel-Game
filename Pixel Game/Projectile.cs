@@ -8,6 +8,8 @@ namespace Pixel_Game
 {
     internal class Projectile
     {
+        public int Health { get; set; }
+
         public string type { get; set; }
 
         public int x { get; set; }
@@ -15,6 +17,15 @@ namespace Pixel_Game
 
         public int Momentum_Vertical { get; set; }
         public int Momentum_Horizontal { get; set; }
+
+
+        public float float_X { get; set; }
+        public float float_Y { get; set; }
+
+        public float angle_X { get; set; }
+        public float angle_Y { get; set; }
+
+        public float Momentum_Power { get; set; }
 
         public Projectile()
         {
