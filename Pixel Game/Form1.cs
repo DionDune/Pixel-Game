@@ -561,6 +561,15 @@ namespace Pixel_Game
             {
                 SpawnVoidEnemy();
             }
+
+            if (e.KeyCode == Keys.G)
+            {
+                for (int i = 0; i < 240; i++)
+                {
+                    ForceField_Create(i, 120);
+                }
+                
+            }
         }
 
         private void Mouse_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
