@@ -2701,7 +2701,7 @@ namespace Pixel_Game
 
             }
             //Y
-            if (cameraOffset_y / blockWidth + screenHeight - 1 > Blocks.Count() - 3)
+            if (cameraOffset_y / blockHeight + screenHeight - 1 > Blocks.Count() - 3)
             {
                 blockBound_Y_Right = Blocks.Count() - 1;
             }
