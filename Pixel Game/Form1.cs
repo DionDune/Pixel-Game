@@ -2809,8 +2809,6 @@ namespace Pixel_Game
             UI_PositionUpdate();
 
 
-            Width = (Width / blockWidth) * blockWidth;
-            Height = (Height / blockHeight) * blockHeight;
             screenWidth = Screen.Width / blockWidth;
             screenHeight = Screen.Height / blockHeight;
 
