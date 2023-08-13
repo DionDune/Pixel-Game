@@ -51,8 +51,6 @@ namespace Pixel_Game
         // Sizes
         int screenWidth;
         int screenHeight;
-        int prevScreenPixelWidth;
-        int prevScreenPixelHeight;
         int worldWidth;
         int worldHeight;
 
@@ -148,8 +146,6 @@ namespace Pixel_Game
             screenWidth = Screen.Width / blockWidth;
             worldHeight = 860;//480;
             worldWidth = 3360;//1680;
-            prevScreenPixelWidth = Screen.Width;
-            prevScreenPixelHeight = Screen.Height;
 
             // Camera
             cameraOffset_x = 0;
@@ -2813,55 +2809,13 @@ namespace Pixel_Game
             UI_PositionUpdate();
 
 
-            //X
-            if (Screen.Width > prevScreenPixelWidth)
-            {
-                for (int i = 0; i < Screen.Width - prevScreenPixelWidth; i++)
-                {
-                    if ((prevScreenPixelWidth + i) % 2 == 0)
-                    {
-                        cameraOffset_x -= 1;
-                    }
-                }
-            }
-            else if (Screen.Width < prevScreenPixelWidth)
-            {
-                for (int i = 0; i < prevScreenPixelWidth - Screen.Width; i++)
-                {
-                    if ((prevScreenPixelWidth - i) % 2 == 0)
-                    {
-                        cameraOffset_x += 1;
-                    }
-                }
-            }
-
-            //Y
-            if (Screen.Height > prevScreenPixelHeight)
-            {
-                for (int i = 0; i < Screen.Height - prevScreenPixelHeight; i++)
-                {
-                    if ((prevScreenPixelHeight + i) % 2 == 1)
-                    {
-                        cameraOffset_y -= 1;
-                    }
-                }
-            }
-            else if (Screen.Height < prevScreenPixelHeight)
-            {
-                for (int i = 0; i < prevScreenPixelHeight - Screen.Height; i++)
-                {
-                    if ((prevScreenPixelHeight - i) % 2 == 1)
-                    {
-                        cameraOffset_y += 1;
-                    }
-                }
-            }
-
-            prevScreenPixelWidth = Screen.Width;
-            prevScreenPixelHeight = Screen.Height;
-
-            screenHeight = Screen.Height / blockHeight;
+            Width = (Width / blockWidth) * blockWidth;
+            Height = (Height / blockHeight) * blockHeight;
             screenWidth = Screen.Width / blockWidth;
+            screenHeight = Screen.Height / blockHeight;
+
+            cameraOffset_x = Player.x - ((Width - blockWidth) / 2);
+            cameraOffset_y = Player.y - ((Height - blockHeight) / 2) + 12;
         }
 
         private void GameTick_Handler()
@@ -2937,8 +2891,8 @@ namespace Pixel_Game
 
             // Player
             canvas.FillRectangle(Brushes.Red, new Rectangle(
-                Screen.Width / 2 - playerCameraOffset_X,
-                Screen.Height / 2 - playerCameraOffset_Y - 1,
+                Player.x - cameraOffset_x, 
+                Player.y - cameraOffset_y,
                 blockWidth, blockHeight
                 ));
 
