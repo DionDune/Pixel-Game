@@ -11,6 +11,9 @@ namespace Pixel_Game
 {
     public partial class Form1 : Form
     {
+
+        #region Variable Defenition
+
         DateTime _lastCheckTime;
         long _frameCount;
 
@@ -117,6 +120,8 @@ namespace Pixel_Game
         bool isRaining;
         bool Bouncy;
         int Bounce_MomentumDivision; //Momentum set to -(Momentum / Bounce_MomentumLost)
+
+        #endregion
 
 
 
