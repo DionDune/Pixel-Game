@@ -149,8 +149,8 @@ namespace Pixel_Game
             blockWidth = 15;
             screenHeight = Screen.Height / blockHeight;
             screenWidth = Screen.Width / blockWidth;
-            worldHeight = 860;//480;
-            worldWidth = 3360;//1680;
+            worldHeight = 860;//480,  2400 for terrarias world
+            worldWidth = 3360;//1680, 8400 for terrarias world
 
             // Camera
             cameraOffset_x = 0;
