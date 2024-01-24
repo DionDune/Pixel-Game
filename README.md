@@ -21,7 +21,7 @@ Controls:  (WASD interchangeable with arrow keys)
   > Other:
     
      - Scroll: Change highlighter size
-     - V: Spawn Void Enemy, and increase size of all existing ones.
+     - V: Spawn Void Enemy, Increase size of exxising Void enemies
      - G: Create Force Field
      - R: Toggle rain
      - Tab: Generate new world
